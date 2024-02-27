@@ -26,7 +26,7 @@ export default function Home() {
       .then((res) => {
         console.log(res);
       });
-  }
+  };
 
   return (
     <>
