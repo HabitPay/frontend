@@ -21,7 +21,7 @@ export default function Layout({
   };
   return (
     <div>
-      <div className="bg-white w-full h-12 max-w-xl justify-center text-lg px-10 font-medium fixed text-gray-800  top-0 flex items-center">
+      <div className="bg-slate-100 w-full h-12 max-w-xl justify-center text-lg px-10 font-medium fixed text-gray-800  top-0 flex items-center">
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
             <svg
@@ -65,7 +65,7 @@ export default function Layout({
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth={1.5}
                 stroke="currentColor"
                 className="w-6 h-6"
               >
@@ -117,7 +117,7 @@ export default function Layout({
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                stroke-width="1.5"
+                strokeWidth={1.5}
                 stroke="currentColor"
                 className="w-6 h-6"
               >

@@ -2,6 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
+/* light mode default bg color*/
+/* bg-slate-100 */
+/* rgb(241 245 249); */
+/* #F1F5F9 */
+
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
@@ -18,4 +24,5 @@
 
 body {
   color: rgb(var(--foreground-rgb));
+  background-color: #F1F5F9;
 }
