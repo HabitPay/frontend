@@ -8,7 +8,6 @@ import Input from "../components/input";
 
 interface IForm {
   nickname: string;
-  jkwak: string;
   number: number;
 }
 
@@ -33,7 +32,7 @@ const Page = () => {
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col">
             <input
-              className="bg-slate-100 border-b-2 border-slate-200 focus:outline-none focus:border-green-500"
+              className="bg-slate-200 border-b-2 border-slate-200 focus:outline-none focus:border-green-500"
               type="text"
               placeholder="닉네임을 입력해주세요."
               {...register("nickname", {
@@ -52,7 +51,6 @@ const Page = () => {
                 },
               })}
             />
-            <input {...register("jkwak")} />
             <span className="mt-1 text-red-500 text-sm">
               {errors?.nickname?.message as string}
             </span>

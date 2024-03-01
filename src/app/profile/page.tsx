@@ -5,29 +5,41 @@ import Input from "../components/input";
 import profilePic from "../../../public/profilePic.jpeg";
 import Layout from "../components/layout";
 import { useForm } from "react-hook-form";
+import Button from "../components/button";
+
+interface IForm {
+  nickname: string;
+}
 
 const Page = () => {
-  const { register } = useForm();
+  const { register } = useForm<IForm>();
   return (
     <Layout title="프로필" hasTabBar>
-      <div className="flex flex-col items-center w-screen px-10 space-y-10">
-        <form className="flex flex-col items-center space-y-4">
+      <div className="flex flex-col items-center w-screen px-4 space-y-10">
+        <div className="px-4 w-full flex flex-col items-center space-y-4">
           <Image
             className="rounded-full size-32"
             src={profilePic}
             alt="Picture of me"
             placeholder="blur"
           />
-          <div className="flex flex-col w-full space-y-2">
-            <span className="text-sm">닉네임</span>
-            {/* <Input type="text" {...register("nickname")} /> */}
-          </div>
-        </form>
-        <div>
-          <span>계정관리</span>
-          <div className="flex flex-col items-center">
-            <button>로그아웃</button>
-            <button>계정삭제</button>
+          <form className="flex flex-col w-full space-y-6">
+            <div className="flex flex-col w-full space-y-2">
+              <span className="text-sm">닉네임</span>
+              <Input type="text" register={register("nickname")} />
+            </div>
+            <Button text="저장" />
+          </form>
+        </div>
+        <div className="bg-white rounded-xl w-full pt-4 px-4">
+          <div className="text-lg font-bold pb-2">계정 관리</div>
+          <div className="flex flex-col items-center border-t-2 py-4 space-y-3">
+            <button className="w-full py-1 rounded-md border-slate-400 border-2">
+              로그아웃
+            </button>
+            <button className="w-full py-1 rounded-md border-slate-400 border-2">
+              계정삭제
+            </button>
           </div>
         </div>
       </div>
