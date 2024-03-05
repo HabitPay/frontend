@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import Input from "../components/input";
 import profilePic from "../../../public/profilePic.jpeg";
-import Layout from "../components/layout";
 import { useForm } from "react-hook-form";
-import Button from "../components/button";
+import Layout from "@app/components/layout";
+import Input from "@app/components/input";
+import Button from "@app/components/button";
 
 interface IForm {
   nickname: string;
