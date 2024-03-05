@@ -1,19 +1,23 @@
 "use client";
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import GoogleCustomButton from "./components/googleCustomButton";
+
 const Page = () => {
+  const clientId = "abc";
+
   return (
-    <div className=" bg-inherit h-screen flex flex-col justify-center items-center  space-y-8">
-      <div className="flex flex-col items-center">
-        <span className=" font-light">성공하는 습관 만들기</span>
-        <span className=" font-bold text-lg">HabitPay</span>
+    <GoogleOAuthProvider clientId={clientId}>
+      <div className=" bg-inherit h-screen flex flex-col justify-center items-center  space-y-8">
+        <div className="flex flex-col items-center">
+          <span className=" font-light">성공하는 습관 만들기</span>
+          <span className=" font-bold text-lg">HabitPay</span>
+        </div>
+        <div className="flex flex-col space-y-4">
+          <GoogleCustomButton />
+        </div>
       </div>
-      <div className="flex flex-col space-y-4">
-        <button className="text-sm w-64 py-2 bg-yellow-300">
-          카카오 로그인
-        </button>
-        <button className="text-sm w-64 py-2 bg-white">구글 로그인</button>
-      </div>
-    </div>
+    </GoogleOAuthProvider>
   );
 };
 
