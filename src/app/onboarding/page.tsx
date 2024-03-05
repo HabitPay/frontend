@@ -1,10 +1,8 @@
 "use client";
 
+import Layout from "@app/components/layout";
 import { error } from "console";
 import { useForm } from "react-hook-form";
-import Layout from "../components/layout";
-import Button from "../components/button";
-import Input from "../components/input";
 
 interface IForm {
   nickname: string;
