@@ -38,8 +38,6 @@ const Page = () => {
       } else {
         setError("profileImage", { message: "" });
         //프로필 이미지 변경
-        // setProfileImageSrc(URL.createObjectURL(file));
-
         const reader = new FileReader();
         reader.onload = () => {
           setProfileImageSrc(reader.result as string);
