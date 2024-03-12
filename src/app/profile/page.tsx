@@ -7,6 +7,8 @@ import Layout from "@app/components/layout";
 import Input from "@app/components/input";
 import Button from "@app/components/button";
 import { useState } from "react";
+import useMutation, { MutationResult } from "@libs/useMutaion";
+import { eventNames } from "process";
 
 interface IForm {
   nickname: string;
@@ -19,11 +21,26 @@ const Page = () => {
     watch,
     setValue,
     setError,
+    handleSubmit,
     formState: { errors },
   } = useForm<IForm>({});
-  console.log(watch());
 
+  const nickname = "hogkim";
   const [profileImageSrc, setProfileImageSrc] = useState<string | null>(null);
+  const [changeProfile, { loading, data, error }] =
+    useMutation<MutationResult>("backendAddress");
+
+  const onSubmitWithValid = (validForm: IForm) => {
+    console.log(validForm);
+    // changeProfile(validForm);
+  };
+
+  const onProfileNicknameChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newNickname = event.target.value;
+    console.log(newNickname);
+  };
 
   const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
@@ -50,7 +67,10 @@ const Page = () => {
   return (
     <Layout title="프로필" hasTabBar>
       <div className="flex flex-col items-center w-screen px-4 space-y-10">
-        <form className="px-4 w-full flex flex-col items-center space-y-4 static">
+        <form
+          className="px-4 w-full flex flex-col items-center space-y-4 static"
+          onSubmit={handleSubmit(onSubmitWithValid)}
+        >
           <Image
             className="rounded-full size-32"
             src={profileImageSrc || profilePic}
@@ -88,7 +108,11 @@ const Page = () => {
           <div className="flex flex-col w-full space-y-6">
             <div className="flex flex-col w-full space-y-2">
               <span className="text-sm">닉네임</span>
-              <Input type="text" register={register("nickname")} />
+              <input
+                type="text"
+                {...register("nickname", { onChange: onProfileNicknameChange })}
+                className="appearance-none w-full px-3 py-2 rounded-2xl  placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
+              />
             </div>
             <Button text="저장" />
           </div>
