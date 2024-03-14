@@ -82,9 +82,9 @@ const Page = () => {
 
   return (
     <Layout title="프로필" hasTabBar>
-      <div className="flex flex-col items-center w-screen px-4 space-y-10">
+      <div className="flex flex-col items-center space-y-10">
         <form
-          className="px-4 w-full flex flex-col items-center space-y-4 static"
+          className="static flex flex-col items-center w-full px-4 space-y-4"
           onSubmit={handleSubmit(onSubmitWithValid)}
         >
           <Image
@@ -94,7 +94,7 @@ const Page = () => {
             width={300}
             height={300}
           />
-          <label className="absolute top-40 left-64 inline-flex items-center justify-center w-6 h-6 me-2 text-sm font-semibold text-gray-600 bg-gray-100 rounded-full">
+          <label className="absolute inline-flex items-center justify-center w-6 h-6 text-sm font-semibold text-gray-600 bg-gray-100 rounded-full top-40 left-64 me-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -127,7 +127,7 @@ const Page = () => {
               <input
                 type="text"
                 {...register("nickname", { onChange: onProfileNicknameChange })}
-                className="appearance-none w-full px-3 py-2 rounded-2xl  placeholder-gray-400 focus:outline-none focus:ring-green-500 focus:border-green-500"
+                className="w-full px-3 py-2 placeholder-gray-400 appearance-none rounded-2xl focus:outline-none focus:ring-green-500 focus:border-green-500"
               />
             </div>
             <Button text="저장" />
@@ -135,13 +135,13 @@ const Page = () => {
           {errors.nickname && <span>{errors.nickname.message}</span>}
           {errors.profileImage && <span>{errors.profileImage.message}</span>}
         </form>
-        <div className="bg-white rounded-xl w-full pt-4 px-4">
-          <div className="text-lg font-bold pb-2">계정 관리</div>
-          <div className="flex flex-col items-center border-t-2 py-4 space-y-3">
-            <button className="w-full py-1 rounded-md border-slate-400 border-2">
+        <div className="w-full px-4 pt-4 bg-white rounded-xl">
+          <div className="pb-2 text-lg font-bold">계정 관리</div>
+          <div className="flex flex-col items-center py-4 space-y-3 border-t-2">
+            <button className="w-full py-1 border-2 rounded-md border-slate-400">
               로그아웃
             </button>
-            <button className="w-full py-1 rounded-md border-slate-400 border-2">
+            <button className="w-full py-1 border-2 rounded-md border-slate-400">
               계정삭제
             </button>
           </div>
