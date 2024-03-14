@@ -15,6 +15,8 @@ interface IForm {
   profileImage: FileList | string | null;
 }
 
+const MB = 1024 * 1024;
+
 const Page = () => {
   const {
     register,
@@ -28,9 +30,10 @@ const Page = () => {
   const nickname = "hogkim";
   const [profileImageSrc, setProfileImageSrc] = useState<string | null>(null);
   const [changeProfile, { loading, data, error }] =
-    useMutation<MutationResult>("backendAddress");
+    useMutation<MutationResult>("/api/profileCHange");
 
   const onSubmitWithValid = (validForm: IForm) => {
+    if (loading) return;
     console.log(validForm);
     // changeProfile(validForm);
   };
@@ -44,23 +47,36 @@ const Page = () => {
 
   const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      if (file && file.size > 1024 * 1024) {
-        setError("profileImage", {
-          message: "파일 크기는 1MB를 초과할 수 없습니다.",
-        });
-        setValue("profileImage", null);
-        setProfileImageSrc(null);
-      } else {
-        setError("profileImage", { message: "" });
-        //프로필 이미지 변경
-        const reader = new FileReader();
-        reader.onload = () => {
-          setProfileImageSrc(reader.result as string);
-        };
-        reader.readAsDataURL(file);
-      }
+    if (!files || files.length <= 0) return;
+
+    const file = files[0];
+    const fileType = file.type;
+
+    const validExtensions = [
+      "image/jpeg",
+      "image/jpg",
+      "image/png",
+      "image/gif",
+    ];
+    if (!validExtensions.includes(fileType)) {
+      setError("profileImage", {
+        message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
+      });
+      return;
+    }
+
+    if (file.size > 1 * MB) {
+      setError("profileImage", {
+        message: "파일 크기는 1MB를 초과할 수 없습니다.",
+      });
+    } else {
+      setError("profileImage", { message: "" });
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        setProfileImageSrc(reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -101,7 +117,7 @@ const Page = () => {
             <input
               className="hidden"
               type="file"
-              accept="image/*"
+              accept="image/jpeg, image/jpg, image/png, image/gif"
               {...register("profileImage", { onChange: onProfileImageChange })}
             />
           </label>
