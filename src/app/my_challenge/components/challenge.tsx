@@ -152,9 +152,19 @@ const Challenges = ({ challenges, challengeState }: IChallenges) => {
               <span>{`나의 달성율: ${challenge.achievement} / 100%`}</span>
             </div>
           </div>
-          <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-green rounded-xl">
-            참여하기
-          </button>
+          {challengeState === "In Progress" ? (
+            <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-green rounded-xl">
+              참여하기
+            </button>
+          ) : challengeState === "Completed" ? (
+            <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-gray rounded-xl">
+              종료 된 챌린지입니다
+            </button>
+          ) : (
+            <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-gray rounded-xl">
+              아직 시작하지 않은 챌린지입니다
+            </button>
+          )}
         </div>
       ))}
     </>

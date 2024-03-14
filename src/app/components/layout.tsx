@@ -51,12 +51,12 @@ export default function Layout({
       </div>
       {hasTabBar ? (
         <nav className="fixed bottom-0 flex justify-between w-full max-w-xl px-10 pt-3 pb-5 text-xs text-gray-700 bg-white border-t">
-          <Link href="/" legacyBehavior>
+          <Link href="/my_challenge" legacyBehavior>
             {/* <a className="flex flex-col items-center space-y-2"> */}
             <a
               className={addClassNames(
                 "flex flex-col items-center space-y-2 ",
-                router.pathname === "/"
+                router.pathname === "/my_challenge"
                   ? "text-orange-500"
                   : "hover:text-gray-500 transition-colors"
               )}
