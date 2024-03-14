@@ -7,6 +7,19 @@ const config: Config = {
       backgroundColor: {
         "habit-green": "#66BB6A",
         "habit-gray": "#AAAAAA",
+        "habit-lightgray": "#E2E2E2",
+        "habit-background": "#EEEEEE",
+      },
+      textColor: {
+        "habit-green": "#66BB6A",
+        "habit-gray": "#AAAAAA",
+        "habit-lightgray": "#E2E2E2",
+        "habit-background": "#EEEEEE",
+      },
+      borderColor: {
+        "habit-green": "#66BB6A",
+        "habit-gray": "#AAAAAA",
+        "habit-lightgray": "#E2E2E2",
         "habit-background": "#EEEEEE",
       },
     },
