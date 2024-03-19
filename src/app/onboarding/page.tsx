@@ -30,7 +30,7 @@ const Page = () => {
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col">
             <input
-              className="bg-slate-200 border-b-2 border-slate-200 focus:outline-none focus:border-green-500"
+              className="bg-habit-background border-b-2 border-slate-200 focus:outline-none focus:border-green-500"
               type="text"
               placeholder="닉네임을 입력해주세요."
               {...register("nickname", {
@@ -56,7 +56,7 @@ const Page = () => {
               닉네임은 최소 2자부터 최대 15자까지 가능합니다.(특수문자 불가)
             </span>
           </div>
-          <button className=" py-2 w-full text-sm font-medium bg-green-500 hover:bg-green-600 text-white border border-transparent rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:outline-none relative bottom-0">
+          <button className=" py-2 w-full text-sm font-medium bg-habit-green hover:bg-green-600 text-white border border-transparent rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:outline-none relative bottom-0">
             다음
           </button>
         </form>

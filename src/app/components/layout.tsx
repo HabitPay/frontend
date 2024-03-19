@@ -21,7 +21,7 @@ export default function Layout({
   };
   return (
     <div>
-      <div className="bg-slate-200 w-full h-12 max-w-xl justify-center text-lg px-10 font-medium fixed text-gray-800  top-0 flex items-center">
+      <div className="fixed top-0 flex items-center justify-center w-full h-12 max-w-xl px-10 text-lg font-medium text-gray-800 bg-habit-background">
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
             <svg
@@ -46,17 +46,17 @@ export default function Layout({
           </span>
         ) : null}
       </div>
-      <div className={addClassNames("pt-16", hasTabBar ? "pb-20" : "")}>
+      <div className={addClassNames("pt-12", hasTabBar ? "pb-20" : "", "px-6")}>
         {children}
       </div>
       {hasTabBar ? (
-        <nav className="bg-white max-w-xl text-gray-700 border-t fixed bottom-0 w-full px-10 pb-5 pt-3 flex justify-between text-xs">
-          <Link href="/" legacyBehavior>
+        <nav className="fixed bottom-0 flex justify-between w-full max-w-xl px-10 pt-3 pb-5 text-xs text-gray-700 bg-white border-t">
+          <Link href="/my_challenge" legacyBehavior>
             {/* <a className="flex flex-col items-center space-y-2"> */}
             <a
               className={addClassNames(
                 "flex flex-col items-center space-y-2 ",
-                router.pathname === "/"
+                router.pathname === "/my_challenge"
                   ? "text-orange-500"
                   : "hover:text-gray-500 transition-colors"
               )}
