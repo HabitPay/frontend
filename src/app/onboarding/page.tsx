@@ -31,6 +31,8 @@ function Page() {
         nickname,
       });
       if (res.status === StatusCodes.CREATED) {
+        const { accessToken } = res.data;
+        sessionStorage.setItem("accessToken", accessToken);
         router.push("/my_challenge");
       }
       console.log(res);
