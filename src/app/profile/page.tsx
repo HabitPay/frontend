@@ -5,6 +5,7 @@ import Image from "next/image";
 import { eventNames } from "process";
 
 import { useForm } from "react-hook-form";
+import axios, { HttpStatusCode } from "axios";
 
 import Layout from "@app/components/layout";
 import Input from "@app/components/input";
@@ -12,10 +13,12 @@ import Button from "@app/components/button";
 import useMutation, { MutationResult } from "@libs/useMutaion";
 import profilePic from "../../../public/profilePic.jpeg";
 import apiManager from "@api/apiManager";
+import { getEmail } from "@libs/jwt";
 
 interface IForm {
   nickname: string;
   profileImage: FileList | File | null;
+  profileImageName: string | null;
 }
 
 const MB = 1024 * 1024;
@@ -38,19 +41,31 @@ const Page = () => {
   const onSubmitWithValid = async (validForm: IForm) => {
     if (loading) return;
     // changeProfile(validForm);
+    const data = {
+      nickname: validForm.nickname,
+      profileImageName: "",
+    };
+
     if (
       validForm.profileImage instanceof FileList &&
       validForm.profileImage.length == 1
     ) {
       const file = validForm.profileImage[0];
       validForm.profileImage = file;
+      const extension: string = file.type.slice(file.type.indexOf("/") + 1);
+      // TODO: 파일 확장자를 PNG 나 JPG 로 변경해서 저장해도 문제 없는지 자료 찾기
+      data.profileImageName = `${getEmail()}.${extension}`;
+      console.log(data.profileImageName);
     }
     try {
       console.log(validForm);
-      const res = await apiManager.patch("/member", validForm, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const res = await apiManager.patch("/member", data);
       console.log(res);
+      if (res.status === HttpStatusCode.Ok) {
+        const preSignedUrl: string = res.data;
+        const res2 = await axios.put(preSignedUrl, validForm.profileImage);
+        console.log(res2);
+      }
     } catch (error) {
       console.log(error);
     }
