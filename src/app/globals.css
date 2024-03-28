@@ -12,7 +12,13 @@
 /* rgb(226 232 240); */
 /* #e2e8f0 */
 
+h3 {
+  @apply text-sm;
+}
 
+input {
+  @apply rounded-xl text-sm px-3 py-2
+}
 
 
 /* @media (prefers-color-scheme: dark) {
