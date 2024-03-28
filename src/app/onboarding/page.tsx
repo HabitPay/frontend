@@ -1,23 +1,58 @@
 "use client";
 
-import Layout from "@app/components/layout";
-import { error } from "console";
+import { useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
 import { useForm } from "react-hook-form";
+import { StatusCodes } from "http-status-codes";
+
+import apiManager from "@api/apiManager";
+import Layout from "@app/components/layout";
 
 interface IForm {
   nickname: string;
   number: number;
 }
 
-const Page = () => {
+function Page() {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IForm>();
-  const onSubmit = (data: IForm) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const onSubmit = async (data: IForm) => {
     console.log(data);
+    const { nickname } = data;
+    try {
+      const res = await apiManager.post("/member", {
+        nickname,
+      });
+      if (res.status === StatusCodes.CREATED) {
+        const { accessToken } = res.data;
+        sessionStorage.setItem("accessToken", accessToken);
+        router.push("/my_challenge");
+      }
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
+  useEffect(() => {
+    const accessToken: string | null = searchParams.get("accessToken");
+
+    // 소셜 로그인을 통해 들어오지 않고 주소로 직접 접근하는 경우 로그인을 하도록 이동
+    if (accessToken === null) {
+      router.push("/");
+    } else {
+      sessionStorage.setItem("accessToken", accessToken);
+      router.replace("/onboarding");
+    }
+  }, []);
+
   return (
     <Layout canGoBack>
       <div className="mx-5">
@@ -63,6 +98,6 @@ const Page = () => {
       </div>
     </Layout>
   );
-};
+}
 
 export default Page;
