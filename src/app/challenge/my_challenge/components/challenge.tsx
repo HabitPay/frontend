@@ -1,4 +1,4 @@
-import profilePic from "../../../../public/profilePic.jpeg";
+import profilePic from "../../../../../public/profilePic.jpeg";
 import Image from "next/image";
 import { ChallengesState } from "../page";
 

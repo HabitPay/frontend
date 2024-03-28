@@ -12,7 +12,7 @@ export default function FloatingButton({
 }: FloatingButtonProps) {
   return (
     <Link href={href} legacyBehavior>
-      <a className="fixed cursor-pointer bottom-24 right-5 bg-habit-green rounded-full p-3 text-white shadow-xl">
+      <a className="fixed cursor-pointer bottom-24 right-5 bg-habit-green rounded-full p-3 text-white shadow-gray-400 shadow-lg">
         {children}
       </a>
     </Link>

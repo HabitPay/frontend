@@ -2,7 +2,7 @@
 
 import Layout from "@app/components/layout";
 import Image from "next/image";
-import profilePic from "../../../public/profilePic.jpeg";
+import profilePic from "../../../../public/profilePic.jpeg";
 import { useState } from "react";
 import ChallengesButton from "./components/challengesButton";
 import Challenges, {
@@ -106,7 +106,7 @@ const Page = () => {
           />
         </div>
         <Challenges challenges={challenges} challengeState={challengesButton} />
-        <FloatingButton href="/create_challenge">
+        <FloatingButton href="/challenge/create_challenge">
           <div className="flex items-center justify-center text-sm">
             <svg
               xmlns="http://www.w3.org/2000/svg"

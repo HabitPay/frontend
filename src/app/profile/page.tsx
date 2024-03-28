@@ -4,7 +4,6 @@ import Image from "next/image";
 import profilePic from "../../../public/profilePic.jpeg";
 import { useForm } from "react-hook-form";
 import Layout from "@app/components/layout";
-import Input from "@app/components/input";
 import Button from "@app/components/button";
 import { useState } from "react";
 import useMutation, { MutationResult } from "@libs/useMutaion";
