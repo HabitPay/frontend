@@ -1,18 +1,21 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
-import profilePic from "../../../public/profilePic.jpeg";
+import { eventNames } from "process";
+
 import { useForm } from "react-hook-form";
+
 import Layout from "@app/components/layout";
 import Input from "@app/components/input";
 import Button from "@app/components/button";
-import { useState } from "react";
 import useMutation, { MutationResult } from "@libs/useMutaion";
-import { eventNames } from "process";
+import profilePic from "../../../public/profilePic.jpeg";
+import apiManager from "@api/apiManager";
 
 interface IForm {
   nickname: string;
-  profileImage: FileList | string | null;
+  profileImage: FileList | File | null;
 }
 
 const MB = 1024 * 1024;
@@ -32,10 +35,25 @@ const Page = () => {
   const [changeProfile, { loading, data, error }] =
     useMutation<MutationResult>("/api/profileCHange");
 
-  const onSubmitWithValid = (validForm: IForm) => {
+  const onSubmitWithValid = async (validForm: IForm) => {
     if (loading) return;
-    console.log(validForm);
     // changeProfile(validForm);
+    if (
+      validForm.profileImage instanceof FileList &&
+      validForm.profileImage.length == 1
+    ) {
+      const file = validForm.profileImage[0];
+      validForm.profileImage = file;
+    }
+    try {
+      console.log(validForm);
+      const res = await apiManager.patch("/member", validForm, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const onProfileNicknameChange = (
