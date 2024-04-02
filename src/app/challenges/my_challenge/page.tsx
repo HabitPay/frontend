@@ -74,58 +74,63 @@ const Page = () => {
 
   return (
     <Layout hasTabBar>
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex flex-col">
-          <span className="text-gray-400">안녕하세요</span>
-          <h2 className="text-lg font-semibold">joonhan!</h2>
-        </div>
-        <Image
-          className="rounded-full size-16"
-          src={profilePic}
-          alt="Picture of Avatar"
-        />
-      </div>
-      <div className="flex flex-col mb-10">
-        <span className="mb-3 font-thin">2024년 1월 24일 목요일</span>
-        <h3 className="mb-5 text-lg font-semibold">나의 챌린지</h3>
-        <div className="flex items-center mb-2 space-x-2">
-          <ChallengesButton
-            title="진행 중"
-            isActivated={challengesButton == "In Progress"}
-            onClick={() => handleChallengesButtonClick("In Progress")}
-          />
-          <ChallengesButton
-            title="완료"
-            isActivated={challengesButton == "Completed"}
-            onClick={() => handleChallengesButtonClick("Completed")}
-          />
-          <ChallengesButton
-            title="진행 예정"
-            isActivated={challengesButton == "Scheduled"}
-            onClick={() => handleChallengesButtonClick("Scheduled")}
-          />
-        </div>
-        <Challenges challenges={challenges} challengeState={challengesButton} />
-        <FloatingButton href="/challenge/create_challenge">
-          <div className="flex items-center justify-center text-sm">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-4 h-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
-            <span>챌린지 생성</span>
+      <div className="flex flex-col px-6">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex flex-col">
+            <span className="text-gray-400">안녕하세요</span>
+            <h2 className="text-lg font-semibold">joonhan!</h2>
           </div>
-        </FloatingButton>
+          <Image
+            className="rounded-full size-16"
+            src={profilePic}
+            alt="Picture of Avatar"
+          />
+        </div>
+        <div className="flex flex-col mb-10">
+          <span className="mb-3 font-thin">2024년 1월 24일 목요일</span>
+          <h3 className="mb-5 text-lg font-semibold">나의 챌린지</h3>
+          <div className="flex items-center mb-2 space-x-2">
+            <ChallengesButton
+              title="진행 중"
+              isActivated={challengesButton == "In Progress"}
+              onClick={() => handleChallengesButtonClick("In Progress")}
+            />
+            <ChallengesButton
+              title="완료"
+              isActivated={challengesButton == "Completed"}
+              onClick={() => handleChallengesButtonClick("Completed")}
+            />
+            <ChallengesButton
+              title="진행 예정"
+              isActivated={challengesButton == "Scheduled"}
+              onClick={() => handleChallengesButtonClick("Scheduled")}
+            />
+          </div>
+          <Challenges
+            challenges={challenges}
+            challengeState={challengesButton}
+          />
+        </div>
       </div>
+      <FloatingButton href="/challenge/create_challenge">
+        <div className="flex items-center justify-center text-sm">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="w-4 h-4"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 4.5v15m7.5-7.5h-15"
+            />
+          </svg>
+          <span>챌린지 생성</span>
+        </div>
+      </FloatingButton>
     </Layout>
   );
 };
