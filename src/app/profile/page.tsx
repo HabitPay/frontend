@@ -13,12 +13,11 @@ import Button from "@app/components/button";
 import useMutation, { MutationResult } from "@libs/useMutaion";
 import profilePic from "../../../public/profilePic.jpeg";
 import apiManager from "@api/apiManager";
-import { getEmail } from "@libs/jwt";
 
 interface IForm {
   nickname: string;
   profileImage: FileList | File | null;
-  profileImageName: string | null;
+  imageExtension: string;
 }
 
 const MB = 1024 * 1024;
@@ -33,7 +32,7 @@ const Page = () => {
     formState: { errors },
   } = useForm<IForm>({});
 
-  const nickname = "hogkim";
+  const [imageExtension, setImageExtension] = useState<string>("");
   const [profileImageSrc, setProfileImageSrc] = useState<string | null>(null);
   const [changeProfile, { loading, data, error }] =
     useMutation<MutationResult>("/api/profileCHange");
@@ -43,7 +42,7 @@ const Page = () => {
     // changeProfile(validForm);
     const data = {
       nickname: validForm.nickname,
-      profileImageName: "",
+      imageExtension: "",
     };
 
     if (
@@ -52,10 +51,8 @@ const Page = () => {
     ) {
       const file = validForm.profileImage[0];
       validForm.profileImage = file;
-      const extension: string = file.type.slice(file.type.indexOf("/") + 1);
-      // TODO: 파일 확장자를 PNG 나 JPG 로 변경해서 저장해도 문제 없는지 자료 찾기
-      data.profileImageName = `${getEmail()}.${extension}`;
-      console.log(data.profileImageName);
+      data.imageExtension = imageExtension;
+      console.log(data);
     }
     try {
       console.log(validForm);
@@ -104,6 +101,9 @@ const Page = () => {
       });
     } else {
       setError("profileImage", { message: "" });
+
+      const extension: string = file.type.slice(file.type.indexOf("/") + 1);
+      setImageExtension(extension);
 
       const reader = new FileReader();
       reader.onload = () => {
