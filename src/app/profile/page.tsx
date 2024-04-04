@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { eventNames } from "process";
 
@@ -8,10 +8,9 @@ import { useForm } from "react-hook-form";
 import axios, { HttpStatusCode } from "axios";
 
 import Layout from "@app/components/layout";
-import Input from "@app/components/input";
 import Button from "@app/components/button";
 import useMutation, { MutationResult } from "@libs/useMutaion";
-import profilePic from "../../../public/profilePic.jpeg";
+import profilePic from "@public/default-profile.jpeg";
 import apiManager from "@api/apiManager";
 
 interface IForm {
@@ -32,8 +31,10 @@ const Page = () => {
     formState: { errors },
   } = useForm<IForm>({});
 
+  const [nickname, setNickname] = useState<string>("");
   const [imageExtension, setImageExtension] = useState<string>("");
-  const [profileImageSrc, setProfileImageSrc] = useState<string | null>(null);
+  const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [changeProfile, { loading, data, error }] =
     useMutation<MutationResult>("/api/profileCHange");
 
@@ -41,7 +42,7 @@ const Page = () => {
     if (loading) return;
     // changeProfile(validForm);
     const data = {
-      nickname: validForm.nickname,
+      nickname: nickname === validForm.nickname ? validForm.nickname : nickname,
       imageExtension: "",
     };
 
@@ -58,7 +59,7 @@ const Page = () => {
       console.log(validForm);
       const res = await apiManager.patch("/member", data);
       console.log(res);
-      if (res.status === HttpStatusCode.Ok) {
+      if (res.status === HttpStatusCode.Ok && previewImage) {
         const preSignedUrl: string = res.data;
         const res2 = await axios.put(preSignedUrl, validForm.profileImage);
         console.log(res2);
@@ -71,8 +72,8 @@ const Page = () => {
   const onProfileNicknameChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const newNickname = event.target.value;
-    console.log(newNickname);
+    setNickname(event.target.value);
+    console.log(event.target.value);
   };
 
   const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,11 +108,31 @@ const Page = () => {
 
       const reader = new FileReader();
       reader.onload = () => {
-        setProfileImageSrc(reader.result as string);
+        setPreviewImage(reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
+
+  const getProfile = async () => {
+    try {
+      const res = await apiManager.get("/member");
+      console.log(res);
+      const { nickname, imageUrl }: { nickname: string; imageUrl: string } =
+        res.data;
+
+      if (imageUrl.length > 0) {
+        setProfileImageUrl(imageUrl);
+      }
+      setNickname(nickname);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getProfile();
+  }, []);
 
   return (
     <Layout title="프로필" hasTabBar>
@@ -122,7 +143,7 @@ const Page = () => {
         >
           <Image
             className="rounded-full size-32"
-            src={profileImageSrc || profilePic}
+            src={previewImage || profileImageUrl || profilePic}
             alt="Picture of me"
             width={300}
             height={300}
@@ -159,6 +180,7 @@ const Page = () => {
               <span className="text-sm">닉네임</span>
               <input
                 type="text"
+                value={nickname}
                 {...register("nickname", { onChange: onProfileNicknameChange })}
                 className="w-full px-3 py-2 placeholder-gray-400 appearance-none rounded-2xl focus:outline-none focus:ring-green-500 focus:border-green-500"
               />
