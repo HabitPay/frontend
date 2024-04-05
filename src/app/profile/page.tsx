@@ -16,7 +16,12 @@ import apiManager from "@api/apiManager";
 interface IForm {
   nickname: string;
   profileImage: FileList | File | null;
+}
+
+interface IProfileDTO {
+  nickname: string;
   imageExtension: string;
+  contentLength: number;
 }
 
 const MB = 1024 * 1024;
@@ -41,9 +46,10 @@ const Page = () => {
   const onSubmitWithValid = async (validForm: IForm) => {
     if (loading) return;
     // changeProfile(validForm);
-    const data = {
-      nickname: nickname === validForm.nickname ? validForm.nickname : nickname,
+    const data: IProfileDTO = {
+      nickname: validForm.nickname ? validForm.nickname : nickname,
       imageExtension: "",
+      contentLength: 0,
     };
 
     if (
@@ -53,6 +59,7 @@ const Page = () => {
       const file = validForm.profileImage[0];
       validForm.profileImage = file;
       data.imageExtension = imageExtension;
+      data.contentLength = file.size;
       console.log(data);
     }
     try {
@@ -61,7 +68,11 @@ const Page = () => {
       console.log(res);
       if (res.status === HttpStatusCode.Ok && previewImage) {
         const preSignedUrl: string = res.data;
-        const res2 = await axios.put(preSignedUrl, validForm.profileImage);
+        const res2 = await axios.put(preSignedUrl, validForm.profileImage, {
+          headers: {
+            "Content-Type": "image/" + imageExtension,
+          },
+        });
         console.log(res2);
       }
     } catch (error) {
