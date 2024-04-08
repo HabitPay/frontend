@@ -16,6 +16,10 @@ h3 {
   @apply text-sm;
 }
 
+span {
+  white-space: pre;
+}
+
 input {
   @apply rounded-xl text-sm px-3 py-2
 }
