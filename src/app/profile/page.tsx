@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { eventNames } from "process";
+import { useRouter } from "next/navigation";
 
 import { useForm } from "react-hook-form";
 import axios, { HttpStatusCode } from "axios";
@@ -35,6 +35,7 @@ const Page = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<IForm>({});
+  const router = useRouter();
 
   const [nickname, setNickname] = useState<string>("");
   const [imageExtension, setImageExtension] = useState<string>("");
@@ -141,6 +142,19 @@ const Page = () => {
     }
   };
 
+  const handleDeleteUser = async () => {
+    try {
+      const res = await apiManager.delete("/member");
+      console.log(res);
+      if (res.status === HttpStatusCode.Ok) {
+        console.log("delete success");
+        router.push("/");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     getProfile();
   }, []);
@@ -207,7 +221,10 @@ const Page = () => {
             <button className="w-full py-1 border-2 rounded-md border-slate-400">
               로그아웃
             </button>
-            <button className="w-full py-1 border-2 rounded-md border-slate-400">
+            <button
+              className="w-full py-1 border-2 rounded-md border-slate-400"
+              onClick={handleDeleteUser}
+            >
               계정삭제
             </button>
           </div>

@@ -6,11 +6,11 @@ import Image from "next/image";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 
 import Layout from "@app/components/layout";
-import ChallengesButton from "./components/challengesButton";
+import ChallengesButton from "@app/challenges/my_challenge/components/challengesButton";
 import Challenges, {
   IChallengeInfo,
   IChallenges,
-} from "./components/challenge";
+} from "@app/challenges/my_challenge/components/challenge";
 import profilePic from "../../../public/profilePic.jpeg";
 import FloatingButton from "@app/components/floatingButton";
 
