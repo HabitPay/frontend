@@ -22,6 +22,12 @@ const config: Config = {
         "habit-lightgray": "#E2E2E2",
         "habit-background": "#EEEEEE",
       },
+      ringColor: {
+        "habit-green": "#66BB6A",
+        "habit-gray": "#AAAAAA",
+        "habit-lightgray": "#E2E2E2",
+        "habit-background": "#EEEEEE",
+      },
     },
   },
   darkMode: "media",
