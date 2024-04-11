@@ -12,6 +12,7 @@ import Button from "@app/components/button";
 import useMutation, { MutationResult } from "@libs/useMutaion";
 import profilePic from "@public/default-profile.jpeg";
 import apiManager from "@api/apiManager";
+import { removeJwtFromSessionStorage } from "@libs/jwt";
 
 interface IForm {
   nickname: string;
@@ -149,6 +150,7 @@ const Page = () => {
       if (res.status === HttpStatusCode.Ok) {
         console.log("delete success");
         router.push("/");
+        removeJwtFromSessionStorage();
       }
     } catch (error) {
       console.log(error);

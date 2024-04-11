@@ -1,3 +1,4 @@
+import exp from "constants";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 
 function getDecodedJwt(): JwtPayload | null {
@@ -22,4 +23,11 @@ export function getEmail(): string | null | undefined {
     return null;
   }
   return jwt.sub;
+}
+
+export function removeJwtFromSessionStorage() {
+  if (sessionStorage.getItem("accessToken") === null) {
+    return;
+  }
+  sessionStorage.removeItem("accessToken");
 }
