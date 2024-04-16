@@ -157,6 +157,11 @@ const Page = () => {
     }
   };
 
+  const handleLogout = () => {
+    removeJwtFromSessionStorage();
+    router.push("/");
+  };
+
   useEffect(() => {
     getProfile();
   }, []);
@@ -220,7 +225,10 @@ const Page = () => {
         <div className="w-full px-4 pt-4 bg-white rounded-xl">
           <div className="pb-2 text-lg font-bold">계정 관리</div>
           <div className="flex flex-col items-center py-4 space-y-3 border-t-2">
-            <button className="w-full py-1 border-2 rounded-md border-slate-400">
+            <button
+              className="w-full py-1 border-2 rounded-md border-slate-400"
+              onClick={handleLogout}
+            >
               로그아웃
             </button>
             <button
