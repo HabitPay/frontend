@@ -13,6 +13,15 @@ import Challenges, {
 } from "@app/challenges/my_challenge/components/challenge";
 import profilePic from "../../../public/profilePic.jpeg";
 import FloatingButton from "@app/components/floatingButton";
+import apiManager from "@api/apiManager";
+import { AxiosError } from "axios";
+import { StatusCodes } from "http-status-codes";
+import { ITokenData } from "@app/onboarding/page";
+
+interface IFetchData {
+  nickname:string;
+  imageUrl:string;
+}
 
 const inProgressChallenge: IChallengeInfo[] = [
   {
@@ -76,15 +85,44 @@ const Page = () => {
       : setChallenges(scheduledChallenge);
   };
 
-  // TODO: 페이지 로딩하자마자 바로 닉네임 보여줄 수 있도록 수정. 현재는 깜빡 거림
   useEffect(() => {
-    const accessToken: string | null = sessionStorage.getItem("accessToken");
-    if (accessToken) {
-      const decoded = jwtDecode<JwtPayload>(accessToken);
-      setNickname(decoded.nickname);
-    }
+    const fetchData = async () => {
+      try {
+        const response = await apiManager.get<IFetchData>("/member");
+        console.log(response.data);
+        setNickname(response.data.nickname);
+      } catch (error) {
+        console.error("error1");
+        const axoisError = error as AxiosError;
+        if (axoisError.response && axoisError.response.status === StatusCodes.UNAUTHORIZED) {
+          try {
+            const refreshResponse = await apiManager.post<ITokenData>("/token", {
+              grantType: 'refresh_token',
+              refreshToken: sessionStorage.getItem("refreshToken")
+            })
+            console.log(refreshResponse.data);
+            sessionStorage.setItem("accessToken", refreshResponse.data.accessToken);
+            sessionStorage.setItem("refreshToken", refreshResponse.data.refreshToken);
+            sessionStorage.setItem("tokenType", refreshResponse.data.tokenType);
+            // 토큰 재발급 성공 시 처리
+          } catch (refreshError) {
+            console.log("error2");
+            console.error(refreshError);
+            // 토큰 재발급 실패 시 처리
+          }
+        } else {
+          // 다른 오류 처리
+        }
+      }
+    };
+    fetchData();
+     // const accessToken: string | null = sessionStorage.getItem("accessToken");
+    // if (accessToken) {
+    //   const decoded = jwtDecode<JwtPayload>(accessToken);
+    //   setNickname(decoded.nickname);
+    // }
   }, []);
-
+  
   return (
     <Layout hasTabBar>
       <div className="flex items-center justify-between mb-3">
