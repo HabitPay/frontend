@@ -21,9 +21,8 @@ span {
 }
 
 input {
-  @apply rounded-xl text-sm px-3 py-2
+  @apply rounded-xl text-sm px-3 py-2;
 }
-
 
 /* @media (prefers-color-scheme: dark) {
   :root {
@@ -35,5 +34,13 @@ input {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background-color: #EEEEEE;
+  background-color: #eeeeee;
+}
+
+.rdrDateRangePickerWrapper {
+  width: 100%;
+}
+
+.rdrCalendarWrapper {
+  width: 100%;
 }
