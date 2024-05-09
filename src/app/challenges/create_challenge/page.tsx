@@ -68,8 +68,9 @@ function Page() {
 
   const onSelectedDaysChange = (index: number) => {
     setSelectedDays((prev) => {
-      prev[index] = prev[index] === 1 ? 0 : 1;
-      return [...prev];
+      const newSelectedDays = [...prev];
+      newSelectedDays[index] = newSelectedDays[index] === 1 ? 0 : 1;
+      return newSelectedDays;
     });
   };
 
