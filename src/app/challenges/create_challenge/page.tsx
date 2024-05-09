@@ -166,28 +166,35 @@ function Page() {
             </div>
             <div className="flex flex-col">
               <Label title="벌금 설정" isRequired />
-              <div className="mt-4 mb-3 text-sm text-habit-gray">
+              <div className="mt-2 mb-3 text-sm text-habit-gray">
                 벌금은 0원부터 설정 가능합니다.
               </div>
-              <input type="text" placeholder="1,000원" className="mb-4" />
+              <div className="flex flex-row justify-between mb-4">
+                <input
+                  type="text"
+                  placeholder="금액을 입력해주세요."
+                  className="h-10"
+                />
+                <button className="h-10 px-4 py-2 bg-habit-lightgray rounded-xl text-sm">
+                  초기화
+                </button>
+              </div>
               <div className="flex items-center justify-between text-sm">
                 <div className="px-4 py-2 bg-yellow-100 rounded-xl">+100원</div>
                 <div className="px-4 py-2 bg-yellow-100 rounded-xl">
                   +1,000원
                 </div>
                 <div className="px-4 py-2 bg-yellow-100 rounded-xl">
-                  +10,00원
-                </div>
-                <div className="px-4 py-2 bg-habit-lightgray rounded-xl">
-                  초기화
+                  +10,000원
                 </div>
               </div>
             </div>
           </div>
-          <Label
+          {/* TODO: 없어도 될 것 같아서 주석 처리 */}
+          {/* <Label
             title="챌린지 최대 참여 인원은 1000명입니다."
             isRequired
-          ></Label>
+          ></Label> */}
           <button className="py-2 text-sm text-white bg-habit-green rounded-2xl font-extralight">
             챌린지 생성
           </button>
