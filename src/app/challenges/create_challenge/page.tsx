@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { format, differenceInDays } from "date-fns";
+import { format, differenceInDays, set } from "date-fns";
 import { useForm, Controller } from "react-hook-form";
 import { toZonedTime } from "date-fns-tz";
 import { ko } from "date-fns/locale";
@@ -48,6 +48,8 @@ function Page() {
     formState: { errors },
   } = useForm<IChallengeForm>({});
 
+  const [selectedDays, setSelectedDays] = useState([0, 0, 0, 0, 0, 0, 0]);
+
   const [challengeDate, setChallengeDate] = useState([
     {
       startDate: null,
@@ -64,7 +66,12 @@ function Page() {
 
   const onDescriptionChange = () => {};
 
-  const onStartDateChange = () => {};
+  const onSelectedDaysChange = (index: number) => {
+    setSelectedDays((prev) => {
+      prev[index] = prev[index] === 1 ? 0 : 1;
+      return [...prev];
+    });
+  };
 
   return (
     <Layout canGoBack hasTabBar title="챌린지 생성">
@@ -134,17 +141,21 @@ function Page() {
             </div>
             <div className="flex flex-col">
               <Label title="챌린지 요일 선택" isRequired />
-              <div className="flex flex-col mt-5 mb-5">
+              <div className="mt-2 text-sm text-habit-gray">
+                반드시 하루 이상 선택해주세요.
+              </div>
+              <div className="flex flex-col mt-3 mb-5">
                 <div className="flex flex-row justify-between px-3 text-sm">
-                  {[0, 0, 0, 0, 0, 0, 0].map((item, index) => (
+                  {selectedDays.map((item, index) => (
                     <div
                       key={index}
                       className={addClassNames(
                         "flex items-center justify-center p-1 rounded-full size-6 ",
                         item === 1
                           ? "text-habit-green bg-[#E0E9E1]"
-                          : "bg-[#CCCCCC]"
+                          : "bg-white"
                       )}
+                      onClick={() => onSelectedDaysChange(index)}
                     >
                       {Days[index]}
                     </div>
