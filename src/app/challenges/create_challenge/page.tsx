@@ -48,9 +48,9 @@ function Page() {
     formState: { errors },
   } = useForm<IChallengeForm>({});
 
-  const [state, setState] = useState([
+  const [challengeDate, setChallengeDate] = useState([
     {
-      startDate: new Date(),
+      startDate: null,
       endDate: null,
       key: "selection",
     },
@@ -98,57 +98,58 @@ function Page() {
           </div>
           <div className="flex flex-col">
             <Label title="챌린지 기간" isRequired />
-            <div className="flex flex-row justify-around mt-4 mb-4">
-              <div className="flex flex-col items-center justify-center space-y-5">
-                <span className="text-sm text-habit-gray">시작 일자</span>
-              </div>
-              <div className="flex flex-col items-center justify-center space-y-5">
-                <span className="text-sm text-habit-gray">종료 일자</span>
-              </div>
-            </div>
-            <div className="mb-5">
+            <div className="mt-4 mb-4">
               <Controller
                 name="startDate"
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <DateRange
                     locale={ko}
-                    onChange={(item) => setState([item.selection])}
+                    onChange={(item) => setChallengeDate([item.selection])}
                     showSelectionPreview={true}
                     months={1}
-                    ranges={state}
+                    ranges={challengeDate}
                     minDate={new Date()}
                     maxDate={addYears(new Date(), 2)}
+                    shownDate={new Date()}
                     dateDisplayFormat={"yyyy.MM.dd"}
                     direction="horizontal"
-                    startDatePlaceholder="시작 일자"
+                    startDatePlaceholder="시작 일자 선택"
                     endDatePlaceholder="종료 일자 선택"
                   />
                 )}
               />
             </div>
-            <div className="flex flex-col mb-5">
-              <div className="flex flex-row justify-between px-3 text-sm">
-                {[0, 0, 0, 0, 0, 0, 0].map((item, index) => (
-                  <div
-                    key={index}
-                    className={addClassNames(
-                      "flex items-center justify-center p-1 rounded-full size-6 ",
-                      item === 1
-                        ? "text-habit-green bg-[#E0E9E1]"
-                        : "bg-[#CCCCCC]"
-                    )}
-                  >
-                    {Days[index]}
-                  </div>
-                ))}
-              </div>
-              <div className="flex items-center justify-center py-2 mt-4 text-sm bg-habit-lightgray rounded-2xl">
-                <span>챌린지 기간 : </span>
-                <span className=" text-habit-green">
-                  {differenceInDays(new Date(2024, 4, 1), new Date(2024, 2, 1))}
-                </span>
-                <span>일</span>
+            <div className="flex items-center justify-center py-2 mb-4 text-sm bg-habit-lightgray rounded-2xl">
+              <span>챌린지 기간: 총 </span>
+              <span className=" text-habit-green">
+                {challengeDate[0]?.startDate && challengeDate[0]?.endDate
+                  ? differenceInDays(
+                      challengeDate[0]?.endDate,
+                      challengeDate[0]?.startDate
+                    ) + 1
+                  : 0}
+              </span>
+              <span>일</span>
+            </div>
+            <div className="flex flex-col">
+              <Label title="챌린지 요일 선택" isRequired />
+              <div className="flex flex-col mt-5 mb-5">
+                <div className="flex flex-row justify-between px-3 text-sm">
+                  {[0, 0, 0, 0, 0, 0, 0].map((item, index) => (
+                    <div
+                      key={index}
+                      className={addClassNames(
+                        "flex items-center justify-center p-1 rounded-full size-6 ",
+                        item === 1
+                          ? "text-habit-green bg-[#E0E9E1]"
+                          : "bg-[#CCCCCC]"
+                      )}
+                    >
+                      {Days[index]}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
             <div className="flex flex-col">
