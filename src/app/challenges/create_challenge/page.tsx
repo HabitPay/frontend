@@ -7,6 +7,7 @@ import { useForm, Controller } from "react-hook-form";
 import { toZonedTime } from "date-fns-tz";
 import { ko } from "date-fns/locale";
 import { addDays, addYears } from "date-fns";
+import { NumericFormat } from "react-number-format";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
@@ -28,6 +29,8 @@ enum Days {
 
 const TIME_ZONE = "Asia/Seoul";
 
+const INCREASE_FEE = [100, 1000, 10000];
+
 interface IChallengeForm {
   title: string;
   description: string;
@@ -45,6 +48,7 @@ function Page() {
     setValue,
     setError,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<IChallengeForm>({});
 
@@ -72,6 +76,14 @@ function Page() {
       newSelectedDays[index] = newSelectedDays[index] === 1 ? 0 : 1;
       return newSelectedDays;
     });
+  };
+
+  const onClickIncreasingFee = (amount: number) => {
+    const currentFeePerAbsence = parseInt(
+      control._formValues.feePerAbsence || "0",
+      10
+    );
+    setValue("feePerAbsence", currentFeePerAbsence + amount);
   };
 
   return (
@@ -167,26 +179,30 @@ function Page() {
             <div className="flex flex-col">
               <Label title="벌금 설정" isRequired />
               <div className="mt-2 mb-3 text-sm text-habit-gray">
-                벌금은 0원부터 설정 가능합니다.
+                1회 실패 당 부과되는 벌금을 설정해주세요.
               </div>
               <div className="flex flex-row justify-between mb-4">
-                <input
-                  type="text"
-                  placeholder="금액을 입력해주세요."
-                  className="h-10"
+                <Controller
+                  name="feePerAbsence"
+                  control={control}
+                  render={({ field: { ...rest } }) => (
+                    <NumericFormat thousandSeparator="," {...rest} />
+                  )}
                 />
                 <button className="h-10 px-4 py-2 bg-habit-lightgray rounded-xl text-sm">
                   초기화
                 </button>
               </div>
               <div className="flex items-center justify-between text-sm">
-                <div className="px-4 py-2 bg-yellow-100 rounded-xl">+100원</div>
-                <div className="px-4 py-2 bg-yellow-100 rounded-xl">
-                  +1,000원
-                </div>
-                <div className="px-4 py-2 bg-yellow-100 rounded-xl">
-                  +10,000원
-                </div>
+                {INCREASE_FEE.map((amount, index) => (
+                  <div
+                    key={index}
+                    className="px-4 py-2 bg-yellow-100 rounded-xl"
+                    onClick={() => onClickIncreasingFee(amount)}
+                  >
+                    +{new Intl.NumberFormat("ko-KR").format(amount)}원
+                  </div>
+                ))}
               </div>
             </div>
           </div>
