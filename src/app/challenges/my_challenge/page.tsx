@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { JwtPayload, jwtDecode } from "jwt-decode";
 
@@ -65,6 +66,8 @@ const Page = () => {
   const [challengesButton, setChallengesButton] =
     useState<ChallengesState>("In Progress");
   const [nickname, setNickname] = useState<String>("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleChallengesButtonClick = (type: ChallengesState) => {
     setChallengesButton(type);
@@ -76,8 +79,16 @@ const Page = () => {
       : setChallenges(scheduledChallenge);
   };
 
-  // TODO: 페이지 로딩하자마자 바로 닉네임 보여줄 수 있도록 수정. 현재는 깜빡 거림
   useEffect(() => {
+    const queryStringAccessToken: string | null =
+      searchParams.get("accessToken");
+
+    if (queryStringAccessToken) {
+      sessionStorage.setItem("accessToken", queryStringAccessToken);
+      router.replace("/challenges/my_challenge");
+    }
+
+    // TODO: 페이지 로딩하자마자 바로 닉네임 보여줄 수 있도록 수정. 현재는 깜빡 거림
     const accessToken: string | null = sessionStorage.getItem("accessToken");
     if (accessToken) {
       const decoded = jwtDecode<JwtPayload>(accessToken);
