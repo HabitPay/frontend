@@ -198,8 +198,9 @@ function Page() {
                 <Controller
                   name="feePerAbsence"
                   control={control}
-                  render={({ field: { onChange, onBlur, ...rest } }) => (
+                  render={({ field: { ref, onChange, onBlur, ...rest } }) => (
                     <NumericFormat
+                      getInputRef={ref}
                       thousandSeparator=","
                       onChange={handleFeePerAbsenceChange}
                       onBlur={handleFeePerAbsenceChange}
