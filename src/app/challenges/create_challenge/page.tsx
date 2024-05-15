@@ -16,6 +16,7 @@ import { addClassNames } from "@libs/utils";
 import Layout from "@app/components/layout";
 import TextArea from "@app/components/textarea";
 import Label from "../components/label";
+import Button from "@app/components/button";
 
 enum Days {
   일,
@@ -27,6 +28,11 @@ enum Days {
   토,
 }
 
+enum SelectedStatus {
+  NOT_SELECTED,
+  SELECTED,
+}
+
 const TIME_ZONE = "Asia/Seoul";
 
 const INCREASE_FEE = [100, 1000, 10000];
@@ -36,7 +42,9 @@ interface IChallengeForm {
   description: string;
   startDate: string;
   endDate: string;
-  participatingDays: number;
+  startTime: string;
+  endTime: string;
+  // participatingDays: number;
   feePerAbsence: number;
 }
 
@@ -68,14 +76,16 @@ function Page() {
 
   const onTitleChange = () => {};
 
-  const onDescriptionChange = () => {};
-
-  const onSelectedDaysChange = (index: number) => {
+  const handleSelectedDaysChange = (index: number) => {
     setSelectedDays((prev) => {
       const newSelectedDays = [...prev];
-      newSelectedDays[index] = newSelectedDays[index] === 1 ? 0 : 1;
+      newSelectedDays[index] =
+        newSelectedDays[index] === SelectedStatus.SELECTED
+          ? SelectedStatus.NOT_SELECTED
+          : SelectedStatus.SELECTED;
       return newSelectedDays;
     });
+    console.log(control._formValues);
   };
 
   const onClickIncreasingFee = (amount: number) => {
@@ -125,7 +135,6 @@ function Page() {
                   value: true,
                   message: "챌린지 설명을 입력해주세요.",
                 },
-                onChange: onDescriptionChange,
               })}
             />
           </div>
@@ -153,6 +162,34 @@ function Page() {
                 )}
               />
             </div>
+            <div className="flex justify-around mb-4">
+              <div className="flex flex-col">
+                <Label title="시작 시간" isRequired />
+                <input
+                  type="time"
+                  className="mt-3"
+                  {...register("startTime", {
+                    required: {
+                      value: true,
+                      message: "시작 시간을 입력해주세요.",
+                    },
+                  })}
+                />
+              </div>
+              <div className="flex flex-col">
+                <Label title="종료 시간" isRequired />
+                <input
+                  type="time"
+                  className="mt-3"
+                  {...register("endTime", {
+                    required: {
+                      value: true,
+                      message: "종료 시간을 입력해주세요.",
+                    },
+                  })}
+                />
+              </div>
+            </div>
             <div className="flex items-center justify-center py-2 mb-4 text-sm bg-habit-lightgray rounded-2xl">
               <span>챌린지 기간: 총 </span>
               <span className=" text-habit-green">
@@ -177,11 +214,11 @@ function Page() {
                       key={index}
                       className={addClassNames(
                         "flex items-center justify-center p-1 rounded-full size-6 ",
-                        item === 1
+                        item === SelectedStatus.SELECTED
                           ? "text-habit-green bg-[#E0E9E1]"
                           : "bg-white"
                       )}
-                      onClick={() => onSelectedDaysChange(index)}
+                      onClick={() => handleSelectedDaysChange(index)}
                     >
                       {Days[index]}
                     </div>
@@ -233,9 +270,11 @@ function Page() {
             title="챌린지 최대 참여 인원은 1000명입니다."
             isRequired
           ></Label> */}
-          <button className="py-2 text-sm text-white bg-habit-green rounded-2xl font-extralight">
+
+          <Button text="챌린지 생성" />
+          {/* <button className="py-2 text-sm text-white bg-habit-green rounded-2xl font-extralight">
             챌린지 생성
-          </button>
+          </button> */}
         </div>
       </form>
     </Layout>
