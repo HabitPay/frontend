@@ -130,36 +130,42 @@ function Page() {
           <div className="flex flex-col space-y-3">
             <Label title="챌린지 설명" isRequired />
             <TextArea
-              {...register("description", {
+              register={register}
+              options={{
                 required: {
                   value: true,
                   message: "챌린지 설명을 입력해주세요.",
                 },
-              })}
+              }}
+              name="description"
             />
           </div>
           <div className="flex flex-col">
             <Label title="챌린지 기간" isRequired />
             <div className="mt-4 mb-4">
-              <Controller
-                name="startDate"
-                control={control}
-                render={({ field: { onChange, value } }) => (
-                  <DateRange
-                    locale={ko}
-                    onChange={(item) => setChallengeDate([item.selection])}
-                    showSelectionPreview={true}
-                    months={1}
-                    ranges={challengeDate}
-                    minDate={new Date()}
-                    maxDate={addYears(new Date(), 2)}
-                    shownDate={new Date()}
-                    dateDisplayFormat={"yyyy.MM.dd"}
-                    direction="horizontal"
-                    startDatePlaceholder="시작 일자 선택"
-                    endDatePlaceholder="종료 일자 선택"
-                  />
-                )}
+              <DateRange
+                locale={ko}
+                onChange={(item) => {
+                  setChallengeDate([item.selection]);
+                  setValue(
+                    "startDate",
+                    format(item.selection.startDate, "yyyy-MM-dd")
+                  );
+                  setValue(
+                    "endDate",
+                    format(item.selection.endDate, "yyyy-MM-dd")
+                  );
+                }}
+                showSelectionPreview={true}
+                months={1}
+                ranges={challengeDate}
+                minDate={new Date()}
+                maxDate={addYears(new Date(), 2)}
+                shownDate={new Date()}
+                dateDisplayFormat={"yyyy.MM.dd"}
+                direction="horizontal"
+                startDatePlaceholder="시작 일자 선택"
+                endDatePlaceholder="종료 일자 선택"
               />
             </div>
             <div className="flex justify-around mb-4">
