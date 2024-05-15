@@ -91,6 +91,14 @@ function Page() {
     setValue("feePerAbsence", 0);
   };
 
+  const handleFeePerAbsenceChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const commaRemovedValue = event.target.value.replace(/,/g, "");
+    const numberValue = parseInt(commaRemovedValue, 10);
+    setValue("feePerAbsence", numberValue);
+  };
+
   return (
     <Layout canGoBack hasTabBar title="챌린지 생성">
       <form onSubmit={handleSubmit(onSubmitWithValidation)}>
@@ -190,8 +198,13 @@ function Page() {
                 <Controller
                   name="feePerAbsence"
                   control={control}
-                  render={({ field: { ...rest } }) => (
-                    <NumericFormat thousandSeparator="," {...rest} />
+                  render={({ field: { onChange, onBlur, ...rest } }) => (
+                    <NumericFormat
+                      thousandSeparator=","
+                      onChange={handleFeePerAbsenceChange}
+                      onBlur={handleFeePerAbsenceChange}
+                      {...rest}
+                    />
                   )}
                 />
                 <button
