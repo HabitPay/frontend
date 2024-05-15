@@ -86,6 +86,11 @@ function Page() {
     setValue("feePerAbsence", currentFeePerAbsence + amount);
   };
 
+  const handleResetFee = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    setValue("feePerAbsence", 0);
+  };
+
   return (
     <Layout canGoBack hasTabBar title="챌린지 생성">
       <form onSubmit={handleSubmit(onSubmitWithValidation)}>
@@ -189,7 +194,10 @@ function Page() {
                     <NumericFormat thousandSeparator="," {...rest} />
                   )}
                 />
-                <button className="h-10 px-4 py-2 bg-habit-lightgray rounded-xl text-sm">
+                <button
+                  className="h-10 px-4 py-2 bg-habit-lightgray rounded-xl text-sm"
+                  onClick={handleResetFee}
+                >
                   초기화
                 </button>
               </div>
