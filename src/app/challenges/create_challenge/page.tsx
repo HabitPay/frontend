@@ -130,6 +130,7 @@ function Page() {
           <div className="flex flex-col space-y-3">
             <Label title="챌린지 설명" isRequired />
             <TextArea
+              placeholder="챌린지 설명을 입력해주세요."
               register={register}
               options={{
                 required: {
