@@ -6,7 +6,7 @@ import { format, differenceInDays, set } from "date-fns";
 import { useForm, Controller } from "react-hook-form";
 import { toZonedTime } from "date-fns-tz";
 import { ko } from "date-fns/locale";
-import { addDays, addYears } from "date-fns";
+import { addYears } from "date-fns";
 import { NumericFormat } from "react-number-format";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main css file
@@ -44,7 +44,7 @@ interface IChallengeForm {
   endDate: string;
   startTime: string;
   endTime: string;
-  // participatingDays: number;
+  participatingDays: number;
   feePerAbsence: number;
 }
 
@@ -60,7 +60,9 @@ function Page() {
     formState: { errors },
   } = useForm<IChallengeForm>({});
 
-  const [selectedDays, setSelectedDays] = useState([0, 0, 0, 0, 0, 0, 0]);
+  const [selectedDays, setSelectedDays] = useState<number[]>(
+    new Array(7).fill(SelectedStatus.NOT_SELECTED)
+  );
 
   const [challengeDate, setChallengeDate] = useState([
     {
@@ -85,7 +87,10 @@ function Page() {
           : SelectedStatus.SELECTED;
       return newSelectedDays;
     });
-    console.log(control._formValues);
+
+    let bitValue: number = getValues("participatingDays");
+    bitValue ^= 1 << (6 - index);
+    setValue("participatingDays", bitValue);
   };
 
   const onClickIncreasingFee = (amount: number) => {
@@ -171,7 +176,10 @@ function Page() {
             </div>
             <div className="flex justify-around mb-4">
               <div className="flex flex-col">
-                <Label title="시작 시간" isRequired />
+                <Label title="챌린지 시작 시간" isRequired />
+                {control._formValues.startDate && (
+                  <h3 className="text-neutral-500">{getValues("startDate")}</h3>
+                )}
                 <input
                   type="time"
                   className="mt-3"
@@ -184,7 +192,10 @@ function Page() {
                 />
               </div>
               <div className="flex flex-col">
-                <Label title="종료 시간" isRequired />
+                <Label title="챌린지 종료 시간" isRequired />
+                {control._formValues.endDate && (
+                  <h3 className="text-neutral-500">{getValues("endDate")}</h3>
+                )}
                 <input
                   type="time"
                   className="mt-3"
@@ -216,6 +227,15 @@ function Page() {
               </div>
               <div className="flex flex-col mt-3 mb-5">
                 <div className="flex flex-row justify-between px-3 text-sm">
+                  <input
+                    type="hidden"
+                    {...register("participatingDays", {
+                      required: {
+                        value: true,
+                        message: "요일을 선택해주세요.",
+                      },
+                    })}
+                  />
                   {selectedDays.map((item, index) => (
                     <div
                       key={index}
