@@ -17,6 +17,8 @@ import Layout from "@app/components/layout";
 import TextArea from "@app/components/textarea";
 import Label from "../components/label";
 import Button from "@app/components/button";
+import { convertKstDate } from "@libs/date";
+import apiManager from "@api/apiManager";
 
 enum Days {
   일,
@@ -33,8 +35,6 @@ enum SelectedStatus {
   SELECTED,
 }
 
-const TIME_ZONE = "Asia/Seoul";
-
 const INCREASE_FEE = [100, 1000, 10000];
 
 interface IChallengeForm {
@@ -44,6 +44,15 @@ interface IChallengeForm {
   endDate: string;
   startTime: string;
   endTime: string;
+  participatingDays: number;
+  feePerAbsence: number;
+}
+
+interface IChallengeDto {
+  title: string;
+  description: string;
+  startDate: Date;
+  endDate: Date;
   participatingDays: number;
   feePerAbsence: number;
 }
@@ -72,8 +81,22 @@ function Page() {
     },
   ]);
 
-  const onSubmitWithValidation = (form: IChallengeForm) => {
+  const onSubmitWithValidation = async (form: IChallengeForm) => {
     console.log(form);
+    const data: IChallengeDto = {
+      title: form.title,
+      description: form.description,
+      participatingDays: form.participatingDays,
+      feePerAbsence: form.feePerAbsence,
+      startDate: convertKstDate(form.startDate, form.startTime),
+      endDate: convertKstDate(form.endDate, form.endTime),
+    };
+    try {
+      const res = await apiManager.post("/challenge", data);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const onTitleChange = () => {};
