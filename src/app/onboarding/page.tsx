@@ -8,10 +8,18 @@ import { StatusCodes } from "http-status-codes";
 
 import apiManager from "@api/apiManager";
 import Layout from "@app/components/layout";
+import { AxiosError } from "axios";
 
 interface IForm {
   nickname: string;
   number: number;
+}
+
+export interface ITokenData{
+  accessToken: string;
+  expiresIn: number;
+  refreshToken: string;
+  tokenType:string;
 }
 
 function Page() {
@@ -27,13 +35,15 @@ function Page() {
     console.log(data);
     const { nickname } = data;
     try {
-      const res = await apiManager.post("/member", {
+      const res = await apiManager.post<ITokenData>("/member", {
         nickname,
       });
       if (res.status === StatusCodes.CREATED) {
-        const { accessToken } = res.data;
+        const { accessToken, refreshToken, tokenType } = res.data;
         sessionStorage.setItem("accessToken", accessToken);
-        router.push("/challenges/my_challenge");
+        sessionStorage.setItem("refreshToken", refreshToken);
+        sessionStorage.setItem("tokenType", tokenType);
+        router.push("/my_challenge");
       }
       console.log(res);
     } catch (error) {

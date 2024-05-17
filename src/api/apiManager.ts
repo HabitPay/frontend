@@ -9,6 +9,13 @@ const getAccessToken = () => {
   return null;
 };
 
+const getTokenType = () => {
+  if (typeof window !== "undefined") {
+    return sessionStorage.getItem("tokenType");
+  }
+  return null;
+};
+
 const apiManager: AxiosInstance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_BACKEND_SERVER}`,
   timeout: 3000,
@@ -17,8 +24,11 @@ const apiManager: AxiosInstance = axios.create({
 apiManager.interceptors.request.use(
   (config) => {
     const token: String | null = getAccessToken();
+    let tokenType: String | null = getTokenType();
+    if (!tokenType)
+      {tokenType = "Bearer";}
     if (token) {
-      config.headers.setAuthorization(`Bearer ${token}`);
+      config.headers.setAuthorization(`${tokenType} ${token}`);
     }
     return config;
   },
