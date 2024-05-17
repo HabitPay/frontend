@@ -1,15 +1,19 @@
 "use client";
 
-import Layout from "@app/components/layout";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import profilePic from "../../../../public/profilePic.jpeg";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+
+import { JwtPayload, jwtDecode } from "jwt-decode";
+
+import Layout from "@app/components/layout";
+import profilePic from "@public/profilePic.jpeg";
 import ChallengesButton from "./components/challengesButton";
+import FloatingButton from "@app/components/floatingButton";
 import Challenges, {
   IChallengeInfo,
   IChallenges,
 } from "./components/challenge";
-import FloatingButton from "@app/components/floatingButton";
 
 const inProgressChallenge: IChallengeInfo[] = [
   {
@@ -61,6 +65,9 @@ const Page = () => {
     useState<IChallengeInfo[]>(inProgressChallenge);
   const [challengesButton, setChallengesButton] =
     useState<ChallengesState>("In Progress");
+  const [nickname, setNickname] = useState<String>("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const handleChallengesButtonClick = (type: ChallengesState) => {
     setChallengesButton(type);
@@ -72,13 +79,30 @@ const Page = () => {
       : setChallenges(scheduledChallenge);
   };
 
+  useEffect(() => {
+    const queryStringAccessToken: string | null =
+      searchParams.get("accessToken");
+
+    if (queryStringAccessToken) {
+      sessionStorage.setItem("accessToken", queryStringAccessToken);
+      router.replace("/challenges/my_challenge");
+    }
+
+    // TODO: 페이지 로딩하자마자 바로 닉네임 보여줄 수 있도록 수정. 현재는 깜빡 거림
+    const accessToken: string | null = sessionStorage.getItem("accessToken");
+    if (accessToken) {
+      const decoded = jwtDecode<JwtPayload>(accessToken);
+      setNickname(decoded.nickname);
+    }
+  }, []);
+
   return (
     <Layout hasTabBar>
       <div className="flex flex-col px-6">
         <div className="flex items-center justify-between mb-3">
           <div className="flex flex-col">
             <span className="text-gray-400">안녕하세요</span>
-            <h2 className="text-lg font-semibold">joonhan!</h2>
+            <h2 className="text-lg font-semibold">{nickname}</h2>
           </div>
           <Image
             className="rounded-full size-16"
@@ -112,7 +136,7 @@ const Page = () => {
           />
         </div>
       </div>
-      <FloatingButton href="/challenge/create_challenge">
+      <FloatingButton href="/challenges/create_challenge">
         <div className="flex items-center justify-center text-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"

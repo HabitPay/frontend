@@ -1,8 +1,12 @@
+import { RegisterOptions, UseFormRegister } from "react-hook-form";
+
 interface TextAreaProps {
   label?: string;
-  name?: string;
   placeholder?: string;
   value?: string;
+  name: string;
+  register: UseFormRegister<any>;
+  options?: RegisterOptions<any>;
   [key: string]: any;
 }
 
@@ -11,6 +15,8 @@ export default function TextArea({
   name,
   placeholder,
   value,
+  register,
+  options,
   ...rest
 }: TextAreaProps) {
   return (
@@ -29,6 +35,7 @@ export default function TextArea({
         rows={4}
         value={value}
         placeholder={placeholder}
+        {...register(name, options)}
         {...rest}
       />
     </div>
