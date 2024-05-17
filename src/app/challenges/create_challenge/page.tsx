@@ -51,8 +51,8 @@ interface IChallengeForm {
 interface IChallengeDto {
   title: string;
   description: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   participatingDays: number;
   feePerAbsence: number;
 }
@@ -82,7 +82,6 @@ function Page() {
   ]);
 
   const onSubmitWithValidation = async (form: IChallengeForm) => {
-    console.log(form);
     const data: IChallengeDto = {
       title: form.title,
       description: form.description,
@@ -91,6 +90,7 @@ function Page() {
       startDate: convertKstDate(form.startDate, form.startTime),
       endDate: convertKstDate(form.endDate, form.endTime),
     };
+    console.log(data);
     try {
       const res = await apiManager.post("/challenge", data);
       console.log(res);
