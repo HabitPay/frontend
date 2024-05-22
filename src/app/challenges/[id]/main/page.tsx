@@ -13,25 +13,14 @@ import FloatingButton from "@app/components/floatingButton";
 import Menu from "../components/menu";
 import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
-import { IChallengeDetailsDto } from "@/types/challenge";
-import { fetchChallengeDetails } from "@api/challenge";
+import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 
 const Page = ({ params }: { params: { id: string } }) => {
-  const [challengeDetails, setChallengeDetails] =
-    useState<IChallengeDetailsDto | null>(null);
+  const { challengeDetails, isLoading, error } = useChallengeDetails(params.id);
 
-  useEffect(() => {
-    if (params.id) {
-      (async () => {
-        const data: IChallengeDetailsDto | null = await fetchChallengeDetails(
-          params.id
-        );
-        if (data) {
-          setChallengeDetails(data);
-        }
-      })();
-    }
-  }, []);
+  // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
+  if (isLoading) return <div>Loading...</div>;
+  if (error) return <div>Error...</div>;
 
   return (
     <Layout canGoBack hasTabBar>
