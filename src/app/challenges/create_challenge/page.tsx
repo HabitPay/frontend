@@ -19,21 +19,7 @@ import Label from "../components/label";
 import Button from "@app/components/button";
 import { convertKstDate } from "@libs/date";
 import apiManager from "@api/apiManager";
-
-enum Days {
-  일,
-  월,
-  화,
-  수,
-  목,
-  금,
-  토,
-}
-
-enum SelectedStatus {
-  NOT_SELECTED,
-  SELECTED,
-}
+import { Days, SelectedStatus } from "@/types/enums";
 
 const INCREASE_FEE = [100, 1000, 10000];
 
