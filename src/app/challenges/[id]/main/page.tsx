@@ -1,33 +1,74 @@
 "use client";
 
-import Layout from "@app/components/layout";
-import profilePic from "../../../../../public/profilePic.jpeg";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
+
+import apiManager from "@api/apiManager";
+import Layout from "@app/components/layout";
+import profilePic from "@public/profilePic.jpeg";
+import FloatingButton from "@app/components/floatingButton";
 import Menu from "../components/menu";
-import { usePathname } from "next/navigation";
 import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
-import FloatingButton from "@app/components/floatingButton";
-import { useState } from "react";
-import Link from "next/link";
+import { differenceInDays, set } from "date-fns";
 
-const Page = () => {
-  const currentPath = usePathname().split("/");
-  const challengeId = currentPath[2];
+interface IChallengeDetailsDto {
+  title: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  participatingDays: number;
+  feePerAbsence: number;
+  hostNickname: string;
+  hostProfileImage: string | null;
+}
+
+const Page = ({ params }: { params: { id: string } }) => {
+  const [challengeDetails, setChallengeDetails] =
+    useState<IChallengeDetailsDto | null>(null);
   const [isManager, setIsManager] = useState(true);
+
+  const fetchChallengeDetails = async () => {
+    try {
+      const res = await apiManager(`/challenge/${params.id}`);
+      const { data }: { data: IChallengeDetailsDto } = res;
+      setChallengeDetails(data);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (params.id) {
+      fetchChallengeDetails();
+    }
+  }, []);
 
   return (
     <Layout canGoBack hasTabBar>
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6">
-          <Menu currentPage="챌린지 메인" challengeId={challengeId} />
-          <ChallengeTitle />
+          <Menu currentPage="챌린지 메인" challengeId={params.id} />
+          {challengeDetails && (
+            <ChallengeTitle
+              title={challengeDetails.title}
+              remainingDays={
+                differenceInDays(challengeDetails.endDate, Date.now()) + 1
+              }
+              participants={42}
+              profileImages={challengeDetails.hostProfileImage}
+            />
+          )}
+
           <div className="flex flex-col mt-3 space-y-2 text-sm">
             <div className="flex items-center justify-between h-8">
               <div>챌린지 설명</div>
               {isManager ? (
                 <Link
-                  href={`/challenges/${challengeId}/edit`}
+                  href={`/challenges/${params.id}/edit`}
                   className="flex items-center space-x-1 bg-[#FFF9C4] pl-2 pr-3 py-1 rounded-2xl"
                 >
                   <svg
@@ -54,9 +95,7 @@ const Page = () => {
               ) : null}
             </div>
             <div className="px-3 py-2 bg-white rounded-2xl">
-              복잡한 현대사회에서 살아남기 위한 독서 모임입니다.
-              <br />
-              각자 읽고 싶은 책을 읽고 간단하게 정리해서 올리면 됩니다.
+              {challengeDetails && challengeDetails.description}
             </div>
           </div>
           <div className="flex flex-col mt-5 space-y-3">
@@ -115,7 +154,7 @@ const Page = () => {
                 모였습니다!
               </span>
               <Link
-                href={`/challenges/${challengeId}/fee_table`}
+                href={`/challenges/${params.id}/fee_table`}
                 className="px-3 py-2 text-white rounded-xl font-extralight bg-habit-green"
               >
                 벌금 현황 보기
