@@ -15,11 +15,11 @@ interface IForm {
   number: number;
 }
 
-export interface ITokenData{
+export interface ITokenData {
   accessToken: string;
   expiresIn: number;
   refreshToken: string;
-  tokenType:string;
+  tokenType: string;
 }
 
 function Page() {
@@ -43,7 +43,7 @@ function Page() {
         sessionStorage.setItem("accessToken", accessToken);
         sessionStorage.setItem("refreshToken", refreshToken);
         sessionStorage.setItem("tokenType", tokenType);
-        router.push("/my_challenge");
+        router.push("/challenges/my_challenge");
       }
       console.log(res);
     } catch (error) {
