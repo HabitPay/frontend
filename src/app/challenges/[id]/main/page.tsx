@@ -1,9 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+
+import { differenceInDays } from "date-fns";
 
 import apiManager from "@api/apiManager";
 import Layout from "@app/components/layout";
@@ -12,38 +13,23 @@ import FloatingButton from "@app/components/floatingButton";
 import Menu from "../components/menu";
 import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
-import { differenceInDays, set } from "date-fns";
-
-interface IChallengeDetailsDto {
-  title: string;
-  description: string;
-  startDate: string;
-  endDate: string;
-  participatingDays: number;
-  feePerAbsence: number;
-  hostNickname: string;
-  hostProfileImage: string | null;
-}
+import { IChallengeDetailsDto } from "@/types/challenge";
+import { fetchChallengeDetails } from "@api/challenge";
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [challengeDetails, setChallengeDetails] =
     useState<IChallengeDetailsDto | null>(null);
-  const [isManager, setIsManager] = useState(true);
-
-  const fetchChallengeDetails = async () => {
-    try {
-      const res = await apiManager(`/challenge/${params.id}`);
-      const { data }: { data: IChallengeDetailsDto } = res;
-      setChallengeDetails(data);
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   useEffect(() => {
     if (params.id) {
-      fetchChallengeDetails();
+      (async () => {
+        const data: IChallengeDetailsDto | null = await fetchChallengeDetails(
+          params.id
+        );
+        if (data) {
+          setChallengeDetails(data);
+        }
+      })();
     }
   }, []);
 
@@ -66,7 +52,7 @@ const Page = ({ params }: { params: { id: string } }) => {
           <div className="flex flex-col mt-3 space-y-2 text-sm">
             <div className="flex items-center justify-between h-8">
               <div>챌린지 설명</div>
-              {isManager ? (
+              {challengeDetails && challengeDetails.isHost && (
                 <Link
                   href={`/challenges/${params.id}/edit`}
                   className="flex items-center space-x-1 bg-[#FFF9C4] pl-2 pr-3 py-1 rounded-2xl"
@@ -92,7 +78,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                   </svg>
                   <span>챌린지 정보 수정</span>
                 </Link>
-              ) : null}
+              )}
             </div>
             <div className="px-3 py-2 bg-white rounded-2xl">
               {challengeDetails && challengeDetails.description}
