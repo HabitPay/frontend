@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 
-import apiManager from "@api/apiManager";
 import { IChallengeDetailsDto } from "@/types/challenge";
 import { SelectedStatus } from "@/types/enums";
+import { fetchChallengeDetails } from "../api/challenge";
 
 const calculateSelectedDays = (selectedDays: number[], days: number) => {
   selectedDays.forEach((_, idx) => {
@@ -25,11 +25,13 @@ export const useChallengeDetails = (id: string) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await apiManager(`/challenge/${id}`);
-        setChallengeDetails(res.data);
-        setSelectedDays(
-          calculateSelectedDays(selectedDays, res.data.participatingDays)
-        );
+        const data = await fetchChallengeDetails(id);
+        if (data) {
+          setChallengeDetails(data);
+          setSelectedDays(
+            calculateSelectedDays(selectedDays, data.participatingDays)
+          );
+        }
       } catch (err) {
         setError(err as Error);
       } finally {
