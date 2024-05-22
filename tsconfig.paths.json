@@ -6,6 +6,7 @@
       "@app/*": ["app/*"],
       "@libs/*": ["libs/*"],
       "@/types/*": ["types/*"],
+      "@/hooks/*": ["hooks/*"],
       "@public/*": ["../public/*"]
     }
   }
