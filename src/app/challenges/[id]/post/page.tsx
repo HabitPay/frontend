@@ -7,8 +7,9 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import PreviewList from "./components/previewList";
 
-interface imageInfo {
+export interface imageInfo {
   file: File;
   preview: string;
 }
@@ -37,36 +38,6 @@ const Page = () => {
     console.log(data);
   };
 
-  // createObjectURL을 이용하는 방법.
-  // const onImageFilesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   const files = event.target.files;
-  //   if (!files || files.length <= 0) return;
-
-  //   // 파일들의 extension과 size 검사
-  //   const isValidExtensions = Array.from(files).every((file) =>
-  //     validImageExtensions.includes(file.type)
-  //   );
-  //   if (!isValidExtensions) {
-  //     setError("photos", {
-  //       message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
-  //     });
-  //     return;
-  //   }
-  //   // 파일들의 size 검사
-  //   const isAllValidSize = Array.from(files).every(
-  //     (file) => file.size <= 5 * MB
-  //   );
-  //   if (!isAllValidSize) {
-  //     setError("photos", {
-  //       message: "사진 한 장의 크기는 최대 1MB 입니다.",
-  //     });
-  //     return;
-  //   }
-
-  //   let fileUrlList: string[] = [];
-  //   fileUrlList = Array.from(files).map((item) => URL.createObjectURL(item));
-  //   setPreviewList(fileUrlList);
-  // };
   const onImageFilesChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -138,43 +109,7 @@ const Page = () => {
           placeholder="오늘의 챌린지 내용에 대해서 작성해주세요."
         />
         {imageList.length ? (
-          <div className="flex w-full h-28 bg-white fixed bottom-[94px] gap-5 items-center px-5">
-            {imageList.map((item, index) => (
-              <div
-                key={index}
-                className="flex flex-col items-center relative size-16"
-              >
-                {/* x표로 올린 사진 취소하기 */}
-                {/* dnd 구현 */}
-                {/* karrot marker 클론코딩의 image 사이즈 비율 유지 참고 */}
-                <Image
-                  src={item.preview}
-                  alt="image"
-                  fill
-                  className=" object-cover"
-                />
-                <div
-                  onClick={() => onImageCancelClicked(index)}
-                  className="absolute -top-2 -right-2 bg-slate-100 border rounded-full"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth={1.5}
-                    stroke="currentColor"
-                    className="size-4"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M6 18 18 6M6 6l12 12"
-                    />
-                  </svg>
-                </div>
-              </div>
-            ))}
-          </div>
+          <PreviewList imageList={imageList} setImageList={setImageList} />
         ) : null}
         <nav className="fixed bottom-0 flex justify-between w-full max-w-xl px-6 py-4 space-x-12 text-xs text-gray-700 bg-white border-t">
           <div className="flex items-center space-x-8 ">
