@@ -5,18 +5,17 @@ import { MB, validImageExtensions } from "@libs/constants";
 import { addClassNames } from "@libs/utils";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
-interface photoInfo {
-  id: string;
-  file: string;
-  url: string;
+interface imageInfo {
+  file: File;
+  preview: string;
 }
 
 interface IForm {
   text: string;
-  photos?: photoInfo[];
+  photos?: imageInfo[];
 }
 
 const Page = () => {
@@ -26,7 +25,7 @@ const Page = () => {
     setError,
     formState: { errors },
   } = useForm<IForm>();
-  const [photoList, setPhotoList] = useState<string[] | null>(null);
+  const [imageList, setImageList] = useState<imageInfo[]>([]);
   const [isNotice, setIsNotice] = useState(false);
   const [isManager, setIsManager] = useState(false);
 
@@ -38,38 +37,94 @@ const Page = () => {
     console.log(data);
   };
 
-  const onImageFilesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // createObjectURL을 이용하는 방법.
+  // const onImageFilesChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   const files = event.target.files;
+  //   if (!files || files.length <= 0) return;
+
+  //   // 파일들의 extension과 size 검사
+  //   const isValidExtensions = Array.from(files).every((file) =>
+  //     validImageExtensions.includes(file.type)
+  //   );
+  //   if (!isValidExtensions) {
+  //     setError("photos", {
+  //       message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
+  //     });
+  //     return;
+  //   }
+  //   // 파일들의 size 검사
+  //   const isAllValidSize = Array.from(files).every(
+  //     (file) => file.size <= 5 * MB
+  //   );
+  //   if (!isAllValidSize) {
+  //     setError("photos", {
+  //       message: "사진 한 장의 크기는 최대 1MB 입니다.",
+  //     });
+  //     return;
+  //   }
+
+  //   let fileUrlList: string[] = [];
+  //   fileUrlList = Array.from(files).map((item) => URL.createObjectURL(item));
+  //   setPreviewList(fileUrlList);
+  // };
+  const onImageFilesChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const files = event.target.files;
     if (!files || files.length <= 0) return;
 
-    // 파일들의 extension 검사
-    const isValidExtensions = Array.from(files).every((file) =>
-      validImageExtensions.includes(file.type)
-    );
-    if (!isValidExtensions) {
-      setError("photos", {
-        message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
-      });
-      return;
-    }
-    // 파일들의 size 검사
-    const isAllValidSize = Array.from(files).every(
-      (file) => file.size <= 5 * MB
-    );
-    if (!isAllValidSize) {
-      setError("photos", {
-        message: "사진 한 장의 크기는 최대 1MB 입니다.",
-      });
-      return;
+    const previewList: string[] = [];
+    const fileList: File[] = Array.from(files);
+    const imageList: imageInfo[] = [];
+
+    {
+      if (files.length >= 5) {
+        setError("photos", {
+          message: "사진은 최대 5장까지 업로드 가능합니다.",
+        });
+        return;
+      }
+
+      if (!fileList.every((file) => validImageExtensions.includes(file.type))) {
+        setError("photos", {
+          message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
+        });
+        return;
+      }
+
+      if (!fileList.every((file) => file.size <= 5 * MB)) {
+        setError("photos", {
+          message: "사진 한 장의 크기는 최대 1MB 입니다.",
+        });
+        return;
+      }
     }
 
-    let fileUrlList: string[] = [];
+    // previewList
+    const readFilePromises = fileList.map((file) => {
+      return new Promise<string>((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          resolve(e.target!.result as string);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    const results = await Promise.all(readFilePromises);
     for (let i = 0; i < files.length; ++i) {
-      const currentImageUrl = URL.createObjectURL(files[i]);
-      fileUrlList.push(currentImageUrl);
+      imageList.push({ file: fileList[i], preview: results[i] });
     }
-    setPhotoList(fileUrlList);
-    // console.log(fileUrlList);
+
+    setImageList(imageList);
+  };
+
+  const onImageCancelClicked = (index: number) => {
+    const newImageList = [...imageList];
+
+    newImageList.splice(index, 1);
+    console.log(newImageList);
+    setImageList(newImageList);
   };
 
   return (
@@ -82,17 +137,41 @@ const Page = () => {
           className="w-full h-fit px-4 pt-4 border-t border-gray-300"
           placeholder="오늘의 챌린지 내용에 대해서 작성해주세요."
         />
-        {photoList ? (
+        {imageList.length ? (
           <div className="flex w-full h-28 bg-white fixed bottom-[94px] gap-5 items-center px-5">
-            {photoList.map((imageUrl, index) => (
-              <div key={index} className="flex flex-col items-center">
+            {imageList.map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col items-center relative size-16"
+              >
+                {/* x표로 올린 사진 취소하기 */}
+                {/* dnd 구현 */}
+                {/* karrot marker 클론코딩의 image 사이즈 비율 유지 참고 */}
                 <Image
-                  src={imageUrl}
+                  src={item.preview}
                   alt="image"
-                  width={15}
-                  // height={15}
-                  className="size-16"
+                  fill
+                  className=" object-cover"
                 />
+                <div
+                  onClick={() => onImageCancelClicked(index)}
+                  className="absolute -top-2 -right-2 bg-slate-100 border rounded-full"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M6 18 18 6M6 6l12 12"
+                    />
+                  </svg>
+                </div>
               </div>
             ))}
           </div>
