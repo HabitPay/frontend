@@ -3,9 +3,8 @@
 import Layout from "@app/components/layout";
 import { MB, validImageExtensions } from "@libs/constants";
 import { addClassNames } from "@libs/utils";
-import Image from "next/image";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import PreviewList from "./components/previewList";
 
@@ -31,7 +30,6 @@ const Page = () => {
   const [isManager, setIsManager] = useState(false);
 
   // for identify pathname
-  const router = useRouter();
   const currentPath = usePathname();
 
   const onSubmit = async (data: IForm) => {
@@ -49,7 +47,7 @@ const Page = () => {
     const imageList: imageInfo[] = [];
 
     {
-      if (files.length >= 5) {
+      if (files.length > 5) {
         setError("photos", {
           message: "사진은 최대 5장까지 업로드 가능합니다.",
         });
@@ -86,16 +84,7 @@ const Page = () => {
     for (let i = 0; i < files.length; ++i) {
       imageList.push({ file: fileList[i], preview: results[i] });
     }
-
     setImageList(imageList);
-  };
-
-  const onImageCancelClicked = (index: number) => {
-    const newImageList = [...imageList];
-
-    newImageList.splice(index, 1);
-    console.log(newImageList);
-    setImageList(newImageList);
   };
 
   return (

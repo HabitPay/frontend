@@ -1,15 +1,37 @@
 import Image from "next/image";
 import { imageInfo } from "../page";
+import {
+  DraggableProvidedDragHandleProps,
+  DraggableProvidedDraggableProps,
+} from "@hello-pangea/dnd";
+import { memo } from "react";
 
 interface IPreviewImage {
   item: imageInfo;
   index: number;
   onImageCancelClicked: (index: number) => void;
+  draggableProps: DraggableProvidedDraggableProps;
+  dragHandleProps: DraggableProvidedDragHandleProps | null;
+  innerRef: (element?: HTMLElement | null | undefined) => void;
+  [key: string]: any;
 }
 
-const PreviewImage = ({ item, index, onImageCancelClicked }: IPreviewImage) => {
+const PreviewImage = ({
+  item,
+  index,
+  onImageCancelClicked,
+  draggableProps,
+  dragHandleProps,
+  innerRef,
+}: IPreviewImage) => {
+  console.log(index, " rerenderd");
   return (
-    <div key={index} className="flex flex-col items-center relative size-16">
+    <div
+      ref={innerRef}
+      {...dragHandleProps}
+      {...draggableProps}
+      className="flex flex-col items-center relative size-16"
+    >
       <Image src={item.preview} alt="image" fill className="object-cover" />
       <div
         onClick={() => onImageCancelClicked(index)}
@@ -33,4 +55,5 @@ const PreviewImage = ({ item, index, onImageCancelClicked }: IPreviewImage) => {
     </div>
   );
 };
-export default PreviewImage;
+
+export default memo(PreviewImage);
