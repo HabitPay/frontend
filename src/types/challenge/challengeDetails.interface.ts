@@ -8,4 +8,5 @@ export interface IChallengeDetailsDto {
   hostNickname: string;
   hostProfileImage: string | null;
   isHost: boolean;
+  isEnrolledMember: boolean;
 }

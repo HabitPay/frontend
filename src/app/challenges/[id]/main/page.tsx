@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 
-import { differenceInDays } from "date-fns";
+import { differenceInDays, isBefore } from "date-fns";
 
 import Layout from "@app/components/layout";
 import profilePic from "@public/profilePic.jpeg";
@@ -12,22 +12,32 @@ import Menu from "../components/menu";
 import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
+import Enrollment from "../components/enrollment";
 
-const Page = ({ params }: { params: { id: string } }) => {
-  const { challengeDetails, isLoading, error } = useChallengeDetails(params.id);
+const Page = ({ params: { id } }: { params: { id: string } }) => {
+  const { challengeDetails, isLoading, error } = useChallengeDetails(id);
 
   // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
+  if (challengeDetails === null) return <div>Challenge not found</div>;
+
+  const {
+    startDate,
+    isEnrolledMember,
+  }: { startDate: string; isEnrolledMember: boolean } = challengeDetails;
+  const isBeforeStartDate = isBefore(new Date(), startDate);
 
   return (
     <Layout canGoBack hasTabBar>
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6">
-          <Menu currentPage="챌린지 메인" challengeId={params.id} />
+          <Menu currentPage="챌린지 메인" challengeId={id} />
           {challengeDetails && (
             <ChallengeTitle
               title={challengeDetails.title}
+              startDate={startDate}
+              isBeforeStartDate={isBeforeStartDate}
               remainingDays={
                 differenceInDays(challengeDetails.endDate, Date.now()) + 1
               }
@@ -41,7 +51,7 @@ const Page = ({ params }: { params: { id: string } }) => {
               <div>챌린지 설명</div>
               {challengeDetails && challengeDetails.isHost && (
                 <Link
-                  href={`/challenges/${params.id}/edit`}
+                  href={`/challenges/${id}/edit`}
                   className="flex items-center space-x-1 bg-[#FFF9C4] pl-2 pr-3 py-1 rounded-2xl"
                 >
                   <svg
@@ -127,7 +137,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                 모였습니다!
               </span>
               <Link
-                href={`/challenges/${params.id}/fee_table`}
+                href={`/challenges/${id}/fee_table`}
                 className="px-3 py-2 text-white rounded-xl font-extralight bg-habit-green"
               >
                 벌금 현황 보기
@@ -138,41 +148,50 @@ const Page = ({ params }: { params: { id: string } }) => {
         </div>
         <div className="flex flex-col px-6 pt-4">
           <div className="flex flex-col items-center space-y-3">
-            <span className="px-5 py-3 text-sm font-light bg-white rounded-xl">
-              어제
-            </span>
-            <div className="w-full h-64 px-5 py-6 bg-white rounded-2xl">
-              <div className="flex items-center pb-4 space-x-3 border-b-2">
-                <Image
-                  src={profilePic}
-                  className="z-30 rounded-full size-12 "
-                  alt="profilePicture of writer"
-                />
-                <div className="flex flex-col">
-                  <span className="text-sm font-semibold">hokgim</span>
-                  <span className="text-sm text-habit-gray">6시간 전</span>
+            {isBeforeStartDate ? (
+              <Enrollment
+                id={id as string}
+                isEnrolledMember={isEnrolledMember}
+              />
+            ) : (
+              <>
+                <span className="px-5 py-3 text-sm font-light bg-white rounded-xl">
+                  어제
+                </span>
+                <div className="w-full h-64 px-5 py-6 bg-white rounded-2xl">
+                  <div className="flex items-center pb-4 space-x-3 border-b-2">
+                    <Image
+                      src={profilePic}
+                      className="z-30 rounded-full size-12 "
+                      alt="profilePicture of writer"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold">hokgim</span>
+                      <span className="text-sm text-habit-gray">6시간 전</span>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+                <FloatingButton href={"챌린지 작성"}>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-7"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+                    />
+                  </svg>
+                </FloatingButton>
+              </>
+            )}
           </div>
         </div>
       </div>
-      <FloatingButton href={"챌린지 작성"}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-7"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-          />
-        </svg>
-      </FloatingButton>
     </Layout>
   );
 };
