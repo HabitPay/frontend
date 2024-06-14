@@ -5,7 +5,7 @@ export const fetchChallengeDetails = async (
   id: string
 ): Promise<IChallengeDetailsDto | null> => {
   try {
-    const res = await apiManager(`/challenge/${id}`);
+    const res = await apiManager(`/challenges/${id}`);
     const { data }: { data: IChallengeDetailsDto } = res;
     console.log(data);
     return data;
