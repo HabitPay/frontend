@@ -29,7 +29,7 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const onSubmitWithValidation = async (form: IChallengePatchDto) => {
     try {
-      const res = await apiManager.patch(`/challenge/${params.id}`, form);
+      const res = await apiManager.patch(`/challenges/${params.id}`, form);
       console.log(res);
     } catch (error) {
       console.error(error);

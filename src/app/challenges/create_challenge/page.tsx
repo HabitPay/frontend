@@ -78,7 +78,7 @@ function Page() {
     };
     console.log(data);
     try {
-      const res = await apiManager.post("/challenge", data);
+      const res = await apiManager.post("/challenges", data);
       console.log(res);
     } catch (error) {
       console.error(error);
