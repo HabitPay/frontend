@@ -27,7 +27,7 @@ export default function Layout({
     <div>
       <div
         className={addClassNames(
-          "fixed top-0 flex items-center justify-center w-full h-12 max-w-xl px-10 text-lg font-medium text-gray-800",
+          "z-50 fixed top-0 flex items-center justify-center w-full h-12 max-w-xl px-10 text-lg font-medium text-gray-800",
           isWhiteTitle ? "bg-white" : "bg-habit-background"
         )}
       >
