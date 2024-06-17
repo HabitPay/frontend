@@ -13,9 +13,12 @@ import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Enrollment from "../components/enrollment";
+import { usePathname } from "next/navigation";
+import { getParentPath } from "@libs/utils";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
+  const pathname = usePathname();
 
   // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
   if (isLoading) return <div>Loading...</div>;
@@ -171,7 +174,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                     </div>
                   </div>
                 </div>
-                <FloatingButton href={"챌린지 작성"}>
+                <FloatingButton href={`${getParentPath(pathname)}/post`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 
-import { IChallengeDetailsDto } from "@/types/challenge";
+import {
+  IChallengeDetailsDto,
+  challengeDetailsDtoExample,
+} from "@/types/challenge";
 import { SelectedStatus } from "@/types/enums";
 import { fetchChallengeDetails } from "../api/challenge";
 
@@ -15,7 +18,7 @@ const calculateSelectedDays = (selectedDays: number[], days: number) => {
 
 export const useChallengeDetails = (id: string) => {
   const [challengeDetails, setChallengeDetails] =
-    useState<IChallengeDetailsDto | null>(null);
+    useState<IChallengeDetailsDto | null>(challengeDetailsDtoExample);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [selectedDays, setSelectedDays] = useState<number[]>(

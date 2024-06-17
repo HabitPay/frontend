@@ -7,3 +7,11 @@
 export function addClassNames(...classnames: string[]) {
   return classnames.join(" ");
 }
+
+// "/"로 나눈 뒤 마지막 세그먼트를 없애주는 함수.
+// usePathname으로 마지막세그먼트를 교체하고 싶을 때 사용. 특히 Link에서 href를 다룰 때.
+export function getParentPath(pathname: string) {
+  const pathSegments = pathname.split("/");
+  pathSegments.pop(); // Remove the last segment
+  return pathSegments.join("/");
+}
