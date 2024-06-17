@@ -10,3 +10,16 @@ export interface IChallengeDetailsDto {
   isHost: boolean;
   isEnrolledMember: boolean;
 }
+
+export const challengeDetailsDtoExample = {
+  title: "string",
+  description: "string",
+  startDate: "string",
+  endDate: "string",
+  participatingDays: 42,
+  feePerAbsence: 42,
+  hostNickname: "string",
+  hostProfileImage: null,
+  isHost: true,
+  isEnrolledMember: true,
+};
