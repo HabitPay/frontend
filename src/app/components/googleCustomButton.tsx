@@ -3,8 +3,7 @@ import CustomButton from "./customButton";
 const GoogleCustomButton = () => {
   const handleGoogleLogin = () => {
     try {
-      window.location.href =
-        "http://localhost:8080/oauth2/authorization/google";
+      window.location.href = `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/oauth2/authorization/google`;
     } catch (error) {
       console.log(error);
     }
