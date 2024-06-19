@@ -17,7 +17,7 @@ const getTokenType = () => {
 };
 
 const apiManager: AxiosInstance = axios.create({
-  baseURL: `${process.env.NEXT_PUBLIC_BACKEND_SERVER}`,
+  baseURL: `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api`,
   timeout: 3000,
 });
 
@@ -25,8 +25,9 @@ apiManager.interceptors.request.use(
   (config) => {
     const token: String | null = getAccessToken();
     let tokenType: String | null = getTokenType();
-    if (!tokenType)
-      {tokenType = "Bearer";}
+    if (!tokenType) {
+      tokenType = "Bearer";
+    }
     if (token) {
       config.headers.setAuthorization(`${tokenType} ${token}`);
     }
