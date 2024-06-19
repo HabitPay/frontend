@@ -34,7 +34,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   return (
     <Layout canGoBack hasTabBar>
       <div className="flex flex-col divide-y-2">
-        <div className="flex flex-col px-6">
+        <div className="flex flex-col px-6  bg-white">
           <Menu currentPage="챌린지 메인" challengeId={id} />
           {challengeDetails && (
             <ChallengeTitle

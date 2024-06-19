@@ -6,6 +6,7 @@ import { useState } from "react";
 interface LayoutProps {
   title?: string;
   isWhiteTitle?: boolean;
+  isBorder?: boolean;
   canGoBack?: boolean;
   hasTabBar?: boolean;
   children: React.ReactNode;
@@ -13,6 +14,7 @@ interface LayoutProps {
 
 export default function Layout({
   isWhiteTitle,
+  isBorder,
   title,
   canGoBack,
   hasTabBar,
@@ -28,7 +30,8 @@ export default function Layout({
       <div
         className={addClassNames(
           "z-50 fixed top-0 flex items-center justify-center w-full h-12 max-w-xl px-10 text-lg font-medium text-gray-800",
-          isWhiteTitle ? "bg-white" : "bg-habit-background"
+          isWhiteTitle ? "bg-white" : "bg-habit-background",
+          isBorder ? "border-b border-gray-300" : ""
         )}
       >
         {canGoBack ? (

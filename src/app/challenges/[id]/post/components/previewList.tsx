@@ -46,7 +46,7 @@ const PreviewList = ({ imageList, setImageList }: IPreviewList) => {
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="flex w-full h-28 bg-white gap-5 items-center px-5 border-t border-gray-300"
+            className="flex w-full h-28 bg-white fixed bottom-[94px] gap-5 items-center px-5 border-t border-gray-300"
           >
             {imageList.map((item, index) => (
               <Draggable
