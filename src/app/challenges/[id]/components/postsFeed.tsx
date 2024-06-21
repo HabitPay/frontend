@@ -1,14 +1,19 @@
 import Image from "next/image";
 
 interface IFeedDto {
-  createdAt: string;
-  nickname: string;
   profilePic: string;
+  nickname: string;
+  createdAt: string;
+  isNotification: boolean;
+  imageList: string[];
+  contents: string;
 }
 
-interface IWebFeedDto {}
+interface IWebFeedDto {
+  feeds: IFeedDto[];
+}
 
-const WebFeed = ({}: IWebFeedDto) => {
+const PostsFeed = ({ feeds }: IWebFeedDto) => {
   return (
     <div>
       <span className="px-5 py-3 text-sm font-light bg-white rounded-xl">
@@ -31,4 +36,4 @@ const WebFeed = ({}: IWebFeedDto) => {
   );
 };
 
-export default WebFeed;
+export default PostsFeed;

@@ -15,3 +15,14 @@ export function getParentPath(pathname: string) {
   pathSegments.pop(); // Remove the last segment
   return pathSegments.join("/");
 }
+
+// 게시물등에서 사용하는 시간 함수. (몇 일 전으로 표기 해줌.)
+export function formatToTimeAgo(date: string): string {
+  const dayInMs = 1000 * 60 * 60 * 24;
+  const time = new Date(date).getTime();
+  const now = new Date().getTime();
+  const diff = Math.round((time - now) / dayInMs);
+
+  const formatter = new Intl.RelativeTimeFormat("ko");
+  return formatter.format(diff, "days");
+}
