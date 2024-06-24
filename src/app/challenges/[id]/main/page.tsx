@@ -15,6 +15,7 @@ import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Enrollment from "../components/enrollment";
 import { usePathname } from "next/navigation";
 import { getParentPath } from "@libs/utils";
+import PostsFeed, { PostsFeedExample } from "../components/postsFeed";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
@@ -34,7 +35,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   return (
     <Layout canGoBack hasTabBar>
       <div className="flex flex-col divide-y-2">
-        <div className="flex flex-col px-6  bg-white">
+        <div className="flex flex-col px-6">
           <Menu currentPage="챌린지 메인" challengeId={id} />
           {challengeDetails && (
             <ChallengeTitle
@@ -161,19 +162,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 <span className="px-5 py-3 text-sm font-light bg-white rounded-xl">
                   어제
                 </span>
-                <div className="w-full h-64 px-5 py-6 bg-white rounded-2xl">
-                  <div className="flex items-center pb-4 space-x-3 border-b-2">
-                    <Image
-                      src={profilePic}
-                      className="z-30 rounded-full size-12 "
-                      alt="profilePicture of writer"
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold">hokgim</span>
-                      <span className="text-sm text-habit-gray">6시간 전</span>
-                    </div>
-                  </div>
-                </div>
+                <PostsFeed feeds={PostsFeedExample} />
                 <FloatingButton href={`${getParentPath(pathname)}/post`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

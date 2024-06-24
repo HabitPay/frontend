@@ -1,7 +1,7 @@
 import { formatToTimeAgo } from "@libs/utils";
 import Image from "next/image";
 
-interface IPostDto {
+export interface IPostDto {
   profilePic: string;
   nickname: string;
   createdAt: Date;
@@ -19,28 +19,30 @@ const PostItem = ({
   contents,
 }: IPostDto) => {
   return (
-    <div>
-      <div className="w-full h-64 px-5 py-6 bg-white rounded-2xl">
-        <div className="flex items-center pb-4 space-x-3 border-b-2">
-          <Image
-            src={profilePic}
-            className="z-30 rounded-full size-12 "
-            alt="profilePicture of writer"
-          />
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold">{nickname}</span>
-            <span className="text-sm text-habit-gray">
-              {formatToTimeAgo(createdAt.toString())}
-            </span>
+    <div className="flex flex-col w-full px-5 py-5 bg-white rounded-2xl">
+      <div className="flex items-center w-full gap-2 pb-4 border-b-2">
+        <Image
+          src={profilePic}
+          className="z-30 rounded-full size-12"
+          alt="profilePicture of writer"
+          width={12}
+          height={12}
+        />
+        <div className="flex flex-col justify-center gap-1">
+          <span className="text-sm font-semibold">{nickname}</span>
+          <span className="text-sm text-habit-gray">
+            {formatToTimeAgo(createdAt.toString())}
+          </span>
+        </div>
+        {isNotification ? (
+          <div className="px-2 py-1 ml-auto text-sm font-light text-white bg-red-600 rounded-2xl">
+            공지
           </div>
-          {isNotification ? (
-            <div className="ml-auto text-white rounded-lg ">공지</div>
-          ) : null}
-        </div>
-        <div>
-          <div>{/* imageList */}</div>
-          <div>{contents}</div>
-        </div>
+        ) : null}
+      </div>
+      <div className="flex flex-col pt-4">
+        <div>{/* imageList */}</div>
+        <div>{contents}</div>
       </div>
     </div>
   );

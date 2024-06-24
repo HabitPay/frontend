@@ -1,37 +1,38 @@
+import Layout from "@app/components/layout";
 import Image from "next/image";
+import PostItem, { IPostDto } from "./postItem";
 
-interface IFeedDto {
-  profilePic: string;
-  nickname: string;
-  createdAt: string;
-  isNotification: boolean;
-  imageList: string[];
-  contents: string;
-}
+export const PostsFeedExample: IPostDto[] = [
+  {
+    profilePic: "/profilePic.jpeg",
+    nickname: "hogkim",
+    createdAt: new Date(),
+    isNotification: true,
+    imageList: ["/default-profile.jpeg", "/profilePic.jpeg"],
+    contents:
+      "test contents test contents test contents test contents test contents test contents test contents test contents test contents",
+  },
+  {
+    profilePic: "/default-profile.jpeg",
+    nickname: "jkwak",
+    createdAt: new Date(),
+    isNotification: false,
+    imageList: ["/profilePic.jpeg", "/default-profile.jpeg"],
+    contents:
+      "example contents example contents example contents example contents example contents example contents example contents example contents example contents example contents example contents ",
+  },
+];
 
 interface IWebFeedDto {
-  feeds: IFeedDto[];
+  feeds: IPostDto[];
 }
 
 const PostsFeed = ({ feeds }: IWebFeedDto) => {
   return (
-    <div>
-      <span className="px-5 py-3 text-sm font-light bg-white rounded-xl">
-        어제
-      </span>
-      <div className="w-full h-64 px-5 py-6 bg-white rounded-2xl">
-        <div className="flex items-center pb-4 space-x-3 border-b-2">
-          <Image
-            src={""}
-            className="z-30 rounded-full size-12 "
-            alt="profilePicture of writer"
-          />
-          <div className="flex flex-col">
-            <span className="text-sm font-semibold">hokgim</span>
-            <span className="text-sm text-habit-gray">6시간 전</span>
-          </div>
-        </div>
-      </div>
+    <div className="flex flex-col gap-4">
+      {feeds.map((item, index) => (
+        <PostItem {...item} key={index} />
+      ))}
     </div>
   );
 };
