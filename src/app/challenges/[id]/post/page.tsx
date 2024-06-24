@@ -89,7 +89,7 @@ const Page = () => {
 
   return (
     <Layout canGoBack title="게시물 작성" isWhiteTitle isBorder>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex h-full flex-col">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col h-full">
         <textarea
           {...register("text", {
             required: { value: true, message: "내용을 입력해주세요." },
@@ -118,7 +118,7 @@ const Page = () => {
                   : "hover:text-gray-500 transition-colors"
               )}
             >
-              <label className="text-gray-600 hover:text-habit-green flex items-center justify-center border-gray-300">
+              <label className="flex items-center justify-center text-gray-600 border-gray-300 hover:text-habit-green">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"

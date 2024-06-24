@@ -30,8 +30,8 @@ const PostItem = ({
     slidesToScroll: 1,
   };
   return (
-    <div className="flex flex-col w-full px-5 py-5 bg-white rounded-2xl">
-      <div className="flex items-center w-full gap-2 pb-4 border-b-2">
+    <div className="flex flex-col px-5 py-5 bg-white rounded-2xl">
+      <div className="flex items-center gap-2 pb-4 border-b-2">
         <Image
           src={profilePic}
           className="z-30 rounded-full size-12"
@@ -52,7 +52,7 @@ const PostItem = ({
         ) : null}
       </div>
       <div className="flex flex-col gap-5 pt-4">
-        <Slider {...slickSettings} className="w-full">
+        <Slider {...slickSettings}>
           {imageList.map((item, index) => (
             <div key={index} className="relative flex items-center h-80">
               <Image
