@@ -8,7 +8,12 @@ export const PostsFeedExample: IPostDto[] = [
     nickname: "hogkim",
     createdAt: new Date(),
     isNotification: true,
-    imageList: ["/default-profile.jpeg", "/profilePic.jpeg"],
+    imageList: [
+      "/default-profile.jpeg",
+      "/profilePic.jpeg",
+      "/chungking_express__movie_poster__by_seblakes31_dep34tb-fullview.jpg",
+      "/manaca.JPG",
+    ],
     contents:
       "test contents test contents test contents test contents test contents test contents test contents test contents test contents",
   },

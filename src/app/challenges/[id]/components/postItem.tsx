@@ -1,6 +1,11 @@
 import { formatToTimeAgo } from "@libs/utils";
 import Image from "next/image";
 
+import React from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+
 export interface IPostDto {
   profilePic: string;
   nickname: string;
@@ -18,6 +23,12 @@ const PostItem = ({
   imageList,
   contents,
 }: IPostDto) => {
+  const slickSettings = {
+    dots: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+  };
   return (
     <div className="flex flex-col w-full px-5 py-5 bg-white rounded-2xl">
       <div className="flex items-center w-full gap-2 pb-4 border-b-2">
@@ -40,8 +51,19 @@ const PostItem = ({
           </div>
         ) : null}
       </div>
-      <div className="flex flex-col pt-4">
-        <div>{/* imageList */}</div>
+      <div className="flex flex-col gap-5 pt-4">
+        <Slider {...slickSettings} className="w-full">
+          {imageList.map((item, index) => (
+            <div key={index} className="relative flex items-center h-80">
+              <Image
+                src={item}
+                className="object-contain"
+                fill
+                alt={`image ${index}`}
+              />
+            </div>
+          ))}
+        </Slider>
         <div>{contents}</div>
       </div>
     </div>
