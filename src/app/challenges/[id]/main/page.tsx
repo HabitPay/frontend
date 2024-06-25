@@ -13,9 +13,13 @@ import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Enrollment from "../components/enrollment";
+import { usePathname } from "next/navigation";
+import { getParentPath } from "@libs/utils";
+import PostsFeed, { PostsFeedExample } from "@app/components/postsFeed";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
+  const pathname = usePathname();
 
   // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
   if (isLoading) return <div>Loading...</div>;
@@ -158,20 +162,8 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 <span className="px-5 py-3 text-sm font-light bg-white rounded-xl">
                   어제
                 </span>
-                <div className="w-full h-64 px-5 py-6 bg-white rounded-2xl">
-                  <div className="flex items-center pb-4 space-x-3 border-b-2">
-                    <Image
-                      src={profilePic}
-                      className="z-30 rounded-full size-12 "
-                      alt="profilePicture of writer"
-                    />
-                    <div className="flex flex-col">
-                      <span className="text-sm font-semibold">hokgim</span>
-                      <span className="text-sm text-habit-gray">6시간 전</span>
-                    </div>
-                  </div>
-                </div>
-                <FloatingButton href={"챌린지 작성"}>
+                <PostsFeed feeds={PostsFeedExample} />
+                <FloatingButton href={`${getParentPath(pathname)}/post`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -192,6 +184,8 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           </div>
         </div>
       </div>
+      {/* layout에 맞춰주기 위한 빈 영역 */}
+      <div className="h-[95px]"></div>
     </Layout>
   );
 };

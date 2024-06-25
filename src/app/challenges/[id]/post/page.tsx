@@ -88,18 +88,26 @@ const Page = () => {
   };
 
   return (
-    <Layout canGoBack title="게시물 작성" isWhiteTitle>
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <Layout canGoBack title="게시물 작성" isWhiteTitle isBorder>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col h-full">
         <textarea
           {...register("text", {
             required: { value: true, message: "내용을 입력해주세요." },
           })}
-          className="w-full h-fit px-4 pt-4 border-t border-gray-300"
+          className="w-full h-screen px-4 pt-4 border-gray-300"
           placeholder="오늘의 챌린지 내용에 대해서 작성해주세요."
         />
-        {imageList.length ? (
-          <PreviewList imageList={imageList} setImageList={setImageList} />
-        ) : null}
+        {
+          // nav와 imageList의 높이 112px, 95px
+          imageList.length ? (
+            <>
+              <div className="h-[207px]"></div>
+              <PreviewList imageList={imageList} setImageList={setImageList} />
+            </>
+          ) : (
+            <div className="h-[95px]"></div>
+          )
+        }
         <nav className="fixed bottom-0 flex justify-between w-full max-w-xl px-6 py-4 space-x-12 text-xs text-gray-700 bg-white border-t">
           <div className="flex items-center space-x-8 ">
             <div
@@ -110,7 +118,7 @@ const Page = () => {
                   : "hover:text-gray-500 transition-colors"
               )}
             >
-              <label className="text-gray-600 hover:text-habit-green flex items-center justify-center  border-gray-300">
+              <label className="flex items-center justify-center text-gray-600 border-gray-300 hover:text-habit-green">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
