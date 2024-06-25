@@ -1,8 +1,8 @@
 "use client";
 
-import PostItem from "@app/challenges/[id]/components/postItem";
-import { PostsFeedExample } from "@app/challenges/[id]/components/postsFeed";
 import Layout from "@app/components/layout";
+import PostItem from "@app/components/postItem";
+import { PostsFeedExample } from "@app/components/postsFeed";
 
 const Page = () => {
   return (

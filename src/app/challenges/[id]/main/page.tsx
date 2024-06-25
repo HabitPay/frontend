@@ -15,7 +15,7 @@ import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Enrollment from "../components/enrollment";
 import { usePathname } from "next/navigation";
 import { getParentPath } from "@libs/utils";
-import PostsFeed, { PostsFeedExample } from "../components/postsFeed";
+import PostsFeed, { PostsFeedExample } from "@app/components/postsFeed";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
