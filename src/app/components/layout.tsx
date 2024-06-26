@@ -69,7 +69,7 @@ export default function Layout({
         {children}
       </div>
       {hasTabBar ? (
-        <nav className="fixed bottom-0 flex justify-center w-full max-w-xl py-4 space-x-12 text-xs text-gray-700 bg-white border-t">
+        <nav className="z-50 fixed bottom-0 flex justify-center w-full max-w-xl py-4 space-x-12 text-xs text-gray-700 bg-white border-t">
           <Link href="/challenges/my_challenge">
             <div
               className={addClassNames(
