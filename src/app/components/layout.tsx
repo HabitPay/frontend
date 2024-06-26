@@ -22,8 +22,15 @@ export default function Layout({
 }: LayoutProps) {
   const router = useRouter();
   const currentPath = usePathname();
+  console.log(currentPath);
   const onClick = () => {
-    router.back();
+    // 여기 if문이 보기가 싫음. 깔끔한 코드 추천받습니다.
+    if (currentPath === "/onboarding") {
+      console.log("clicked");
+      router.push("/");
+    } else {
+      router.back();
+    }
   };
   return (
     <div>
