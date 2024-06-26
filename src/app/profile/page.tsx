@@ -13,6 +13,7 @@ import useMutation, { MutationResult } from "@libs/useMutaion";
 import profilePic from "@public/default-profile.jpeg";
 import apiManager from "@api/apiManager";
 import { removeJwtFromSessionStorage } from "@libs/jwt";
+import { validImageExtensions } from "@libs/constants";
 
 interface IForm {
   nickname: string;
@@ -96,13 +97,7 @@ const Page = () => {
     const file = files[0];
     const fileType = file.type;
 
-    const validExtensions = [
-      "image/jpeg",
-      "image/jpg",
-      "image/png",
-      "image/gif",
-    ];
-    if (!validExtensions.includes(fileType)) {
+    if (!validImageExtensions.includes(fileType)) {
       setError("profileImage", {
         message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
       });
@@ -203,7 +198,7 @@ const Page = () => {
             <input
               className="hidden"
               type="file"
-              accept="image/jpeg, image/jpg, image/png, image/gif"
+              accept={validImageExtensions.join(",")}
               {...register("profileImage", { onChange: onProfileImageChange })}
             />
           </label>
