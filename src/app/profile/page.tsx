@@ -163,7 +163,7 @@ const Page = () => {
 
   return (
     <Layout title="프로필" hasTabBar>
-      <div className="flex flex-col items-center space-y-10">
+      <div className="flex flex-col items-center space-y-10 px-5">
         <form
           className="static flex flex-col items-center w-full px-4 space-y-4"
           onSubmit={handleSubmit(onSubmitWithValid)}
