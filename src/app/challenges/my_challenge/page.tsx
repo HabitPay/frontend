@@ -1,19 +1,21 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { JwtPayload, jwtDecode } from "jwt-decode";
 
 import Layout from "@app/components/layout";
-import profilePic from "@public/profilePic.jpeg";
-import ChallengesButton from "./components/challengesButton";
 import FloatingButton from "@app/components/floatingButton";
 import Challenges, {
   IChallengeInfo,
   IChallenges,
 } from "./components/challenge";
+import ChallengesButton from "./components/challengesButton";
+
+import profilePic from "@public/profilePic.jpeg";
 
 const inProgressChallenge: IChallengeInfo[] = [
   {
@@ -98,7 +100,7 @@ const Page = () => {
 
   return (
     <Layout hasTabBar>
-      <div className="flex flex-col px-6">
+      <div className="flex flex-col px-5">
         <div className="flex items-center justify-between mb-3">
           <div className="flex flex-col">
             <span className="text-gray-400">안녕하세요</span>
@@ -111,7 +113,9 @@ const Page = () => {
           />
         </div>
         <div className="flex flex-col mb-10">
-          <span className="mb-3 font-thin">2024년 1월 24일 목요일</span>
+          <span className="mb-2 font-light text-sm">
+            2024년 1월 24일 목요일
+          </span>
           <h3 className="mb-5 text-lg font-semibold">나의 챌린지</h3>
           <div className="flex items-center mb-2 space-x-2">
             <ChallengesButton
