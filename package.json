@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@hello-pangea/dnd": "^16.6.0",
+    "@types/react-date-range": "^1.4.9",
     "@types/react-slick": "^0.23.13",
     "axios": "^1.6.5",
     "date-fns": "^3.6.0",
