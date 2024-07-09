@@ -9,13 +9,12 @@ import { JwtPayload, jwtDecode } from "jwt-decode";
 
 import Layout from "@app/components/layout";
 import FloatingButton from "@app/components/floatingButton";
-import Challenges, {
-  IChallengeInfo,
-  IChallenges,
-} from "./components/challenge";
+import Challenges, { IChallengeInfo } from "./components/challenge";
 import ChallengesButton from "./components/challengesButton";
 
+// 나중에 삭제
 import profilePic from "@public/profilePic.jpeg";
+import Loading from "./loading";
 
 const inProgressChallenge: IChallengeInfo[] = [
   {
@@ -63,11 +62,13 @@ const scheduledChallenge: IChallengeInfo[] = [
 export type ChallengesState = "In Progress" | "Completed" | "Scheduled";
 
 const Page = () => {
-  const [challenges, setChallenges] =
-    useState<IChallengeInfo[]>(inProgressChallenge);
+  const [challenges, setChallenges] = useState<IChallengeInfo[] | null>(
+    inProgressChallenge
+  );
   const [challengesButton, setChallengesButton] =
     useState<ChallengesState>("In Progress");
   const [nickname, setNickname] = useState<String>("");
+  const [loadingPage, setLoadingPage] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -96,7 +97,16 @@ const Page = () => {
       const decoded = jwtDecode<JwtPayload>(accessToken);
       setNickname(decoded.nickname);
     }
+    const timeoutId = setTimeout(() => {
+      setLoadingPage(false);
+    }, 2000); // 2초 후 로딩 상태 해제
+
+    return () => clearTimeout(timeoutId);
   }, []);
+
+  if (loadingPage) {
+    return <Loading />; // 로딩 중일 때 로딩 컴포넌트 렌더링
+  }
 
   return (
     <Layout hasTabBar>
@@ -134,10 +144,15 @@ const Page = () => {
               onClick={() => handleChallengesButtonClick("Scheduled")}
             />
           </div>
-          <Challenges
-            challenges={challenges}
-            challengeState={challengesButton}
-          />
+          {
+            // challenges null일 시 스켈레톤 처리
+            challenges ? (
+              <Challenges
+                challenges={challenges}
+                challengeState={challengesButton}
+              />
+            ) : null
+          }
         </div>
       </div>
       <FloatingButton href="/challenges/create_challenge">

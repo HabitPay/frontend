@@ -44,3 +44,7 @@ body {
 .rdrCalendarWrapper {
   width: 100%;
 }
+
+.rdrDateInput {
+  background-color: black;
+}

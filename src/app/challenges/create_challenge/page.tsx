@@ -79,9 +79,10 @@ function Page() {
         startDate: convertKstDate(form.startDate, form.startTime),
         endDate: convertKstDate(form.endDate, form.endTime),
       };
-      const res = await apiManager.post("/challenge", data);
+      const res = await apiManager.post("/challenges", data);
       console.log(res);
-      router.push(`/challenges/${res.data}/main`);
+      // res.data로 메세지를 받을 수 있음. 사용자에게 표시되도록. id도 추출해서 redirect
+      // router.push(`/challenges/${res.data}/main`);
     } catch (error) {
       console.error(error);
     }
