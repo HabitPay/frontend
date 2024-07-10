@@ -33,7 +33,7 @@ export default function Layout({
     }
   };
   return (
-    <div>
+    <div className="max-w-xl mx-auto">
       <div
         className={addClassNames(
           "z-50 fixed top-0 flex items-center justify-center w-full h-12 max-w-xl px-10 text-lg font-medium text-gray-800",
@@ -69,7 +69,7 @@ export default function Layout({
         {children}
       </div>
       {hasTabBar ? (
-        <nav className="z-50 fixed bottom-0 flex justify-center w-full max-w-xl py-4 space-x-12 text-xs text-gray-700 bg-white border-t mx-auto">
+        <nav className="fixed bottom-0 z-50 flex justify-center w-full max-w-xl gap-12 py-4 text-xs text-gray-700 bg-white border-t">
           <Link href="/challenges/my_challenge">
             <div
               className={addClassNames(

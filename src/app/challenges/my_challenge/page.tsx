@@ -72,7 +72,7 @@ const Page = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const handleChallengesButtonClick = (type: ChallengesState) => {
+  const handleChallengesButtonClick = async (type: ChallengesState) => {
     setChallengesButton(type);
     // api요청으로 가져오기.
     type == "In Progress"
@@ -110,7 +110,7 @@ const Page = () => {
 
   return (
     <Layout hasTabBar>
-      <div className="flex flex-col px-5">
+      <div className="flex flex-col max-w-xl px-5 mx-auto">
         <div className="flex items-center justify-between mb-3">
           <div className="flex flex-col">
             <span className="text-gray-400">안녕하세요</span>
@@ -123,7 +123,7 @@ const Page = () => {
           />
         </div>
         <div className="flex flex-col mb-10">
-          <span className="mb-2 font-light text-sm">
+          <span className="mb-2 text-sm font-light">
             2024년 1월 24일 목요일
           </span>
           <h3 className="mb-5 text-lg font-semibold">나의 챌린지</h3>
