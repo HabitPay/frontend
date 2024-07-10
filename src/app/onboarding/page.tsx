@@ -75,7 +75,7 @@ function Page() {
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col">
             <input
-              className="bg-habit-background border-b-2 border-slate-200 focus:outline-none focus:border-green-500"
+              className="bg-habit-background border-b-2 border-slate-200 focus:outline-none focus:border-green-500 py-2 px-1"
               type="text"
               placeholder="닉네임을 입력해주세요."
               {...register("nickname", {
@@ -97,7 +97,7 @@ function Page() {
             <span className="mt-1 text-red-500 text-sm">
               {errors?.nickname?.message as string}
             </span>
-            <span className="text-sm mt-4 mb-24">
+            <span className="text-sm mt-4 mb-10">
               닉네임은 최소 2자부터 최대 15자까지 가능합니다.(특수문자 불가)
             </span>
           </div>

@@ -184,8 +184,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           </div>
         </div>
       </div>
-      {/* layout에 맞춰주기 위한 빈 영역 */}
-      <div className="h-[95px]"></div>
     </Layout>
   );
 };

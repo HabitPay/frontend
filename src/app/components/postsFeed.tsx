@@ -34,7 +34,7 @@ interface IWebFeedDto {
 
 const PostsFeed = ({ feeds }: IWebFeedDto) => {
   return (
-    <div className="flex flex-col w-full gap-4">
+    <div className="flex flex-col w-full gap-4 pb-4">
       {feeds.map((item, index) => (
         <PostItem {...item} key={index} />
       ))}

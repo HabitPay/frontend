@@ -1,19 +1,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
+
 import Image from "next/image";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { JwtPayload, jwtDecode } from "jwt-decode";
 
 import Layout from "@app/components/layout";
-import profilePic from "@public/profilePic.jpeg";
-import ChallengesButton from "./components/challengesButton";
 import FloatingButton from "@app/components/floatingButton";
-import Challenges, {
-  IChallengeInfo,
-  IChallenges,
-} from "./components/challenge";
+import Challenges, { IChallengeInfo } from "./components/challenge";
+import ChallengesButton from "./components/challengesButton";
+
+// 나중에 삭제
+import profilePic from "@public/profilePic.jpeg";
+import Loading from "./loading";
 
 const inProgressChallenge: IChallengeInfo[] = [
   {
@@ -61,15 +62,17 @@ const scheduledChallenge: IChallengeInfo[] = [
 export type ChallengesState = "In Progress" | "Completed" | "Scheduled";
 
 const Page = () => {
-  const [challenges, setChallenges] =
-    useState<IChallengeInfo[]>(inProgressChallenge);
+  const [challenges, setChallenges] = useState<IChallengeInfo[] | null>(
+    inProgressChallenge
+  );
   const [challengesButton, setChallengesButton] =
     useState<ChallengesState>("In Progress");
   const [nickname, setNickname] = useState<String>("");
+  const [loadingPage, setLoadingPage] = useState(true);
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const handleChallengesButtonClick = (type: ChallengesState) => {
+  const handleChallengesButtonClick = async (type: ChallengesState) => {
     setChallengesButton(type);
     // api요청으로 가져오기.
     type == "In Progress"
@@ -94,11 +97,20 @@ const Page = () => {
       const decoded = jwtDecode<JwtPayload>(accessToken);
       setNickname(decoded.nickname);
     }
+    const timeoutId = setTimeout(() => {
+      setLoadingPage(false);
+    }, 2000); // 2초 후 로딩 상태 해제
+
+    return () => clearTimeout(timeoutId);
   }, []);
+
+  if (loadingPage) {
+    return <Loading />; // 로딩 중일 때 로딩 컴포넌트 렌더링
+  }
 
   return (
     <Layout hasTabBar>
-      <div className="flex flex-col px-6">
+      <div className="flex flex-col max-w-xl px-5 mx-auto">
         <div className="flex items-center justify-between mb-3">
           <div className="flex flex-col">
             <span className="text-gray-400">안녕하세요</span>
@@ -111,7 +123,9 @@ const Page = () => {
           />
         </div>
         <div className="flex flex-col mb-10">
-          <span className="mb-3 font-thin">2024년 1월 24일 목요일</span>
+          <span className="mb-2 text-sm font-light">
+            2024년 1월 24일 목요일
+          </span>
           <h3 className="mb-5 text-lg font-semibold">나의 챌린지</h3>
           <div className="flex items-center mb-2 space-x-2">
             <ChallengesButton
@@ -130,10 +144,15 @@ const Page = () => {
               onClick={() => handleChallengesButtonClick("Scheduled")}
             />
           </div>
-          <Challenges
-            challenges={challenges}
-            challengeState={challengesButton}
-          />
+          {
+            // challenges null일 시 스켈레톤 처리
+            challenges ? (
+              <Challenges
+                challenges={challenges}
+                challengeState={challengesButton}
+              />
+            ) : null
+          }
         </div>
       </div>
       <FloatingButton href="/challenges/create_challenge">
