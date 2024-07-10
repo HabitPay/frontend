@@ -1,19 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import axios, { HttpStatusCode } from "axios";
 
+import axios, { HttpStatusCode } from "axios";
 import Layout from "@app/components/layout";
 import Button from "@app/components/button";
-import useMutation, { MutationResult } from "@libs/useMutaion";
 import profilePic from "@public/default-profile.jpeg";
 import apiManager from "@api/apiManager";
 import { removeJwtFromSessionStorage } from "@libs/jwt";
-import { validImageExtensions } from "@libs/constants";
+import { MB, validImageExtensions } from "@libs/constants";
 
 interface IForm {
   nickname: string;
@@ -25,8 +24,6 @@ interface IProfileDTO {
   imageExtension: string;
   contentLength: number;
 }
-
-const MB = 1024 * 1024;
 
 const Page = () => {
   const {
@@ -43,11 +40,8 @@ const Page = () => {
   const [imageExtension, setImageExtension] = useState<string>("");
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const [changeProfile, { loading, data, error }] =
-    useMutation<MutationResult>("/api/profileCHange");
 
   const onSubmitWithValid = async (validForm: IForm) => {
-    if (loading) return;
     // changeProfile(validForm);
     const data: IProfileDTO = {
       nickname: validForm.nickname ? validForm.nickname : nickname,
