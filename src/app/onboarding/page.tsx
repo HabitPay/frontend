@@ -38,11 +38,12 @@ function Page() {
       const res = await apiManager.post<ITokenData>("/member", {
         nickname,
       });
-      if (res.status === StatusCodes.CREATED) {
-        const { accessToken, refreshToken, tokenType } = res.data;
-        sessionStorage.setItem("accessToken", accessToken);
-        sessionStorage.setItem("refreshToken", refreshToken);
-        sessionStorage.setItem("tokenType", tokenType);
+      if (res.status === StatusCodes.OK) {
+        // TODO: 삭제 예정
+        // const { accessToken, refreshToken, tokenType } = res.data;
+        // sessionStorage.setItem("accessToken", accessToken);
+        // sessionStorage.setItem("refreshToken", refreshToken);
+        // sessionStorage.setItem("tokenType", tokenType);
         router.push("/challenges/my_challenge");
       }
       console.log(res);
@@ -59,6 +60,8 @@ function Page() {
       router.push("/");
     } else {
       sessionStorage.setItem("accessToken", accessToken);
+      // TODO: 추가 예정
+      // sessionStorage.setItem("tokenType", tokenType);
       router.replace("/onboarding");
     }
   }, []);
