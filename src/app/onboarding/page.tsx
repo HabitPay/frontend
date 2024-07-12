@@ -35,15 +35,17 @@ function Page() {
     console.log(data);
     const { nickname } = data;
     try {
+      // TODO: /member/activate 로 변경 예정
       const res = await apiManager.post<ITokenData>("/member", {
         nickname,
       });
       if (res.status === StatusCodes.OK) {
-        // TODO: 삭제 예정
-        // const { accessToken, refreshToken, tokenType } = res.data;
-        // sessionStorage.setItem("accessToken", accessToken);
+        // TODO: 데이터 받는 부분 수정 필요
+        const { accessToken, expiresIn, tokenType } = res.data?.data;
+        sessionStorage.setItem("accessToken", accessToken);
+        sessionStorage.setItem("expiresIn", expiresIn);
         // sessionStorage.setItem("refreshToken", refreshToken);
-        // sessionStorage.setItem("tokenType", tokenType);
+        sessionStorage.setItem("tokenType", tokenType);
         router.push("/challenges/my_challenge");
       }
       console.log(res);
