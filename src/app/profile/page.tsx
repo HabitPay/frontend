@@ -19,6 +19,11 @@ interface IForm {
   profileImage: FileList | File | null;
 }
 
+interface IProfileDTO {
+  nickname: string;
+  imageUrl: string;
+}
+
 interface INicknameDto {
   nickname: string;
 }
@@ -139,8 +144,7 @@ const Page = () => {
     try {
       const res = await apiManager.get("/member");
       console.log(res);
-      const { nickname, imageUrl }: { nickname: string; imageUrl: string } =
-        res.data;
+      const { nickname, imageUrl }: IProfileDTO = res.data?.data;
 
       if (imageUrl.length > 0) {
         setProfileImageUrl(imageUrl);
