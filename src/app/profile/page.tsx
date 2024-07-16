@@ -16,7 +16,7 @@ import { MB, validImageExtensions } from "@libs/constants";
 
 interface IForm {
   nickname: string;
-  profileImage: FileList | File | null;
+  profileImage: FileList | null;
 }
 
 interface IProfileDTO {
@@ -29,7 +29,7 @@ interface INicknameDto {
 }
 
 interface IImageDto {
-  imageExtension: string;
+  extension: string;
   contentLength: number;
 }
 
@@ -63,42 +63,52 @@ const Page = () => {
     }
   };
 
+  const fetchPreSignedUrl = async (image: File) => {
+    const data: IImageDto = {
+      extension: imageExtension,
+      contentLength: image.size,
+    };
+    console.log(data);
+    try {
+      const res = await apiManager.patch("/member/image", data);
+      const { preSignedUrl } = res.data?.data;
+      return preSignedUrl;
+    } catch (error) {
+      // TODO: 에러 메세지 표시 추가하기
+      console.log(error);
+      return null;
+    }
+  };
+
+  const uploadImageToS3 = async (preSignedUrl: string, image: File) => {
+    try {
+      const res = await axios.put(preSignedUrl, image, {
+        headers: {
+          "Content-Type": "image/" + imageExtension,
+        },
+      });
+      // TODO: 성공 메세지 표시 추가하기
+      console.log(res);
+    } catch (error) {
+      // TODO: 에러 메세지 표시 추가하기
+      console.log(error);
+    }
+  };
+
   const onSubmitWithValid = async (validForm: IForm) => {
     if (validForm.nickname) {
       fetchNicknameUpdate(validForm.nickname);
     }
-    // const data: IProfileDTO = {
-    //   nickname: validForm.nickname ? validForm.nickname : nickname,
-    //   imageExtension: "",
-    //   contentLength: 0,
-    // };
-
-    // if (
-    //   validForm.profileImage instanceof FileList &&
-    //   validForm.profileImage.length == 1
-    // ) {
-    //   const file = validForm.profileImage[0];
-    //   validForm.profileImage = file;
-    //   data.imageExtension = imageExtension;
-    //   data.contentLength = file.size;
-    //   console.log(data);
-    // }
-    // try {
-    //   console.log(validForm);
-    //   const res = await apiManager.patch("/member", data);
-    //   console.log(res);
-    //   if (res.status === HttpStatusCode.Ok && previewImage) {
-    //     const preSignedUrl: string = res.data;
-    //     const res2 = await axios.put(preSignedUrl, validForm.profileImage, {
-    //       headers: {
-    //         "Content-Type": "image/" + imageExtension,
-    //       },
-    //     });
-    //     console.log(res2);
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    if (
+      validForm.profileImage instanceof FileList &&
+      validForm.profileImage.length == 1
+    ) {
+      const image: File = validForm.profileImage[0];
+      const preSignedUrl = await fetchPreSignedUrl(image);
+      if (preSignedUrl) {
+        uploadImageToS3(preSignedUrl, image);
+      }
+    }
   };
 
   const onProfileNicknameChange = (
