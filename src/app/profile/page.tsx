@@ -19,8 +19,11 @@ interface IForm {
   profileImage: FileList | File | null;
 }
 
-interface IProfileDTO {
+interface INicknameDto {
   nickname: string;
+}
+
+interface IImageDto {
   imageExtension: string;
   contentLength: number;
 }
@@ -41,40 +44,56 @@ const Page = () => {
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  const onSubmitWithValid = async (validForm: IForm) => {
-    // changeProfile(validForm);
-    const data: IProfileDTO = {
-      nickname: validForm.nickname ? validForm.nickname : nickname,
-      imageExtension: "",
-      contentLength: 0,
+  const fetchNicknameUpdate = async (nickname: string) => {
+    const data: INicknameDto = {
+      nickname,
     };
-
-    if (
-      validForm.profileImage instanceof FileList &&
-      validForm.profileImage.length == 1
-    ) {
-      const file = validForm.profileImage[0];
-      validForm.profileImage = file;
-      data.imageExtension = imageExtension;
-      data.contentLength = file.size;
-      console.log(data);
-    }
     try {
-      console.log(validForm);
-      const res = await apiManager.patch("/member", data);
+      const res = await apiManager.patch("/member/nickname", data);
+      // TODO: 성공 메세지 표시 추가하기
       console.log(res);
-      if (res.status === HttpStatusCode.Ok && previewImage) {
-        const preSignedUrl: string = res.data;
-        const res2 = await axios.put(preSignedUrl, validForm.profileImage, {
-          headers: {
-            "Content-Type": "image/" + imageExtension,
-          },
-        });
-        console.log(res2);
-      }
     } catch (error) {
+      // TODO: 에러 메세지 표시 추가하기
       console.log(error);
     }
+  };
+
+  const onSubmitWithValid = async (validForm: IForm) => {
+    if (validForm.nickname) {
+      fetchNicknameUpdate(validForm.nickname);
+    }
+    // const data: IProfileDTO = {
+    //   nickname: validForm.nickname ? validForm.nickname : nickname,
+    //   imageExtension: "",
+    //   contentLength: 0,
+    // };
+
+    // if (
+    //   validForm.profileImage instanceof FileList &&
+    //   validForm.profileImage.length == 1
+    // ) {
+    //   const file = validForm.profileImage[0];
+    //   validForm.profileImage = file;
+    //   data.imageExtension = imageExtension;
+    //   data.contentLength = file.size;
+    //   console.log(data);
+    // }
+    // try {
+    //   console.log(validForm);
+    //   const res = await apiManager.patch("/member", data);
+    //   console.log(res);
+    //   if (res.status === HttpStatusCode.Ok && previewImage) {
+    //     const preSignedUrl: string = res.data;
+    //     const res2 = await axios.put(preSignedUrl, validForm.profileImage, {
+    //       headers: {
+    //         "Content-Type": "image/" + imageExtension,
+    //       },
+    //     });
+    //     console.log(res2);
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   const onProfileNicknameChange = (
