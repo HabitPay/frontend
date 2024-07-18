@@ -5,8 +5,8 @@ export const fetchChallengeDetails = async (
   id: string
 ): Promise<IChallengeDetailsDto | null> => {
   try {
-    const res = await apiManager(`/challenges/${id}`);
-    const { data }: { data: IChallengeDetailsDto } = res;
+    const res = await apiManager.get(`/challenges/${id}`);
+    const { data }: { data: IChallengeDetailsDto } = res.data;
     console.log(data);
     return data;
   } catch (error) {
