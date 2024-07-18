@@ -7,12 +7,14 @@ import Button from "@app/components/button";
 
 interface IEnrollmentProps {
   id: string;
-  isEnrolledMember: boolean;
+  isMemberEnrolledInChallenge: boolean;
 }
 
-const Enrollment = ({ id, isEnrolledMember }: IEnrollmentProps) => {
-  const [isEnrolledMemberState, setIsEnrolledMemberState] =
-    useState<boolean>(isEnrolledMember);
+const Enrollment = ({ id, isMemberEnrolledInChallenge }: IEnrollmentProps) => {
+  const [
+    isMemberEnrolledInChallengeState,
+    setIsMemberEnrolledInChallengeState,
+  ] = useState<boolean>(isMemberEnrolledInChallenge);
 
   const enrollChallenge = async () => {
     try {
@@ -20,11 +22,10 @@ const Enrollment = ({ id, isEnrolledMember }: IEnrollmentProps) => {
       if (response.status === HttpStatusCode.Ok) {
         console.log(response);
         console.log("챌린지 참여 성공");
-        setIsEnrolledMemberState(true);
+        setIsMemberEnrolledInChallengeState(true);
       }
     } catch (error) {
       console.error(error);
-      console.error(error.response.data.message);
     }
   };
 
@@ -34,17 +35,16 @@ const Enrollment = ({ id, isEnrolledMember }: IEnrollmentProps) => {
       if (response.status === HttpStatusCode.Ok) {
         console.log(response);
         console.log("챌린지 참여 취소 성공");
-        setIsEnrolledMemberState(false);
+        setIsMemberEnrolledInChallengeState(false);
       }
     } catch (error) {
       console.error(error);
-      console.error(error.response.data.message);
     }
   };
 
   return (
     <>
-      {isEnrolledMemberState ? (
+      {isMemberEnrolledInChallengeState ? (
         // TODO: 빨간색으로 변경하기
         <Button onClick={cancelChallengeEnrollment} text="챌린지 참여 취소" />
       ) : (
