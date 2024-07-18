@@ -28,9 +28,10 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
 
   const {
     startDate,
-    isEnrolledMember,
-  }: { startDate: string; isEnrolledMember: boolean } = challengeDetails;
-  const isBeforeStartDate = isBefore(new Date(), startDate);
+    isMemberEnrolledInChallenge,
+  }: { startDate: string; isMemberEnrolledInChallenge: boolean } =
+    challengeDetails;
+  const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
 
   return (
     <Layout canGoBack hasTabBar>
@@ -43,7 +44,10 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
               startDate={startDate}
               isBeforeStartDate={isBeforeStartDate}
               remainingDays={
-                differenceInDays(challengeDetails.endDate, Date.now()) + 1
+                differenceInDays(
+                  new Date(challengeDetails.endDate),
+                  Date.now()
+                ) + 1
               }
               participants={42}
               profileImages={challengeDetails.hostProfileImage}
@@ -155,7 +159,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
             {isBeforeStartDate ? (
               <Enrollment
                 id={id as string}
-                isEnrolledMember={isEnrolledMember}
+                isMemberEnrolledInChallenge={isMemberEnrolledInChallenge}
               />
             ) : (
               <>

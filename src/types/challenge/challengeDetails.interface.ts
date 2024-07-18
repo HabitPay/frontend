@@ -8,7 +8,7 @@ export interface IChallengeDetailsDto {
   hostNickname: string;
   hostProfileImage: string | null;
   isHost: boolean;
-  isEnrolledMember: boolean;
+  isMemberEnrolledInChallenge: boolean;
 }
 
 export const challengeDetailsDtoExample = {
@@ -21,5 +21,5 @@ export const challengeDetailsDtoExample = {
   hostNickname: "string",
   hostProfileImage: null,
   isHost: true,
-  isEnrolledMember: true,
+  isMemberEnrolledInChallenge: true,
 };

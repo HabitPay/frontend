@@ -18,7 +18,7 @@ const calculateSelectedDays = (selectedDays: number[], days: number) => {
 
 export const useChallengeDetails = (id: string) => {
   const [challengeDetails, setChallengeDetails] =
-    useState<IChallengeDetailsDto | null>(challengeDetailsDtoExample);
+    useState<IChallengeDetailsDto | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
   const [selectedDays, setSelectedDays] = useState<number[]>(
