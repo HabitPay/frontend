@@ -1,8 +1,8 @@
 "use client";
 
-import Layout from "@app/components/layout";
-import { MB, validImageExtensions } from "@libs/constants";
-import { addClassNames } from "@libs/utils";
+import Layout from "@/app/components/layout";
+import { MB, validImageExtensions } from "@/libs/constants";
+import { addClassNames } from "@/libs/utils";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";

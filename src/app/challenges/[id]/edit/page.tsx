@@ -4,12 +4,12 @@ import { useForm } from "react-hook-form";
 import { format, differenceInDays } from "date-fns";
 import { ko } from "date-fns/locale/ko";
 
-import apiManager from "@api/apiManager";
+import apiManager from "@/api/apiManager";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
-import Label from "@app/challenges/components/label";
-import Layout from "@app/components/layout";
-import TextArea from "@app/components/textarea";
-import { addClassNames } from "@libs/utils";
+import Label from "@/app/challenges/components/label";
+import Layout from "@/app/components/layout";
+import TextArea from "@/app/components/textarea";
+import { addClassNames } from "@/libs/utils";
 import { IChallengePatchDto } from "@/types/challenge";
 import { Days } from "@/types/enums";
 

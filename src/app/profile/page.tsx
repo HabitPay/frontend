@@ -7,12 +7,12 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import axios, { HttpStatusCode } from "axios";
-import Layout from "@app/components/layout";
-import Button from "@app/components/button";
-import profilePic from "@public/default-profile.jpeg";
-import apiManager from "@api/apiManager";
-import { removeJwtFromSessionStorage } from "@libs/jwt";
-import { MB, validImageExtensions } from "@libs/constants";
+import Layout from "@/app/components/layout";
+import Button from "@/app/components/button";
+import profilePic from "@/public/default-profile.jpeg";
+import apiManager from "@/api/apiManager";
+import { removeJwtFromSessionStorage } from "@/libs/jwt";
+import { MB, validImageExtensions } from "@/libs/constants";
 
 interface IForm {
   nickname: string;

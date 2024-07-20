@@ -11,12 +11,12 @@ import { DateRange, Range } from "react-date-range";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
-import { addClassNames } from "@libs/utils";
-import Layout from "@app/components/layout";
+import { addClassNames } from "@/libs/utils";
+import Layout from "@/app/components/layout";
 import Label from "../components/label";
-import Button from "@app/components/button";
-import { convertKstDate } from "@libs/date";
-import apiManager from "@api/apiManager";
+import Button from "@/app/components/button";
+import { convertKstDate } from "@/libs/date";
+import apiManager from "@/api/apiManager";
 import { Days, SelectedStatus } from "@/types/enums";
 import { useRouter } from "next/navigation";
 

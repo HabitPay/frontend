@@ -6,8 +6,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { StatusCodes } from "http-status-codes";
 
-import apiManager from "@api/apiManager";
-import Layout from "@app/components/layout";
+import apiManager from "@/api/apiManager";
+import Layout from "@/app/components/layout";
 import { AxiosError } from "axios";
 
 interface IForm {
