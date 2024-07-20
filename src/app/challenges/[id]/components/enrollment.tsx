@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import { HttpStatusCode } from "axios";
 
-import apiManager from "@api/apiManager";
-import Button from "@app/components/button";
+import apiManager from "@/api/apiManager";
+import Button from "@/app/components/button";
 
 interface IEnrollmentProps {
   id: string;

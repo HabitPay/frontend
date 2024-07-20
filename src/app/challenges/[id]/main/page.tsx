@@ -5,17 +5,17 @@ import Image from "next/image";
 
 import { differenceInDays, isBefore } from "date-fns";
 
-import Layout from "@app/components/layout";
-import profilePic from "@public/profilePic.jpeg";
-import FloatingButton from "@app/components/floatingButton";
+import Layout from "@/app/components/layout";
+import profilePic from "@/public/profilePic.jpeg";
+import FloatingButton from "@/app/components/floatingButton";
 import Menu from "../components/menu";
 import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Enrollment from "../components/enrollment";
 import { usePathname } from "next/navigation";
-import { getParentPath } from "@libs/utils";
-import PostsFeed, { PostsFeedExample } from "@app/components/postsFeed";
+import { getParentPath } from "@/libs/utils";
+import PostsFeed, { PostsFeedExample } from "@/app/components/postsFeed";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);

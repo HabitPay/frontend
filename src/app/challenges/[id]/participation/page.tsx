@@ -1,12 +1,12 @@
 "use client";
 
-import Layout from "@app/components/layout";
+import Layout from "@/app/components/layout";
 import Menu from "../components/menu";
 import { usePathname } from "next/navigation";
 import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
 import Calendar from "react-calendar";
-import FloatingButton from "@app/components/floatingButton";
+import FloatingButton from "@/app/components/floatingButton";
 
 const Page = () => {
   const currentPath = usePathname().split("/");

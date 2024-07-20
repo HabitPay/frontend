@@ -1,4 +1,4 @@
-import Layout from "@app/components/layout";
+import Layout from "@/app/components/layout";
 import Image from "next/image";
 import PostItem, { IPostDto } from "./postItem";
 

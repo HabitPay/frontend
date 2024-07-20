@@ -1,6 +1,6 @@
 "use client";
 
-import ErrorModal from "@app/components/errorModal";
+import ErrorModal from "@/app/components/errorModal";
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 

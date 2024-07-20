@@ -1,4 +1,4 @@
-import apiManager from "@api/apiManager";
+import apiManager from "@/api/apiManager";
 import { IChallengeDetailsDto } from "@/types/challenge";
 
 export const fetchChallengeDetails = async (
