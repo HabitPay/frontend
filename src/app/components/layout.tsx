@@ -1,6 +1,10 @@
 "use client";
 
+<<<<<<< HEAD
 import { addClassNames } from "@libs/utils";
+=======
+import { addClassNames } from "@/libs/utils";
+>>>>>>> main
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 

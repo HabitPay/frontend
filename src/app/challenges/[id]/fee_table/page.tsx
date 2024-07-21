@@ -1,7 +1,7 @@
 "use client";
 
-import Layout from "@app/components/layout";
-import { addClassNames } from "@libs/utils";
+import Layout from "@/app/components/layout";
+import { addClassNames } from "@/libs/utils";
 import { useState } from "react";
 
 interface Participant {

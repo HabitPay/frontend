@@ -1,19 +1,16 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
 import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
 
-import { JwtPayload, jwtDecode } from "jwt-decode";
-
-import Layout from "@app/components/layout";
-import FloatingButton from "@app/components/floatingButton";
+import Layout from "@/app/components/layout";
+import FloatingButton from "@/app/components/floatingButton";
+import { useMemberProfile } from "@/hooks/useMemberProfile";
 import Challenges, { IChallengeInfo } from "./components/challenge";
 import ChallengesButton from "./components/challengesButton";
 
 // 나중에 삭제
-import profilePic from "@public/profilePic.jpeg";
+import profilePic from "@/public/profilePic.jpeg";
 import Loading from "./loading";
 
 const inProgressChallenge: IChallengeInfo[] = [
@@ -65,12 +62,11 @@ const Page = () => {
   const [challenges, setChallenges] = useState<IChallengeInfo[] | null>(
     inProgressChallenge
   );
+  // TODO: 다른 hook 들과 겹치지 않도록 컴포넌트 분리하기
+  const { memberProfile, isLoading, error } = useMemberProfile();
   const [challengesButton, setChallengesButton] =
     useState<ChallengesState>("In Progress");
-  const [nickname, setNickname] = useState<String>("");
   const [loadingPage, setLoadingPage] = useState(true);
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
   const handleChallengesButtonClick = async (type: ChallengesState) => {
     setChallengesButton(type);
@@ -83,23 +79,9 @@ const Page = () => {
   };
 
   useEffect(() => {
-    const queryStringAccessToken: string | null =
-      searchParams.get("accessToken");
-
-    if (queryStringAccessToken) {
-      sessionStorage.setItem("accessToken", queryStringAccessToken);
-      router.replace("/challenges/my_challenge");
-    }
-
-    // TODO: 페이지 로딩하자마자 바로 닉네임 보여줄 수 있도록 수정. 현재는 깜빡 거림
-    const accessToken: string | null = sessionStorage.getItem("accessToken");
-    if (accessToken) {
-      const decoded = jwtDecode<JwtPayload>(accessToken);
-      setNickname(decoded.nickname);
-    }
     const timeoutId = setTimeout(() => {
       setLoadingPage(false);
-    }, 2000); // 2초 후 로딩 상태 해제
+    }, 1000); // 1초 후 로딩 상태 해제
 
     return () => clearTimeout(timeoutId);
   }, []);
@@ -108,17 +90,21 @@ const Page = () => {
     return <Loading />; // 로딩 중일 때 로딩 컴포넌트 렌더링
   }
 
+  if (memberProfile === null) {
+    return <>Error</>;
+  }
+
   return (
     <Layout hasTabBar>
       <div className="flex flex-col max-w-xl px-5 mx-auto">
         <div className="flex items-center justify-between mb-3">
           <div className="flex flex-col">
             <span className="text-gray-400">안녕하세요</span>
-            <h2 className="text-lg font-semibold">{nickname}</h2>
+            <h2 className="text-lg font-semibold">{memberProfile.nickname}</h2>
           </div>
           <Image
             className="rounded-full size-16"
-            src={profilePic}
+            src={memberProfile.imageUrl || profilePic}
             alt="Picture of Avatar"
           />
         </div>

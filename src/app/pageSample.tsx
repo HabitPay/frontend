@@ -1,6 +1,6 @@
 "use client";
 
-import apiManager from "@api/apiManager";
+import apiManager from "@/api/apiManager";
 import Image from "next/image";
 import { FormEvent, useEffect } from "react";
 

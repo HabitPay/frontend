@@ -1,4 +1,4 @@
-import { addClassNames } from "@libs/utils";
+import { addClassNames } from "@/libs/utils";
 import Link from "next/link";
 import { ReadonlyURLSearchParams } from "next/navigation";
 
