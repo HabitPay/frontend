@@ -3,7 +3,6 @@
 import { addClassNames } from "@/libs/utils";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
 
 interface LayoutProps {
   title?: string;
