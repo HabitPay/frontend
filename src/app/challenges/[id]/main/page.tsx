@@ -33,6 +33,33 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     challengeDetails;
   const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
 
+  // PostsFeed의 prop으로 주기위한 예시. 백엔드완성되면 삭제
+  const initialFeed = [
+    {
+      profilePic: "/profilePic.jpeg",
+      nickname: "hogkim",
+      createdAt: new Date(),
+      isNotification: true,
+      imageList: [
+        "/default-profile.jpeg",
+        "/profilePic.jpeg",
+        "/chungking_express__movie_poster__by_seblakes31_dep34tb-fullview.jpg",
+        "/manaca.JPG",
+      ],
+      contents:
+        "test contents test contents test contents test contents test contents test contents test contents test contents test contents",
+    },
+    {
+      profilePic: "/default-profile.jpeg",
+      nickname: "jkwak",
+      createdAt: new Date(),
+      isNotification: false,
+      imageList: ["/profilePic.jpeg", "/default-profile.jpeg"],
+      contents:
+        "example contents example contents example contents example contents example contents example contents example contents example contents example contents example contents example contents ",
+    },
+  ];
+
   return (
     <Layout canGoBack hasTabBar>
       <div className="flex flex-col divide-y-2">
@@ -166,7 +193,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 <span className="px-5 py-3 text-sm font-light bg-white rounded-xl">
                   어제
                 </span>
-                <PostsFeed feeds={PostsFeedExample} />
+                <PostsFeed initialFeed={initialFeed} />
                 <FloatingButton href={`${getParentPath(pathname)}/post`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
