@@ -12,6 +12,7 @@ import ChallengesButton from "./components/challengesButton";
 // 나중에 삭제
 import profilePic from "@/public/profilePic.jpeg";
 import Loading from "./loading";
+import { verifyAccessToken } from "@/libs/authUtils";
 
 const inProgressChallenge: IChallengeInfo[] = [
   {
@@ -58,7 +59,8 @@ const scheduledChallenge: IChallengeInfo[] = [
 
 export type ChallengesState = "In Progress" | "Completed" | "Scheduled";
 
-const Page = () => {
+export default function Page() {
+  verifyAccessToken();
   const [challenges, setChallenges] = useState<IChallengeInfo[] | null>(
     inProgressChallenge
   );
@@ -162,6 +164,4 @@ const Page = () => {
       </FloatingButton>
     </Layout>
   );
-};
-
-export default Page;
+}

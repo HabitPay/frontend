@@ -2,7 +2,7 @@
 
 import axios, { AxiosInstance } from "axios";
 
-const getAccessToken = () => {
+export const getAccessToken = () => {
   if (typeof window !== "undefined") {
     return sessionStorage.getItem("accessToken");
   }
