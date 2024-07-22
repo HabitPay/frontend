@@ -12,6 +12,7 @@ import ChallengesButton from "./components/challengesButton";
 // 나중에 삭제
 import profilePic from "@/public/profilePic.jpeg";
 import Loading from "./loading";
+import { useChallengeEnrolledList } from "@/hooks/useChallengeEnrolledList";
 
 const inProgressChallenge: IChallengeInfo[] = [
   {
@@ -58,12 +59,13 @@ const scheduledChallenge: IChallengeInfo[] = [
 
 export type ChallengesState = "In Progress" | "Completed" | "Scheduled";
 
-const Page = () => {
+function Page() {
   const [challenges, setChallenges] = useState<IChallengeInfo[] | null>(
     inProgressChallenge
   );
   // TODO: 다른 hook 들과 겹치지 않도록 컴포넌트 분리하기
   const { memberProfile, isLoading, error } = useMemberProfile();
+  const { challengeEnrolledList } = useChallengeEnrolledList();
   const [challengesButton, setChallengesButton] =
     useState<ChallengesState>("In Progress");
   const [loadingPage, setLoadingPage] = useState(true);
@@ -162,6 +164,6 @@ const Page = () => {
       </FloatingButton>
     </Layout>
   );
-};
+}
 
 export default Page;
