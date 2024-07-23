@@ -7,12 +7,13 @@ import Layout from "@/app/components/layout";
 import FloatingButton from "@/app/components/floatingButton";
 import { useMemberProfile } from "@/hooks/useMemberProfile";
 import Challenges, { IChallengeInfo } from "./components/challenge";
-import ChallengesButton from "./components/challengesButton";
+import ChallengesButton from "./components/challengesStatusButton";
 
 // 나중에 삭제
 import profilePic from "@/public/profilePic.jpeg";
 import Loading from "./loading";
 import { useChallengeEnrolledList } from "@/hooks/useChallengeEnrolledList";
+import EnrolledChallengeList from "./components/enrolledChallengeList";
 
 const inProgressChallenge: IChallengeInfo[] = [
   {
@@ -116,22 +117,9 @@ function Page() {
           </span>
           <h3 className="mb-5 text-lg font-semibold">나의 챌린지</h3>
           <div className="flex items-center mb-2 space-x-2">
-            <ChallengesButton
-              title="진행 중"
-              isActivated={challengesButton == "In Progress"}
-              onClick={() => handleChallengesButtonClick("In Progress")}
-            />
-            <ChallengesButton
-              title="완료"
-              isActivated={challengesButton == "Completed"}
-              onClick={() => handleChallengesButtonClick("Completed")}
-            />
-            <ChallengesButton
-              title="진행 예정"
-              isActivated={challengesButton == "Scheduled"}
-              onClick={() => handleChallengesButtonClick("Scheduled")}
-            />
+            <EnrolledChallengeList challengesState={challengesButton} />
           </div>
+
           {
             // challenges null일 시 스켈레톤 처리
             challenges ? (
