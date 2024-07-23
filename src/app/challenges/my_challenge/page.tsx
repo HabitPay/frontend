@@ -13,6 +13,7 @@ import ChallengesButton from "./components/challengesButton";
 import profilePic from "@/public/profilePic.jpeg";
 import Loading from "./loading";
 import { verifyAccessToken } from "@/libs/authUtils";
+import withAuth from "@/app/components/withAuth";
 
 const inProgressChallenge: IChallengeInfo[] = [
   {
@@ -59,7 +60,7 @@ const scheduledChallenge: IChallengeInfo[] = [
 
 export type ChallengesState = "In Progress" | "Completed" | "Scheduled";
 
-export default function Page() {
+function Page() {
   verifyAccessToken();
   const [challenges, setChallenges] = useState<IChallengeInfo[] | null>(
     inProgressChallenge
@@ -165,3 +166,5 @@ export default function Page() {
     </Layout>
   );
 }
+
+export default withAuth(Page);
