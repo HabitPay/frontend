@@ -7,13 +7,13 @@ import Layout from "@/app/components/layout";
 import FloatingButton from "@/app/components/floatingButton";
 import { useMemberProfile } from "@/hooks/useMemberProfile";
 import Challenges, { IChallengeInfo } from "./components/challenge";
-import ChallengesButton from "./components/challengesStatusButton";
+import { ChallengeStatesEnum } from "@/types/enums";
 
 // 나중에 삭제
 import profilePic from "@/public/profilePic.jpeg";
 import Loading from "./loading";
 import { useChallengeEnrolledList } from "@/hooks/useChallengeEnrolledList";
-import EnrolledChallengeList from "./components/enrolledChallengeList";
+import ChallengeStateSelector from "./components/challengeStateSelector";
 
 const inProgressChallenge: IChallengeInfo[] = [
   {
@@ -58,7 +58,7 @@ const scheduledChallenge: IChallengeInfo[] = [
   },
 ];
 
-export type ChallengesState = "In Progress" | "Completed" | "Scheduled";
+// export type ChallengesState = "In Progress" | "Completed" | "Scheduled";
 
 function Page() {
   const [challenges, setChallenges] = useState<IChallengeInfo[] | null>(
@@ -67,19 +67,9 @@ function Page() {
   // TODO: 다른 hook 들과 겹치지 않도록 컴포넌트 분리하기
   const { memberProfile, isLoading, error } = useMemberProfile();
   const { challengeEnrolledList } = useChallengeEnrolledList();
-  const [challengesButton, setChallengesButton] =
-    useState<ChallengesState>("In Progress");
+  const [challengeStateSelection, setChallengeStateSelection] =
+    useState<ChallengeStatesEnum>(ChallengeStatesEnum.InProgress);
   const [loadingPage, setLoadingPage] = useState(true);
-
-  const handleChallengesButtonClick = async (type: ChallengesState) => {
-    setChallengesButton(type);
-    // api요청으로 가져오기.
-    type == "In Progress"
-      ? setChallenges(inProgressChallenge)
-      : type == "Completed"
-      ? setChallenges(completedChallenge)
-      : setChallenges(scheduledChallenge);
-  };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -117,7 +107,10 @@ function Page() {
           </span>
           <h3 className="mb-5 text-lg font-semibold">나의 챌린지</h3>
           <div className="flex items-center mb-2 space-x-2">
-            <EnrolledChallengeList challengesState={challengesButton} />
+            <ChallengeStateSelector
+              challengeStateSelection={challengeStateSelection}
+              setter={setChallengeStateSelection}
+            />
           </div>
 
           {
@@ -125,7 +118,7 @@ function Page() {
             challenges ? (
               <Challenges
                 challenges={challenges}
-                challengeState={challengesButton}
+                challengeState={challengeStateSelection}
               />
             ) : null
           }
