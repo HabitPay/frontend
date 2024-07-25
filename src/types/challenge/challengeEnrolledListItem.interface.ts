@@ -4,6 +4,7 @@ export interface IChallengeEnrolledListItemDto {
   startDate: string;
   endDate: string;
   stopDate: string;
+  totalParticipatingDays: number;
   numberOfParticipants: number;
   participatingDays: number;
   totalFee: number;
