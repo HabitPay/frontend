@@ -3,80 +3,27 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
+import { format } from "date-fns";
+
 import Layout from "@/app/components/layout";
 import FloatingButton from "@/app/components/floatingButton";
+import Challenges from "./components/challenges";
+import ChallengeStateSelector from "./components/challengeStateSelector";
 import { useMemberProfile } from "@/hooks/useMemberProfile";
-import Challenges, { IChallengeInfo } from "./components/challenge";
-import ChallengesButton from "./components/challengesButton";
+import { useChallengeEnrolledList } from "@/hooks/useChallengeEnrolledList";
+import { ChallengeStatesEnum } from "@/types/enums";
 
 // 나중에 삭제
 import profilePic from "@/public/profilePic.jpeg";
 import Loading from "./loading";
 
-const inProgressChallenge: IChallengeInfo[] = [
-  {
-    title: "책업일치",
-    participation: false,
-    participants: 42,
-    startAt: new Date(2024, 1, 1),
-    endAt: new Date(2024, 4, 27),
-    fee: 10000,
-    achievement: 70,
-  },
-  {
-    title: "1일 1백준",
-    participation: true,
-    participants: 42,
-    startAt: new Date(2024, 0, 3),
-    endAt: new Date(2024, 3, 2),
-    fee: 9000,
-    achievement: 22,
-  },
-];
-const completedChallenge: IChallengeInfo[] = [
-  {
-    title: "탄수화물 억제 모임",
-    participation: false,
-    participants: 12,
-    startAt: new Date(2023, 11, 11),
-    endAt: new Date(2024, 2, 5),
-    fee: 3000,
-    achievement: 88,
-  },
-];
-const scheduledChallenge: IChallengeInfo[] = [
-  {
-    title: "물마시기",
-    participation: false,
-    participants: 12,
-    startAt: new Date(2024, 4, 1),
-    endAt: new Date(2024, 7, 25),
-    fee: 0,
-    achievement: 0,
-  },
-];
-
-export type ChallengesState = "In Progress" | "Completed" | "Scheduled";
-
-const Page = () => {
-  const [challenges, setChallenges] = useState<IChallengeInfo[] | null>(
-    inProgressChallenge
-  );
+function Page() {
   // TODO: 다른 hook 들과 겹치지 않도록 컴포넌트 분리하기
   const { memberProfile, isLoading, error } = useMemberProfile();
-  const [challengesButton, setChallengesButton] =
-    useState<ChallengesState>("In Progress");
+  const { challengeEnrolledList } = useChallengeEnrolledList();
+  const [challengeStateSelection, setChallengeStateSelection] =
+    useState<ChallengeStatesEnum>(ChallengeStatesEnum.InProgress);
   const [loadingPage, setLoadingPage] = useState(true);
-
-  const handleChallengesButtonClick = async (type: ChallengesState) => {
-    setChallengesButton(type);
-    // api요청으로 가져오기.
-    type == "In Progress"
-      ? setChallenges(inProgressChallenge)
-      : type == "Completed"
-      ? setChallenges(completedChallenge)
-      : setChallenges(scheduledChallenge);
-  };
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -90,7 +37,7 @@ const Page = () => {
     return <Loading />; // 로딩 중일 때 로딩 컴포넌트 렌더링
   }
 
-  if (memberProfile === null) {
+  if (memberProfile === null || challengeEnrolledList === null) {
     return <>Error</>;
   }
 
@@ -110,35 +57,22 @@ const Page = () => {
         </div>
         <div className="flex flex-col mb-10">
           <span className="mb-2 text-sm font-light">
-            2024년 1월 24일 목요일
+            {format(new Date(), "yyyy년 MM월 dd일")}
           </span>
+
           <h3 className="mb-5 text-lg font-semibold">나의 챌린지</h3>
+
           <div className="flex items-center mb-2 space-x-2">
-            <ChallengesButton
-              title="진행 중"
-              isActivated={challengesButton == "In Progress"}
-              onClick={() => handleChallengesButtonClick("In Progress")}
-            />
-            <ChallengesButton
-              title="완료"
-              isActivated={challengesButton == "Completed"}
-              onClick={() => handleChallengesButtonClick("Completed")}
-            />
-            <ChallengesButton
-              title="진행 예정"
-              isActivated={challengesButton == "Scheduled"}
-              onClick={() => handleChallengesButtonClick("Scheduled")}
+            <ChallengeStateSelector
+              challengeStateSelection={challengeStateSelection}
+              setter={setChallengeStateSelection}
             />
           </div>
-          {
-            // challenges null일 시 스켈레톤 처리
-            challenges ? (
-              <Challenges
-                challenges={challenges}
-                challengeState={challengesButton}
-              />
-            ) : null
-          }
+
+          <Challenges
+            challenges={challengeEnrolledList}
+            challengeState={challengeStateSelection}
+          />
         </div>
       </div>
       <FloatingButton href="/challenges/create_challenge">
@@ -162,6 +96,6 @@ const Page = () => {
       </FloatingButton>
     </Layout>
   );
-};
+}
 
 export default Page;

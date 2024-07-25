@@ -1,5 +1,4 @@
 import { addClassNames } from "@/libs/utils";
-import { Dispatch } from "react";
 
 interface IChallengesButton {
   title: string;
@@ -7,11 +6,11 @@ interface IChallengesButton {
   onClick: () => void;
 }
 
-const ChallengesButton = ({
+function ChallengeStateButton({
   title,
   isActivated,
   onClick,
-}: IChallengesButton) => {
+}: IChallengesButton) {
   return (
     <button
       className={addClassNames(
@@ -25,6 +24,6 @@ const ChallengesButton = ({
       {title}
     </button>
   );
-};
+}
 
-export default ChallengesButton;
+export default ChallengeStateButton;
