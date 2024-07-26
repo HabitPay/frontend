@@ -17,7 +17,7 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
     <>
       {items.map((item, index) => {
         const progressPercent: number =
-          (item.successCount / item.totalParticipatingDays) * 100;
+          (item.successCount / item.totalParticipatingDaysCount) * 100;
 
         return (
           <div
