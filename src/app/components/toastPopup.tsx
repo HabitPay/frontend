@@ -3,20 +3,21 @@
 import { addClassNames } from "@/libs/utils";
 import { Dispatch, SetStateAction, useEffect } from "react";
 
-interface ToastPopupProps {
+export interface IToast {
   message: string;
-  setToast: Dispatch<SetStateAction<boolean>>;
-  position: "top" | "bottom";
+  top: boolean;
+  success: boolean;
 }
 
-export default function ToastPopup({
-  message,
-  setToast,
-  position,
-}: ToastPopupProps) {
+export interface ToastPopupProps {
+  toast: IToast;
+  setToast: Dispatch<SetStateAction<IToast>>;
+}
+
+export default function ToastPopup({ toast, setToast }: ToastPopupProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
-      setToast(false);
+      setToast((prev) => ({ message: "", top: true, success: true }));
     }, 2500);
     return () => {
       clearTimeout(timer);
@@ -24,12 +25,42 @@ export default function ToastPopup({
   }, [setToast]);
   return (
     <div
-      className={addClassNames(
-        "fixed z-20 flex h-[4rem] w-[90%] max-w-[73rem] items-center justify-center rounded-[1rem] bg-green-50 opacity-[97%] shadow-[0px_2px_8px_rgba(0,0,0,0.25)]",
-        position === "top" ? "animate-toast-top" : "animate-toast-bottom"
-      )}
+      className={`fixed z-50 flex px-4 py-3 w-11/12 max-w-md items-center  gap-5 rounded-xl opacity-85 shadow-[0px_2px_8px_rgba(0,0,0,0.25)] *:text-white ${
+        toast.top ? " top-12" : " bottom-24"
+      } ${toast.success ? "bg-green-400" : "bg-red-400"}`}
     >
-      <p className="text-Body text-white">{message}</p>
+      {toast.success ? (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="m4.5 12.75 6 6 9-13.5"
+          />
+        </svg>
+      ) : (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={1.5}
+          stroke="currentColor"
+          className="size-6"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
+          />
+        </svg>
+      )}
+      <div className="text-Body">{toast.message}</div>
     </div>
   );
 }

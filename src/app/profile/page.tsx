@@ -13,6 +13,8 @@ import profilePic from "@/public/default-profile.jpeg";
 import apiManager from "@/api/apiManager";
 import { removeJwtFromSessionStorage } from "@/libs/jwt";
 import { MB, validImageExtensions } from "@/libs/constants";
+import ToastPopup, { IToast } from "../components/toastPopup";
+import { IApiResponseDto } from "@/types/api/apiResponse.interface";
 
 interface IForm {
   nickname: string;
@@ -36,8 +38,6 @@ interface IImageDto {
 const Page = () => {
   const {
     register,
-    watch,
-    setValue,
     setError,
     handleSubmit,
     formState: { errors },
@@ -49,17 +49,34 @@ const Page = () => {
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
+  const [toast, setToast] = useState<IToast>({
+    message: "",
+    top: false,
+    success: true,
+  });
+
   const fetchNicknameUpdate = async (nickname: string) => {
     const data: INicknameDto = {
       nickname,
     };
     try {
-      const res = await apiManager.patch("/member/nickname", data);
-      // TODO: 성공 메세지 표시 추가하기
-      console.log(res);
+      const res: IApiResponseDto = await apiManager.patch(
+        "/member/nickname",
+        data
+      );
+      setToast((prev) => ({
+        message: res.data.message,
+        top: false,
+        success: true,
+      }));
     } catch (error) {
-      // TODO: 에러 메세지 표시 추가하기
       console.log(error);
+      // TODO: 에러 메세지 표시 추가하기
+      setToast((prev) => ({
+        message: "error",
+        top: false,
+        success: false,
+      }));
     }
   };
 
@@ -68,13 +85,22 @@ const Page = () => {
       extension: imageExtension,
       contentLength: image.size,
     };
-    console.log(data);
     try {
       const res = await apiManager.patch("/member/image", data);
+      setToast((prev) => ({
+        message: res.data.message,
+        top: false,
+        success: true,
+      }));
       const { preSignedUrl } = res.data?.data;
       return preSignedUrl;
     } catch (error) {
       // TODO: 에러 메세지 표시 추가하기
+      setToast((prev) => ({
+        message: "error",
+        top: false,
+        success: false,
+      }));
       console.log(error);
       return null;
     }
@@ -115,7 +141,7 @@ const Page = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setNickname(event.target.value);
-    console.log(event.target.value);
+    // console.log(event.target.value);
   };
 
   const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,7 +179,6 @@ const Page = () => {
   const getProfile = async () => {
     try {
       const res = await apiManager.get("/member");
-      console.log(res);
       const { nickname, imageUrl }: IProfileDTO = res.data?.data;
 
       if (imageUrl.length > 0) {
@@ -168,10 +193,17 @@ const Page = () => {
   const handleDeleteUser = async () => {
     try {
       const res = await apiManager.delete("/member");
-      console.log(res);
       if (res.status === HttpStatusCode.Ok) {
         console.log("delete success");
-        router.push("/");
+        setToast((prev) => ({
+          message: res.data.message,
+          top: false,
+          success: true,
+        }));
+        setTimeout(() => {
+          router.push("/");
+        }, 2500);
+
         removeJwtFromSessionStorage();
       }
     } catch (error) {
@@ -266,6 +298,11 @@ const Page = () => {
             </button>
           </div>
         </div>
+      </div>
+      <div className="flex justify-center">
+        {toast.message ? (
+          <ToastPopup toast={toast} setToast={setToast} />
+        ) : null}
       </div>
     </Layout>
   );

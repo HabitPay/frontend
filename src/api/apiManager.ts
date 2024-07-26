@@ -7,7 +7,8 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
-import { useRouter } from "next/navigation";
+// window 로 리다이렉트하기로 바꾸기
+// import { useRouter } from "next/navigation";
 
 export const getAccessToken = () => {
   if (typeof window !== "undefined") {
@@ -51,10 +52,10 @@ apiManager.interceptors.response.use(
     return response;
   },
   async function (error: AxiosError): Promise<AxiosResponse | Promise<never>> {
-    const router = useRouter();
+    // const router = useRouter();
     const logout = () => {
       removeJwtFromSessionStorage();
-      router.push("/");
+      // router.push("/");
     };
 
     const { config, response } = error;
@@ -67,7 +68,7 @@ apiManager.interceptors.response.use(
     const { status, data } = response;
 
     if (status === 401) {
-      if (data === "InvalidTokenException") {
+      if (data === "invalid_token") {
         logout();
       } else if (data === "TokenExpired") {
         try {
@@ -89,7 +90,7 @@ apiManager.interceptors.response.use(
       }
     }
 
-    return Promise.reject(error);
+    return Promise.reject(response);
   }
 );
 
