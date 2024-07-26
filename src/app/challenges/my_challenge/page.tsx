@@ -19,60 +19,7 @@ import Loading from "./loading";
 import { verifyAccessToken } from "@/libs/authUtils";
 import withAuth from "@/app/components/withAuth";
 
-<<<<<<< HEAD
-const inProgressChallenge: IChallengeInfo[] = [
-  {
-    title: "책업일치",
-    participation: false,
-    participants: 42,
-    startAt: new Date(2024, 1, 1),
-    endAt: new Date(2024, 4, 27),
-    fee: 10000,
-    achievement: 70,
-  },
-  {
-    title: "1일 1백준",
-    participation: true,
-    participants: 42,
-    startAt: new Date(2024, 0, 3),
-    endAt: new Date(2024, 3, 2),
-    fee: 9000,
-    achievement: 22,
-  },
-];
-const completedChallenge: IChallengeInfo[] = [
-  {
-    title: "탄수화물 억제 모임",
-    participation: false,
-    participants: 12,
-    startAt: new Date(2023, 11, 11),
-    endAt: new Date(2024, 2, 5),
-    fee: 3000,
-    achievement: 88,
-  },
-];
-const scheduledChallenge: IChallengeInfo[] = [
-  {
-    title: "물마시기",
-    participation: false,
-    participants: 12,
-    startAt: new Date(2024, 4, 1),
-    endAt: new Date(2024, 7, 25),
-    fee: 0,
-    achievement: 0,
-  },
-];
-
-export type ChallengesState = "In Progress" | "Completed" | "Scheduled";
-
 function Page() {
-  verifyAccessToken();
-  const [challenges, setChallenges] = useState<IChallengeInfo[] | null>(
-    inProgressChallenge
-  );
-=======
-function Page() {
->>>>>>> main
   // TODO: 다른 hook 들과 겹치지 않도록 컴포넌트 분리하기
   const { memberProfile, isLoading, error } = useMemberProfile();
   const { challengeEnrolledList } = useChallengeEnrolledList();
