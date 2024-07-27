@@ -52,6 +52,8 @@ function Page() {
           <Image
             className="rounded-full size-16"
             src={memberProfile.imageUrl || profilePic}
+            width={64}
+            height={64}
             alt="Picture of Avatar"
           />
         </div>
