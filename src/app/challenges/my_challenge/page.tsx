@@ -28,7 +28,7 @@ function Page() {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setLoadingPage(false);
-    }, 1000); // 1초 후 로딩 상태 해제
+    }, 300); // 0.3초 후 로딩 상태 해제
 
     return () => clearTimeout(timeoutId);
   }, []);
