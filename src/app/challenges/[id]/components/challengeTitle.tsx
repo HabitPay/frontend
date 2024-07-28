@@ -6,7 +6,7 @@ interface IChallengeTitleProps {
   title: string;
   remainingDays: number;
   participants: number;
-  profileImages: string | null;
+  profileImages: string[];
   startDate: string;
   isBeforeStartDate: boolean;
 }
@@ -34,21 +34,17 @@ const ChallengeTitle = ({
       </div>
       <div className="flex items-center px-3 space-x-2 border-2 h-11 rounded-2xl border-habit-gray">
         <div className="flex -space-x-2">
-          <Image
-            src={defaultProfileImage}
-            className="z-30 rounded-full size-9 "
-            alt="defaultProfileImageture of attendees"
-          />
-          <Image
-            src={defaultProfileImage}
-            className="z-20 rounded-full size-9"
-            alt="defaultProfileImageture of attendees"
-          />
-          <Image
-            src={defaultProfileImage}
-            className="z-10 rounded-full size-9 "
-            alt="defaultProfileImageture of attendees"
-          />
+          {profileImages.map((profileImage) => {
+            return (
+              <Image
+                src={profileImage || defaultProfileImage}
+                className="z-30 rounded-full size-9 "
+                alt="profile image"
+                width={36}
+                height={36}
+              />
+            );
+          })}
         </div>
         <div>{participants}</div>
       </div>
