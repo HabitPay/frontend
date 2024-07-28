@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { format, differenceInDays } from "date-fns";
-import { ko } from "date-fns/locale/ko";
+import { ko } from "date-fns/locale";
 
 import apiManager from "@/api/apiManager";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
@@ -13,9 +13,9 @@ import { addClassNames } from "@/libs/utils";
 import { IChallengePatchDto } from "@/types/challenge";
 import { Days } from "@/types/enums";
 
-const Page = ({ params }: { params: { id: string } }) => {
+const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, selectedDays, isLoading, error } =
-    useChallengeDetails(params.id);
+    useChallengeDetails(id);
   const {
     register,
     control,
@@ -29,7 +29,16 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const onSubmitWithValidation = async (form: IChallengePatchDto) => {
     try {
-      const res = await apiManager.patch(`/challenges/${params.id}`, form);
+      const res = await apiManager.patch(`/challenges/${id}`, form);
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleChallengeDelete = async () => {
+    try {
+      const res = await apiManager.delete(`/challenges/${id}`);
       console.log(res);
     } catch (error) {
       console.error(error);
@@ -42,8 +51,8 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   return (
     <Layout canGoBack hasTabBar title="챌린지 정보 수정">
-      <form onSubmit={handleSubmit(onSubmitWithValidation)}>
-        <div className="flex flex-col px-12 space-y-4">
+      <div className="flex flex-col px-12 space-y-4">
+        <form onSubmit={handleSubmit(onSubmitWithValidation)}>
           <div className="flex flex-col space-y-3">
             <Label title="챌린지 이름" isRequired />
             <div className="px-4 py-2 text-sm font-light rounded-xl bg-habit-lightgray">
@@ -126,14 +135,20 @@ const Page = ({ params }: { params: { id: string } }) => {
               </div>
             </div>
           </div>
-          <button className="py-2 text-sm text-white bg-habit-green rounded-2xl font-extralight ">
-            저장
-          </button>
-          <button className="py-2 text-sm text-white bg-[#D32F2F] rounded-2xl font-extralight">
-            챌린지 종료
-          </button>
-        </div>
-      </form>
+          <div className="flex flex-col mt-2">
+            <button className="py-2 text-sm text-white bg-habit-green rounded-2xl font-extralight ">
+              저장
+            </button>
+          </div>
+        </form>
+        {/* TODO: 챌린지 삭제 확인 창 추가하기 */}
+        <button
+          className="py-2 text-sm text-white bg-[#D32F2F] rounded-2xl font-extralight"
+          onClick={handleChallengeDelete}
+        >
+          챌린지 삭제
+        </button>
+      </div>
     </Layout>
   );
 };
