@@ -1,9 +1,6 @@
 import { useState, useEffect } from "react";
 
-import {
-  IChallengeDetailsDto,
-  challengeDetailsDtoExample,
-} from "@/types/challenge";
+import { IChallengeDetailsDto } from "@/types/challenge";
 import { SelectedStatus } from "@/types/enums";
 import { fetchChallengeDetails } from "../api/challenge";
 

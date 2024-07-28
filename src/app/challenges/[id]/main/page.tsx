@@ -15,7 +15,8 @@ import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Enrollment from "../components/enrollment";
 import { usePathname } from "next/navigation";
 import { getParentPath } from "@/libs/utils";
-import PostsFeed, { PostsFeedExample } from "@/app/components/postsFeed";
+import PostsFeed from "@/app/components/postsFeed";
+import { IChallengeDetailsDto } from "@/types/challenge";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
@@ -27,10 +28,15 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   if (challengeDetails === null) return <div>Challenge not found</div>;
 
   const {
+    title,
+    description,
     startDate,
+    endDate,
+    numberOfParticipants,
+    enrolledMembersProfileImageList,
+    isHost,
     isMemberEnrolledInChallenge,
-  }: { startDate: string; isMemberEnrolledInChallenge: boolean } =
-    challengeDetails;
+  }: IChallengeDetailsDto = challengeDetails;
   const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
 
   // PostsFeed의 prop으로 주기위한 예시. 백엔드완성되면 삭제
@@ -65,26 +71,19 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6">
           <Menu currentPage="챌린지 메인" challengeId={id} />
-          {challengeDetails && (
-            <ChallengeTitle
-              title={challengeDetails.title}
-              startDate={startDate}
-              isBeforeStartDate={isBeforeStartDate}
-              remainingDays={
-                differenceInDays(
-                  new Date(challengeDetails.endDate),
-                  Date.now()
-                ) + 1
-              }
-              participants={42}
-              profileImages={challengeDetails.hostProfileImage}
-            />
-          )}
+          <ChallengeTitle
+            title={title}
+            startDate={startDate}
+            isBeforeStartDate={isBeforeStartDate}
+            remainingDays={differenceInDays(new Date(endDate), Date.now()) + 1}
+            participants={numberOfParticipants}
+            profileImages={enrolledMembersProfileImageList}
+          />
 
           <div className="flex flex-col mt-3 space-y-2 text-sm">
             <div className="flex items-center justify-between h-8">
               <div>챌린지 설명</div>
-              {challengeDetails && challengeDetails.isHost && (
+              {isHost && (
                 <Link
                   href={`/challenges/${id}/edit`}
                   className="flex items-center space-x-1 bg-[#FFF9C4] pl-2 pr-3 py-1 rounded-2xl"
@@ -113,7 +112,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
               )}
             </div>
             <div className="px-3 py-2 bg-white rounded-2xl">
-              {challengeDetails && challengeDetails.description}
+              {description}
             </div>
           </div>
           <div className="flex flex-col mt-5 space-y-3">
