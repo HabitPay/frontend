@@ -1,5 +1,5 @@
 import Image from "next/image";
-import profilePic from "../../../../../public/profilePic.jpeg";
+import defaultProfileImage from "@/public/default-profile.jpg";
 import { differenceInDays, isBefore } from "date-fns";
 
 interface IChallengeTitleProps {
@@ -19,7 +19,7 @@ const ChallengeTitle = ({
   isBeforeStartDate,
   profileImages,
 }: IChallengeTitleProps) => {
-  const daysLeftUntilStart = differenceInDays(startDate, new Date());
+  const daysLeftUntilStart = differenceInDays(new Date(startDate), new Date());
 
   return (
     <div className="flex items-center justify-between mt-4">
@@ -35,19 +35,19 @@ const ChallengeTitle = ({
       <div className="flex items-center px-3 space-x-2 border-2 h-11 rounded-2xl border-habit-gray">
         <div className="flex -space-x-2">
           <Image
-            src={profilePic}
+            src={defaultProfileImage}
             className="z-30 rounded-full size-9 "
-            alt="profilePicture of attendees"
+            alt="defaultProfileImageture of attendees"
           />
           <Image
-            src={profilePic}
+            src={defaultProfileImage}
             className="z-20 rounded-full size-9"
-            alt="profilePicture of attendees"
+            alt="defaultProfileImageture of attendees"
           />
           <Image
-            src={profilePic}
+            src={defaultProfileImage}
             className="z-10 rounded-full size-9 "
-            alt="profilePicture of attendees"
+            alt="defaultProfileImageture of attendees"
           />
         </div>
         <div>{participants}</div>

@@ -14,7 +14,7 @@ import { useChallengeEnrolledList } from "@/hooks/useChallengeEnrolledList";
 import { ChallengeStatesEnum } from "@/types/enums";
 
 // 나중에 삭제
-import profilePic from "@/public/profilePic.jpeg";
+import defaultProfileImage from "@/public/default-profile.jpg";
 import Loading from "./loading";
 
 function Page() {
@@ -51,7 +51,7 @@ function Page() {
           </div>
           <Image
             className="rounded-full size-16"
-            src={memberProfile.imageUrl || profilePic}
+            src={memberProfile.imageUrl || defaultProfileImage}
             width={64}
             height={64}
             alt="Picture of Avatar"

@@ -2,7 +2,7 @@ import Image from "next/image";
 
 import { IChallengeEnrolledListItemDto } from "@/types/challenge";
 import { ChallengeStatesEnum } from "@/types/enums";
-import profilePic from "@/public/profilePic.jpeg";
+import defaultProfileImage from "@/public/default-profile.jpg";
 import { differenceInCalendarDays, format } from "date-fns";
 
 interface IChallengeCardProps {
@@ -30,10 +30,10 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
                   <div className="flex items-center -space-x-2">
                     <Image
                       className="z-10 rounded-full size-12"
-                      src={item.hostProfileImage || profilePic}
+                      src={item.hostProfileImage || defaultProfileImage}
                       width={48}
                       height={48}
-                      alt="profilePicture of atendees"
+                      alt="defaultProfileImageture of atendees"
                     />
                     <div className="flex items-center justify-center rounded-full size-12 bg-habit-lightgray">
                       <span className="text-lg text-gray-600">

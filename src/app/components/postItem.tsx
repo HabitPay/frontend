@@ -8,7 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { formatToTimeAgo } from "@/libs/utils";
 
 export interface IPostDto {
-  profilePic: string;
+  defaultProfileImage: string;
   nickname: string;
   createdAt: Date;
   isNotification: boolean;
@@ -17,7 +17,7 @@ export interface IPostDto {
 }
 
 const PostItem = ({
-  profilePic,
+  defaultProfileImage,
   nickname,
   createdAt,
   isNotification,
@@ -34,9 +34,9 @@ const PostItem = ({
     <div className="flex flex-col px-5 py-5 bg-white rounded-2xl">
       <div className="flex items-center gap-2 pb-4 border-b-2">
         <Image
-          src={profilePic}
+          src={defaultProfileImage}
           className="z-30 rounded-full size-12"
-          alt="profilePicture of writer"
+          alt="defaultProfileImageture of writer"
           width={12}
           height={12}
         />

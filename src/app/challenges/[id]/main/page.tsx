@@ -6,7 +6,7 @@ import Image from "next/image";
 import { differenceInDays, isBefore } from "date-fns";
 
 import Layout from "@/app/components/layout";
-import profilePic from "@/public/profilePic.jpeg";
+import defaultProfileImage from "@/public/default-profile.jpg";
 import FloatingButton from "@/app/components/floatingButton";
 import Menu from "../components/menu";
 import ChallengeTitle from "../components/challengeTitle";
@@ -36,13 +36,13 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   // PostsFeed의 prop으로 주기위한 예시. 백엔드완성되면 삭제
   const initialFeed = [
     {
-      profilePic: "/profilePic.jpeg",
+      defaultProfileImage: "/defaultProfileImage.jpeg",
       nickname: "hogkim",
       createdAt: new Date(),
       isNotification: true,
       imageList: [
-        "/default-profile.jpeg",
-        "/profilePic.jpeg",
+        "/default-profile.jpg",
+        "/defaultProfileImage.jpeg",
         "/chungking_express__movie_poster__by_seblakes31_dep34tb-fullview.jpg",
         "/manaca.JPG",
       ],
@@ -50,11 +50,11 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
         "test contents test contents test contents test contents test contents test contents test contents test contents test contents",
     },
     {
-      profilePic: "/default-profile.jpeg",
+      defaultProfileImage: "/default-profile.jpg",
       nickname: "jkwak",
       createdAt: new Date(),
       isNotification: false,
-      imageList: ["/profilePic.jpeg", "/default-profile.jpeg"],
+      imageList: ["/defaultProfileImage.jpeg", "/default-profile.jpg"],
       contents:
         "example contents example contents example contents example contents example contents example contents example contents example contents example contents example contents example contents ",
     },
