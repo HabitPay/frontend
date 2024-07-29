@@ -17,15 +17,29 @@ import { usePathname } from "next/navigation";
 import { getParentPath } from "@/libs/utils";
 import PostsFeed from "@/app/components/postsFeed";
 import { IChallengeDetailsDto } from "@/types/challenge";
+import { useSetRecoilState } from "recoil";
+import { toastPopupAtom } from "@/hooks/atoms";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
   const pathname = usePathname();
+  const setToastPopup = useSetRecoilState(toastPopupAtom);
 
   // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error...</div>;
-  if (challengeDetails === null) return <div>Challenge not found</div>;
+  if (error) {
+    // setToastPopup({ message: "error", success: false, top: false });
+    console.log("error");
+    return <div>Loading...</div>;
+  }
+  if (challengeDetails === null || error) {
+    // if (error) {
+    //   setToastPopup({ message: "error", success: false, top: false });
+    // }
+    console.log("null");
+    // 스켈레톤 return하기
+    return <div>Challenge not found</div>;
+  }
 
   const {
     title,
@@ -111,9 +125,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 </Link>
               )}
             </div>
-            <div className="px-3 py-2 bg-white rounded-2xl">
-              {description}
-            </div>
+            <div className="px-3 py-2 bg-white rounded-2xl">{description}</div>
           </div>
           <div className="flex flex-col mt-5 space-y-3">
             <div className="flex items-center justify-between px-4 py-2 text-sm bg-red-100 font-extralight">

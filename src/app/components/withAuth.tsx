@@ -1,6 +1,7 @@
 "use client";
 
 import { toastPopupAtom } from "@/hooks/atoms";
+import { PopupErrorMessage } from "@/types/enums";
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -19,7 +20,7 @@ const withAuth = <P extends object>(
 
       if (!accessToken) {
         setToastPopup({
-          message: "다시 로그인 해 주세요",
+          message: PopupErrorMessage.ReLoginRequired,
           top: false,
           success: false,
         });

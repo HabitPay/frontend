@@ -16,6 +16,8 @@ import { MB, validImageExtensions } from "@/libs/constants";
 import { IApiResponseDto } from "@/types/api/apiResponse.interface";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
+import { PopupErrorMessage } from "@/types/enums";
+import withAuth from "../components/withAuth";
 
 interface IForm {
   nickname: string;
@@ -39,7 +41,6 @@ interface IImageDto {
 const Page = () => {
   const {
     register,
-    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<IForm>({});
@@ -61,19 +62,19 @@ const Page = () => {
         "/member/nickname",
         data
       );
-      setToastPopup((prev) => ({
+      setToastPopup({
         message: res.data.message,
         top: false,
         success: true,
-      }));
+      });
     } catch (error) {
-      console.log(error);
-      // TODO: 에러 메세지 표시 추가하기
-      setToastPopup((prev) => ({
-        message: "error",
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
         top: false,
         success: false,
-      }));
+      });
+      console.log(error);
     }
   };
 
@@ -84,20 +85,20 @@ const Page = () => {
     };
     try {
       const res = await apiManager.patch("/member/image", data);
-      setToastPopup((prev) => ({
+      setToastPopup({
         message: res.data.message,
         top: false,
         success: true,
-      }));
+      });
       const { preSignedUrl } = res.data?.data;
       return preSignedUrl;
     } catch (error) {
-      // TODO: 에러 메세지 표시 추가하기
-      setToastPopup((prev) => ({
-        message: "error",
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
         top: false,
         success: false,
-      }));
+      });
       console.log(error);
       return null;
     }
@@ -110,11 +111,20 @@ const Page = () => {
           "Content-Type": "image/" + imageExtension,
         },
       });
-      // TODO: 성공 메세지 표시 추가하기
       console.log(res);
+      // setToastPopup({
+      //   // @ts-ignore
+      //   message: res.data.message,
+      //   top: false,
+      //   success: true,
+      // });
     } catch (error) {
-      // TODO: 에러 메세지 표시 추가하기
-      console.log(error);
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
     }
   };
 
@@ -138,7 +148,6 @@ const Page = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setNickname(event.target.value);
-    // console.log(event.target.value);
   };
 
   const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -149,19 +158,23 @@ const Page = () => {
     const fileType = file.type;
 
     if (!validImageExtensions.includes(fileType)) {
-      setError("profileImage", {
-        message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
+      setToastPopup({
+        // @ts-ignore
+        message: PopupErrorMessage.UnsupportedFileType,
+        top: false,
+        success: false,
       });
       return;
     }
 
     if (file.size > 1 * MB) {
-      setError("profileImage", {
-        message: "파일 크기는 1MB를 초과할 수 없습니다.",
+      setToastPopup({
+        // @ts-ignore
+        message: PopupErrorMessage.FileSizeExceeded,
+        top: false,
+        success: false,
       });
     } else {
-      setError("profileImage", { message: "" });
-
       const extension: string = file.type.slice(file.type.indexOf("/") + 1);
       setImageExtension(extension);
 
@@ -183,7 +196,12 @@ const Page = () => {
       }
       setNickname(nickname);
     } catch (error) {
-      console.log(error);
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
     }
   };
 
@@ -204,7 +222,12 @@ const Page = () => {
         removeJwtFromSessionStorage();
       }
     } catch (error) {
-      console.log(error);
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
     }
   };
 
@@ -300,4 +323,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default withAuth(Page);
