@@ -11,7 +11,7 @@ const withAuth = <P extends object>(
 ): NextPage<P> => {
   const ComponentWithAuth: NextPage<P> = (props) => {
     const router = useRouter();
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
     const setToastPopup = useSetRecoilState(toastPopupAtom);
 
     useEffect(() => {
@@ -27,14 +27,12 @@ const withAuth = <P extends object>(
           router.push("/");
         }, 2700);
         return () => clearTimeout(timer);
-      } else {
-        setLoading(false);
       }
     }, [router, setToastPopup]);
 
-    if (loading) {
-      return <p>Loading...</p>;
-    }
+    // if (loading) {
+    //   return <p>Loading...</p>;
+    // }
 
     return <WrappedComponent {...props} />;
   };

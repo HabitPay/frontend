@@ -25,22 +25,14 @@ function Page() {
   const { challengeEnrolledList } = useChallengeEnrolledList();
   const [challengeStateSelection, setChallengeStateSelection] =
     useState<ChallengeStatesEnum>(ChallengeStatesEnum.InProgress);
-  const [loadingPage, setLoadingPage] = useState(true);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setLoadingPage(false);
-    }, 300); // 0.3초 후 로딩 상태 해제
-
-    return () => clearTimeout(timeoutId);
-  }, []);
+  const [loadingPage, setLoadingPage] = useState(false);
 
   if (loadingPage) {
     return <Loading />; // 로딩 중일 때 로딩 컴포넌트 렌더링
   }
 
   if (memberProfile === null || challengeEnrolledList === null) {
-    return <>Error</>;
+    return <Loading />;
   }
 
   return (
