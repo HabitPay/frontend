@@ -4,6 +4,8 @@ import { HttpStatusCode } from "axios";
 
 import apiManager from "@/api/apiManager";
 import Button from "@/app/components/button";
+import { useSetRecoilState } from "recoil";
+import { toastPopupAtom } from "@/hooks/atoms";
 
 interface IEnrollmentProps {
   id: string;
@@ -15,30 +17,44 @@ const Enrollment = ({ id, isMemberEnrolledInChallenge }: IEnrollmentProps) => {
     isMemberEnrolledInChallengeState,
     setIsMemberEnrolledInChallengeState,
   ] = useState<boolean>(isMemberEnrolledInChallenge);
+  const setToastPopup = useSetRecoilState(toastPopupAtom);
 
   const enrollChallenge = async () => {
     try {
-      const response = await apiManager.post(`/challenges/${id}/enroll`);
-      if (response.status === HttpStatusCode.Ok) {
-        console.log(response);
-        console.log("챌린지 참여 성공");
-        setIsMemberEnrolledInChallengeState(true);
-      }
+      const res = await apiManager.post(`/challenges/${id}/enroll`);
+
+      setIsMemberEnrolledInChallengeState(true);
+      setToastPopup({
+        message: res.data.message,
+        top: false,
+        success: true,
+      });
     } catch (error) {
-      console.error(error);
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
     }
   };
 
   const cancelChallengeEnrollment = async () => {
     try {
-      const response = await apiManager.post(`/challenges/${id}/cancel`);
-      if (response.status === HttpStatusCode.Ok) {
-        console.log(response);
-        console.log("챌린지 참여 취소 성공");
-        setIsMemberEnrolledInChallengeState(false);
-      }
+      const res = await apiManager.post(`/challenges/${id}/cancel`);
+      setIsMemberEnrolledInChallengeState(false);
+      setToastPopup({
+        message: res.data.message,
+        top: false,
+        success: true,
+      });
     } catch (error) {
-      console.error(error);
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
     }
   };
 
@@ -46,7 +62,11 @@ const Enrollment = ({ id, isMemberEnrolledInChallenge }: IEnrollmentProps) => {
     <>
       {isMemberEnrolledInChallengeState ? (
         // TODO: 빨간색으로 변경하기
-        <Button onClick={cancelChallengeEnrollment} text="챌린지 참여 취소" />
+        <Button
+          color="red"
+          onClick={cancelChallengeEnrollment}
+          text="챌린지 참여 취소"
+        />
       ) : (
         <Button onClick={enrollChallenge} text="챌린지 참여" />
       )}
