@@ -13,8 +13,9 @@ import defaultProfileImage from "@/public/default-profile.jpg";
 import apiManager from "@/api/apiManager";
 import { removeJwtFromSessionStorage } from "@/libs/jwt";
 import { MB, validImageExtensions } from "@/libs/constants";
-import ToastPopup, { IToast } from "../components/toastPopup";
 import { IApiResponseDto } from "@/types/api/apiResponse.interface";
+import { useSetRecoilState } from "recoil";
+import { toastPopupAtom } from "@/hooks/atoms";
 
 interface IForm {
   nickname: string;
@@ -49,11 +50,7 @@ const Page = () => {
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
-  const [toast, setToast] = useState<IToast>({
-    message: "",
-    top: false,
-    success: true,
-  });
+  const setToastPopup = useSetRecoilState(toastPopupAtom);
 
   const fetchNicknameUpdate = async (nickname: string) => {
     const data: INicknameDto = {
@@ -64,7 +61,7 @@ const Page = () => {
         "/member/nickname",
         data
       );
-      setToast((prev) => ({
+      setToastPopup((prev) => ({
         message: res.data.message,
         top: false,
         success: true,
@@ -72,7 +69,7 @@ const Page = () => {
     } catch (error) {
       console.log(error);
       // TODO: 에러 메세지 표시 추가하기
-      setToast((prev) => ({
+      setToastPopup((prev) => ({
         message: "error",
         top: false,
         success: false,
@@ -87,7 +84,7 @@ const Page = () => {
     };
     try {
       const res = await apiManager.patch("/member/image", data);
-      setToast((prev) => ({
+      setToastPopup((prev) => ({
         message: res.data.message,
         top: false,
         success: true,
@@ -96,7 +93,7 @@ const Page = () => {
       return preSignedUrl;
     } catch (error) {
       // TODO: 에러 메세지 표시 추가하기
-      setToast((prev) => ({
+      setToastPopup((prev) => ({
         message: "error",
         top: false,
         success: false,
@@ -195,7 +192,7 @@ const Page = () => {
       const res = await apiManager.delete("/member");
       if (res.status === HttpStatusCode.Ok) {
         console.log("delete success");
-        setToast((prev) => ({
+        setToastPopup((prev) => ({
           message: res.data.message,
           top: false,
           success: true,
@@ -298,11 +295,6 @@ const Page = () => {
             </button>
           </div>
         </div>
-      </div>
-      <div className="flex justify-center">
-        {toast.message ? (
-          <ToastPopup toast={toast} setToast={setToast} />
-        ) : null}
       </div>
     </Layout>
   );
