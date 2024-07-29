@@ -1,4 +1,5 @@
 export interface IChallengeEnrolledListItemDto {
+  challengeId: number;
   title: string;
   description: string;
   startDate: string;

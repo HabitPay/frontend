@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import axios, { HttpStatusCode } from "axios";
 import Layout from "@/app/components/layout";
 import Button from "@/app/components/button";
-import profilePic from "@/public/default-profile.jpeg";
+import defaultProfileImage from "@/public/default-profile.jpg";
 import apiManager from "@/api/apiManager";
 import { removeJwtFromSessionStorage } from "@/libs/jwt";
 import { MB, validImageExtensions } from "@/libs/constants";
@@ -230,7 +230,7 @@ const Page = () => {
           <div className="relative">
             <Image
               className="rounded-full size-32"
-              src={previewImage || profileImageUrl || profilePic}
+              src={previewImage || profileImageUrl || defaultProfileImage}
               alt="Picture of me"
               width={300}
               height={300}

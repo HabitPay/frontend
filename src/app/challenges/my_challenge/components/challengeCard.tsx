@@ -1,8 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import { IChallengeEnrolledListItemDto } from "@/types/challenge";
 import { ChallengeStatesEnum } from "@/types/enums";
-import profilePic from "@/public/profilePic.jpeg";
+import defaultProfileImage from "@/public/default-profile.jpg";
 import { differenceInCalendarDays, format } from "date-fns";
 
 interface IChallengeCardProps {
@@ -25,54 +26,59 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
             className="flex flex-col px-4 py-6 mt-6 space-y-4 bg-white rounded-xl"
           >
             <div className="flex flex-col space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-4">
-                  <div className="flex items-center -space-x-2">
-                    <Image
-                      className="z-10 rounded-full size-12"
-                      src={profilePic}
-                      alt="profilePicture of atendees"
-                    />
-                    <div className="flex items-center justify-center rounded-full size-12 bg-habit-lightgray">
-                      <span className="text-lg text-gray-600">
-                        {`+${item.numberOfParticipants - 1}`}
-                      </span>
+              <Link href={`/challenges/${item.challengeId}/main`}>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center -space-x-2">
+                      <Image
+                        className="z-10 rounded-full size-12"
+                        src={item.hostProfileImage || defaultProfileImage}
+                        width={48}
+                        height={48}
+                        alt="Profile image of challenge host"
+                      />
+                      <div className="flex items-center justify-center rounded-full size-12 bg-habit-lightgray">
+                        <span className="text-lg text-gray-600">
+                          {`+${item.numberOfParticipants - 1}`}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col">
+                      <h3 className="text-lg font-bold">{item.title}</h3>
+                      {challengeState == ChallengeStatesEnum.InProgress &&
+                        item.isParticipatedToday && (
+                          <span className="text-sm text-habit-green">
+                            참여 완료
+                          </span>
+                        )}
+
+                      {challengeState == ChallengeStatesEnum.InProgress &&
+                        item.isTodayParticipatingDay &&
+                        !item.isParticipatedToday && (
+                          <span className="text-sm text-habit-gray">
+                            아직 참여하지 않으셨습니다.
+                          </span>
+                        )}
                     </div>
                   </div>
-
-                  <div className="flex flex-col">
-                    <h3 className="text-lg font-bold">{item.title}</h3>
-                    {challengeState == ChallengeStatesEnum.InProgress &&
-                      item.isParticipatedToday && (
-                        <span className="text-sm text-habit-green">
-                          참여 완료
-                        </span>
-                      )}
-
-                    {challengeState == ChallengeStatesEnum.InProgress &&
-                      item.isTodayParticipatingDay &&
-                      !item.isParticipatedToday && (
-                        <span className="text-sm text-habit-gray">
-                          아직 참여하지 않으셨습니다.
-                        </span>
-                      )}
-                  </div>
+                  
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
                 </div>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                  />
-                </svg>
-              </div>
+              </Link>
               <div className="w-full h-2 bg-habit-green" />
             </div>
             <div className="w-full h-[2px]  bg-habit-lightgray" />
