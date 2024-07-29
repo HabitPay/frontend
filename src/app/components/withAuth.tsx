@@ -24,10 +24,7 @@ const withAuth = <P extends object>(
           top: false,
           success: false,
         });
-        const timer = setTimeout(() => {
-          router.push("/");
-        }, 2700);
-        return () => clearTimeout(timer);
+        router.push("/");
       }
     }, [router, setToastPopup]);
 
