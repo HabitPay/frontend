@@ -19,6 +19,8 @@ import { convertKstDate } from "@/libs/date";
 import apiManager from "@/api/apiManager";
 import { Days, SelectedStatus } from "@/types/enums";
 import { useRouter } from "next/navigation";
+import { useSetRecoilState } from "recoil";
+import { toastPopupAtom } from "@/hooks/atoms";
 
 const INCREASE_FEE = [100, 1000, 10000];
 
@@ -55,6 +57,7 @@ function Page() {
   } = useForm<IChallengeForm>({});
 
   const router = useRouter();
+  const setToastPopup = useSetRecoilState(toastPopupAtom);
 
   const [selectedDays, setSelectedDays] = useState<number[]>(
     new Array(7).fill(SelectedStatus.NOT_SELECTED)
@@ -80,11 +83,19 @@ function Page() {
         endDate: convertKstDate(form.endDate, form.endTime),
       };
       const res = await apiManager.post("/challenges", data);
-      console.log(res);
-      // res.data로 메세지를 받을 수 있음. 사용자에게 표시되도록. id도 추출해서 redirect
-      // router.push(`/challenges/${res.data}/main`);
+      setToastPopup({
+        message: res.data.message,
+        top: false,
+        success: true,
+      });
+      router.push(`/challenges/${res.data.data.challengeId}/main`);
     } catch (error) {
-      console.error(error);
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
     }
   };
 
@@ -130,7 +141,7 @@ function Page() {
     <Layout canGoBack hasTabBar title="챌린지 생성">
       <form
         onSubmit={handleSubmit(onSubmitWithValidation)}
-        className="flex flex-col px-10 space-y-4 mb-10"
+        className="flex flex-col px-10 mb-10 space-y-4"
       >
         <div className="flex flex-col space-y-3">
           <Label id="Challenge_name" title="챌린지 이름" isRequired />
