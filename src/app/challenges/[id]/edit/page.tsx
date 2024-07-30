@@ -50,7 +50,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
         top: false,
         success: true,
       });
-      router.push(`/challenges/my_challenge`);
+      router.push(`/challenges/my-challenge`);
     } catch (error) {
       setToastPopup({
         // @ts-ignore

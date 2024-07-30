@@ -113,7 +113,7 @@ const Page = () => {
             <div
               className={addClassNames(
                 "flex flex-col items-center space-y-2 p-3",
-                currentPath === "/challenges/my_challenge"
+                currentPath === "/challenges/my-challenge"
                   ? "bg-[#EFF8F0] rounded-2xl text-habit-green"
                   : "hover:text-gray-500 transition-colors"
               )}
