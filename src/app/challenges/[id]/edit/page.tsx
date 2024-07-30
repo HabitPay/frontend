@@ -116,7 +116,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
               </div>
             </div>
             <div className="flex flex-col mb-2">
-              <Label title="챌린지 참여 요일" isRequired />
+              <Label id="" title="챌린지 참여 요일" isRequired />
               <div className="flex flex-row justify-between px-3 mt-3 text-sm">
                 {selectedDays.map((item, index) => (
                   <div
