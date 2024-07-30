@@ -1,7 +1,7 @@
 "use client";
 
-import { getAccessToken } from "@/api/apiManager";
 import { redirect } from "next/navigation";
+import { getAccessToken } from "./jwt";
 
 // async함수가 되어야함.
 // 백엔드에 accessToken을 보내고 유효기간 검증 과정 필요

@@ -1,6 +1,6 @@
 "use client";
 
-import { removeJwtFromSessionStorage } from "@/libs/jwt";
+import { getAccessToken, removeJwtFromSessionStorage } from "@/libs/jwt";
 import axios, {
   AxiosError,
   AxiosInstance,
@@ -9,13 +9,6 @@ import axios, {
 } from "axios";
 // window 로 리다이렉트하기로 바꾸기
 // import { useRouter } from "next/navigation";
-
-export const getAccessToken = () => {
-  if (typeof window !== "undefined") {
-    return sessionStorage.getItem("accessToken");
-  }
-  return null;
-};
 
 const getTokenType = () => {
   if (typeof window !== "undefined") {

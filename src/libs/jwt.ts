@@ -1,6 +1,13 @@
 import exp from "constants";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 
+export const getAccessToken = () => {
+  if (typeof window !== "undefined") {
+    return sessionStorage.getItem("accessToken");
+  }
+  return null;
+};
+
 function getDecodedJwt(): JwtPayload | null {
   const jwt = sessionStorage.getItem("accessToken");
   if (jwt === null) {
