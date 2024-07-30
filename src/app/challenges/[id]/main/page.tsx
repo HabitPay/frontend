@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 
+import { useSetRecoilState } from "recoil";
 import { differenceInDays, isBefore } from "date-fns";
 
 import Layout from "@/app/components/layout";
@@ -11,11 +13,9 @@ import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Enrollment from "../components/enrollment";
-import { usePathname, useRouter } from "next/navigation";
 import { getParentPath } from "@/libs/utils";
 import PostsFeed from "@/app/components/postsFeed";
 import { IChallengeDetailsDto } from "@/types/challenge";
-import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import Loading from "./loading";
 
@@ -27,17 +27,15 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
 
   // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
   if (isLoading) return <Loading />;
-  if (error) {
+  if (error || challengeDetails === null) {
     setToastPopup({
       // @ts-ignore
       message: error.data.message,
       top: false,
       success: false,
     });
-  }
-  if (challengeDetails === null) {
     router.push("/challenges/my_challenge");
-    return <Loading />;
+    return <></>;
   }
 
   const {
@@ -50,6 +48,9 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     isHost,
     isMemberEnrolledInChallenge,
   }: IChallengeDetailsDto = challengeDetails;
+  // if (challengeDetails === null) {
+  // }
+
   const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
 
   // PostsFeed의 prop으로 주기위한 예시. 백엔드완성되면 삭제
