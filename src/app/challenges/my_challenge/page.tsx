@@ -25,11 +25,6 @@ function Page() {
   const { challengeEnrolledList } = useChallengeEnrolledList();
   const [challengeStateSelection, setChallengeStateSelection] =
     useState<ChallengeStatesEnum>(ChallengeStatesEnum.InProgress);
-  const [loadingPage, setLoadingPage] = useState(false);
-
-  if (loadingPage) {
-    return <Loading />; // 로딩 중일 때 로딩 컴포넌트 렌더링
-  }
 
   if (memberProfile === null || challengeEnrolledList === null) {
     return <Loading />;
