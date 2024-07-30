@@ -3,23 +3,19 @@ import {
   IChallengeDetailsDto,
   IChallengeEnrolledListItemDto,
 } from "@/types/challenge";
+import Error from "next/error";
 
 export const fetchChallengeDetails = async (
   id: string
-): Promise<IChallengeDetailsDto | null> => {
-  try {
-    const res = await apiManager.get(`/challenges/${id}`);
-    const { data }: { data: IChallengeDetailsDto } = res.data;
-    console.log(data);
-    return data;
-  } catch (error) {
-    console.error(error);
-    return null;
-  }
+): Promise<IChallengeDetailsDto> => {
+  const res = await apiManager.get(`/challenges/${id}`);
+  const { data }: { data: IChallengeDetailsDto } = res.data;
+  console.log(data);
+  return data;
 };
 
 export const fetchEnrolledChallenges = async (): Promise<
-  IChallengeEnrolledListItemDto[] | null
+  IChallengeEnrolledListItemDto[] | Error
 > => {
   try {
     const res = await apiManager.get(`/challenges/me`);
@@ -27,7 +23,6 @@ export const fetchEnrolledChallenges = async (): Promise<
     console.log(data);
     return data;
   } catch (error) {
-    console.error(error);
-    return null;
+    return error as Error;
   }
 };

@@ -1,31 +1,42 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
 
+import { useSetRecoilState } from "recoil";
 import { differenceInDays, isBefore } from "date-fns";
 
 import Layout from "@/app/components/layout";
-import defaultProfileImage from "@/public/default-profile.jpg";
 import FloatingButton from "@/app/components/floatingButton";
 import Menu from "../components/menu";
 import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Enrollment from "../components/enrollment";
-import { usePathname } from "next/navigation";
 import { getParentPath } from "@/libs/utils";
 import PostsFeed from "@/app/components/postsFeed";
 import { IChallengeDetailsDto } from "@/types/challenge";
+import { toastPopupAtom } from "@/hooks/atoms";
+import Loading from "./loading";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
   const pathname = usePathname();
+  const setToastPopup = useSetRecoilState(toastPopupAtom);
+  const router = useRouter();
 
   // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
-  if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error...</div>;
-  if (challengeDetails === null) return <div>Challenge not found</div>;
+  if (isLoading) return <Loading />;
+  if (error || challengeDetails === null) {
+    setToastPopup({
+      // @ts-ignore
+      message: error.data.message,
+      top: false,
+      success: false,
+    });
+    router.push("/challenges/my_challenge");
+    return <></>;
+  }
 
   const {
     title,
@@ -37,6 +48,9 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     isHost,
     isMemberEnrolledInChallenge,
   }: IChallengeDetailsDto = challengeDetails;
+  // if (challengeDetails === null) {
+  // }
+
   const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
 
   // PostsFeed의 prop으로 주기위한 예시. 백엔드완성되면 삭제
@@ -111,9 +125,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 </Link>
               )}
             </div>
-            <div className="px-3 py-2 bg-white rounded-2xl">
-              {description}
-            </div>
+            <div className="px-3 py-2 bg-white rounded-2xl">{description}</div>
           </div>
           <div className="flex flex-col mt-5 space-y-3">
             <div className="flex items-center justify-between px-4 py-2 text-sm bg-red-100 font-extralight">

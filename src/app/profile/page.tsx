@@ -13,6 +13,11 @@ import defaultProfileImage from "@/public/default-profile.jpg";
 import apiManager from "@/api/apiManager";
 import { removeJwtFromSessionStorage } from "@/libs/jwt";
 import { MB, validImageExtensions } from "@/libs/constants";
+import { IApiResponseDto } from "@/types/api/apiResponse.interface";
+import { useSetRecoilState } from "recoil";
+import { toastPopupAtom } from "@/hooks/atoms";
+import { PopupErrorMessage } from "@/types/enums";
+import withAuth from "../components/withAuth";
 
 interface IForm {
   nickname: string;
@@ -36,9 +41,6 @@ interface IImageDto {
 const Page = () => {
   const {
     register,
-    watch,
-    setValue,
-    setError,
     handleSubmit,
     formState: { errors },
   } = useForm<IForm>({});
@@ -49,16 +51,29 @@ const Page = () => {
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
+  const setToastPopup = useSetRecoilState(toastPopupAtom);
+
   const fetchNicknameUpdate = async (nickname: string) => {
     const data: INicknameDto = {
       nickname,
     };
     try {
-      const res = await apiManager.patch("/member/nickname", data);
-      // TODO: 성공 메세지 표시 추가하기
-      console.log(res);
+      const res: IApiResponseDto = await apiManager.patch(
+        "/member/nickname",
+        data
+      );
+      setToastPopup({
+        message: res.data.message,
+        top: false,
+        success: true,
+      });
     } catch (error) {
-      // TODO: 에러 메세지 표시 추가하기
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
       console.log(error);
     }
   };
@@ -68,13 +83,22 @@ const Page = () => {
       extension: imageExtension,
       contentLength: image.size,
     };
-    console.log(data);
     try {
       const res = await apiManager.patch("/member/image", data);
+      setToastPopup({
+        message: res.data.message,
+        top: false,
+        success: true,
+      });
       const { preSignedUrl } = res.data?.data;
       return preSignedUrl;
     } catch (error) {
-      // TODO: 에러 메세지 표시 추가하기
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
       console.log(error);
       return null;
     }
@@ -87,11 +111,20 @@ const Page = () => {
           "Content-Type": "image/" + imageExtension,
         },
       });
-      // TODO: 성공 메세지 표시 추가하기
       console.log(res);
+      // setToastPopup({
+      //   // @ts-ignore
+      //   message: res.data.message,
+      //   top: false,
+      //   success: true,
+      // });
     } catch (error) {
-      // TODO: 에러 메세지 표시 추가하기
-      console.log(error);
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
     }
   };
 
@@ -115,7 +148,6 @@ const Page = () => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setNickname(event.target.value);
-    console.log(event.target.value);
   };
 
   const onProfileImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,19 +158,23 @@ const Page = () => {
     const fileType = file.type;
 
     if (!validImageExtensions.includes(fileType)) {
-      setError("profileImage", {
-        message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
+      setToastPopup({
+        // @ts-ignore
+        message: PopupErrorMessage.UnsupportedFileType,
+        top: false,
+        success: false,
       });
       return;
     }
 
     if (file.size > 1 * MB) {
-      setError("profileImage", {
-        message: "파일 크기는 1MB를 초과할 수 없습니다.",
+      setToastPopup({
+        // @ts-ignore
+        message: PopupErrorMessage.FileSizeExceeded,
+        top: false,
+        success: false,
       });
     } else {
-      setError("profileImage", { message: "" });
-
       const extension: string = file.type.slice(file.type.indexOf("/") + 1);
       setImageExtension(extension);
 
@@ -153,7 +189,6 @@ const Page = () => {
   const getProfile = async () => {
     try {
       const res = await apiManager.get("/member");
-      console.log(res);
       const { nickname, imageUrl }: IProfileDTO = res.data?.data;
 
       if (imageUrl.length > 0) {
@@ -161,21 +196,38 @@ const Page = () => {
       }
       setNickname(nickname);
     } catch (error) {
-      console.log(error);
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
     }
   };
 
   const handleDeleteUser = async () => {
     try {
       const res = await apiManager.delete("/member");
-      console.log(res);
       if (res.status === HttpStatusCode.Ok) {
         console.log("delete success");
-        router.push("/");
+        setToastPopup((prev) => ({
+          message: res.data.message,
+          top: false,
+          success: true,
+        }));
+        setTimeout(() => {
+          router.push("/");
+        }, 2500);
+
         removeJwtFromSessionStorage();
       }
     } catch (error) {
-      console.log(error);
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
     }
   };
 
@@ -271,4 +323,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default withAuth(Page);

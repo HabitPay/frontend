@@ -16,6 +16,8 @@ import { ChallengeStatesEnum } from "@/types/enums";
 // 나중에 삭제
 import defaultProfileImage from "@/public/default-profile.jpg";
 import Loading from "./loading";
+import { verifyAccessToken } from "@/libs/authUtils";
+import withAuth from "@/app/components/withAuth";
 
 function Page() {
   // TODO: 다른 hook 들과 겹치지 않도록 컴포넌트 분리하기
@@ -23,22 +25,9 @@ function Page() {
   const { challengeEnrolledList } = useChallengeEnrolledList();
   const [challengeStateSelection, setChallengeStateSelection] =
     useState<ChallengeStatesEnum>(ChallengeStatesEnum.InProgress);
-  const [loadingPage, setLoadingPage] = useState(true);
-
-  useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      setLoadingPage(false);
-    }, 300); // 0.3초 후 로딩 상태 해제
-
-    return () => clearTimeout(timeoutId);
-  }, []);
-
-  if (loadingPage) {
-    return <Loading />; // 로딩 중일 때 로딩 컴포넌트 렌더링
-  }
 
   if (memberProfile === null || challengeEnrolledList === null) {
-    return <>Error</>;
+    return <Loading />;
   }
 
   return (
@@ -100,4 +89,4 @@ function Page() {
   );
 }
 
-export default Page;
+export default withAuth(Page);

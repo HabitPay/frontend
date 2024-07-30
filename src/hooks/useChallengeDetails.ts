@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { IChallengeDetailsDto } from "@/types/challenge";
 import { SelectedStatus } from "@/types/enums";
 import { fetchChallengeDetails } from "../api/challenge";
+import Error from "next/error";
 
 const calculateSelectedDays = (selectedDays: number[], days: number) => {
   selectedDays.forEach((_, idx) => {
@@ -26,6 +27,7 @@ export const useChallengeDetails = (id: string) => {
     const fetchData = async () => {
       try {
         const data = await fetchChallengeDetails(id);
+
         if (data) {
           setChallengeDetails(data);
           setSelectedDays(

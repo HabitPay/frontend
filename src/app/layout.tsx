@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import RecoilRootWrapper from "./components/recoilWrapper";
+import ToastPopup from "./components/toastPopup";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +19,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {children}
+        <RecoilRootWrapper>
+          {children}
+          <ToastPopup />
+        </RecoilRootWrapper>
+
         <div id="modal-root"></div>
       </body>
     </html>

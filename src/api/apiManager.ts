@@ -1,13 +1,14 @@
 "use client";
 
-import axios, { AxiosInstance } from "axios";
-
-const getAccessToken = () => {
-  if (typeof window !== "undefined") {
-    return sessionStorage.getItem("accessToken");
-  }
-  return null;
-};
+import { getAccessToken, removeJwtFromSessionStorage } from "@/libs/jwt";
+import axios, {
+  AxiosError,
+  AxiosInstance,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
+// window 로 리다이렉트하기로 바꾸기
+// import { useRouter } from "next/navigation";
 
 const getTokenType = () => {
   if (typeof window !== "undefined") {
@@ -36,6 +37,53 @@ apiManager.interceptors.request.use(
   (error) => {
     console.log(error);
     return Promise.reject(error);
+  }
+);
+
+apiManager.interceptors.response.use(
+  async function (response: AxiosResponse): Promise<AxiosResponse> {
+    return response;
+  },
+  async function (error: AxiosError): Promise<AxiosResponse | Promise<never>> {
+    // const router = useRouter();
+    const logout = () => {
+      removeJwtFromSessionStorage();
+      // router.push("/");
+    };
+
+    const { config, response } = error;
+    const originalRequest = config as InternalAxiosRequestConfig;
+
+    if (!response) {
+      return Promise.reject(error);
+    }
+
+    const { status, data } = response;
+
+    if (status === 401) {
+      if (data === "invalid_token") {
+        logout();
+      } else if (data === "TokenExpired") {
+        try {
+          const tokenRefreshResult: AxiosResponse = await apiManager.post(
+            "/token"
+          );
+          if (tokenRefreshResult.status === 200) {
+            const { accessToken } = tokenRefreshResult.data;
+            sessionStorage.setItem("accessToken", accessToken);
+            originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+            return apiManager(originalRequest);
+          } else {
+            logout();
+          }
+        } catch (e) {
+          console.log(e);
+          logout();
+        }
+      }
+    }
+
+    return Promise.reject(response);
   }
 );
 

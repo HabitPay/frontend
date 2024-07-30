@@ -6,3 +6,5 @@ export const validImageExtensions = [
   "image/png",
   "image/gif",
 ];
+
+export const TOAST_DISMISS_TIMEOUT = 2500;

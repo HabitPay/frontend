@@ -12,9 +12,10 @@ function Challenges({ challenges, challengeState }: IChallengesProps) {
     <>
       {challengeState == ChallengeStatesEnum.InProgress &&
         challenges.inProgress.length === 0 && (
-          <span>
-            참여 중인 챌린지가 없습니다. 새로운 챌린지에 참여해보세요!
-          </span>
+          <div className="flex flex-col justify-center pt-6">
+            <span>참여 중인 챌린지가 없습니다.</span>
+            <span>새로운 챌린지에 참여해보세요!</span>
+          </div>
         )}
 
       {challengeState == ChallengeStatesEnum.InProgress &&
@@ -27,9 +28,10 @@ function Challenges({ challenges, challengeState }: IChallengesProps) {
 
       {challengeState == ChallengeStatesEnum.Scheduled &&
         challenges.scheduled.length === 0 && (
-          <span>
-            진행 예정인 챌린지가 없습니다. 새로운 챌린지에 참여해보세요!
-          </span>
+          <div className="flex flex-col justify-center pt-6">
+            <span>진행 예정인 챌린지가 없습니다.</span>
+            <span>새로운 챌린지에 참여해보세요!</span>
+          </div>
         )}
 
       {challengeState == ChallengeStatesEnum.Scheduled &&
@@ -42,7 +44,9 @@ function Challenges({ challenges, challengeState }: IChallengesProps) {
 
       {challengeState == ChallengeStatesEnum.Completed &&
         challenges.completed.length === 0 && (
-          <span>종료된 챌린지가 없습니다.</span>
+          <div className="flex flex-col justify-center pt-6">
+            <span>종료된 챌린지가 없습니다.</span>
+          </div>
         )}
 
       {challengeState == ChallengeStatesEnum.Completed && (
