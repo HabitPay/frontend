@@ -1,6 +1,7 @@
 "use client";
 
 import { toastPopupAtom } from "@/hooks/atoms";
+import { getAccessToken } from "@/libs/jwt";
 import { PopupErrorMessage } from "@/types/enums";
 import { NextPage } from "next";
 import { useRouter } from "next/navigation";
@@ -16,7 +17,7 @@ const withAuth = <P extends object>(
     const setToastPopup = useSetRecoilState(toastPopupAtom);
 
     useEffect(() => {
-      const accessToken = sessionStorage.getItem("accessToken");
+      const accessToken = getAccessToken();
 
       if (!accessToken) {
         setToastPopup({
