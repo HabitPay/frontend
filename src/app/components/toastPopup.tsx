@@ -1,15 +1,17 @@
 "use client";
 
-import { toastPopupAtom } from "@/hooks/atoms";
 import { useEffect } from "react";
 import { useRecoilState } from "recoil";
+
+import { toastPopupAtom } from "@/hooks/atoms";
+import { TOAST_DISMISS_TIMEOUT } from "@/libs/constants";
 
 export default function ToastPopup() {
   const [toastPopup, setToastPopup] = useRecoilState(toastPopupAtom);
   useEffect(() => {
     const timer = setTimeout(() => {
       setToastPopup({ message: "", top: true, success: true });
-    }, 2500);
+    }, TOAST_DISMISS_TIMEOUT);
     return () => {
       clearTimeout(timer);
     };
