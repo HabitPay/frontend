@@ -2,21 +2,60 @@
 
 import Layout from "@/app/components/layout";
 import Menu from "../components/menu";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
 import Calendar from "react-calendar";
 import FloatingButton from "@/app/components/floatingButton";
+import { useChallengeDetails } from "@/hooks/useChallengeDetails";
+import { IChallengeDetailsDto } from "@/types/challenge";
+import { useSetRecoilState } from "recoil";
+import { toastPopupAtom } from "@/hooks/atoms";
+import Loading from "../main/loading";
+import { differenceInDays, isBefore } from "date-fns";
 
-const Page = () => {
+const Page = ({ params: { id } }: { params: { id: string } }) => {
   const currentPath = usePathname().split("/");
+  const { challengeDetails, isLoading, error } = useChallengeDetails(id);
+  const router = useRouter();
+  const setToastPopup = useSetRecoilState(toastPopupAtom);
 
+  if (isLoading) return <Loading />;
+  if (error || challengeDetails === null) {
+    setToastPopup({
+      // @ts-ignore
+      message: error.data.message,
+      top: false,
+      success: false,
+    });
+    router.push("/challenges/my_challenge");
+    return <></>;
+  }
+  const {
+    title,
+    description,
+    startDate,
+    endDate,
+    numberOfParticipants,
+    enrolledMembersProfileImageList,
+    isHost,
+    isMemberEnrolledInChallenge,
+  }: IChallengeDetailsDto = challengeDetails;
+
+  const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
   return (
     <Layout hasTabBar canGoBack>
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6 pb-5">
           <Menu currentPage="참여 기록" challengeId={currentPath[2]} />
-          <ChallengeTitle />
+          <ChallengeTitle
+            title={title}
+            startDate={startDate}
+            isBeforeStartDate={isBeforeStartDate}
+            remainingDays={differenceInDays(new Date(endDate), Date.now()) + 1}
+            participants={numberOfParticipants}
+            profileImages={enrolledMembersProfileImageList}
+          />
           <IsCompleteToday complete={false} />
         </div>
         <div className="flex flex-col px-6 py-6">
