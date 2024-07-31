@@ -1,5 +1,3 @@
-import Layout from "@/app/components/layout";
-import Image from "next/image";
 import PostItem, { IPostDto } from "./postItem";
 import { useEffect, useRef, useState } from "react";
 
@@ -95,7 +93,7 @@ export default function PostsFeed({ initialFeed }: PostsFeedProps) {
         <span
           ref={trigger}
           style={{ marginTop: `${(page + 1) * 100}vh` }}
-          className="px-3 py-2 mx-auto text-sm font-semibold bg-habit-green rounded-md mb-96 disabled:bg-slate-500 w-fit hover:opacity-90 active:scale-95"
+          className="px-3 py-2 mx-auto text-sm font-semibold rounded-md bg-habit-green mb-96 disabled:bg-slate-500 w-fit hover:opacity-90 active:scale-95"
         >
           {isLoading ? "로딩 중" : "Load more"}
         </span>

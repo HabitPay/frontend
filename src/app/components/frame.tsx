@@ -13,20 +13,18 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-export default function Layout({
+const Frame = ({
+  title,
   isWhiteTitle,
   isBorder,
-  title,
   canGoBack,
   hasTabBar,
   children,
-}: LayoutProps) {
+}: LayoutProps) => {
   const router = useRouter();
   const currentPath = usePathname();
   const onClick = () => {
-    // 여기 if문이 보기가 싫음. 깔끔한 코드 추천받습니다.
     if (currentPath === "/onboarding") {
-      console.log("clicked");
       router.push("/");
     } else {
       router.back();
@@ -41,7 +39,7 @@ export default function Layout({
           isBorder ? "border-b border-gray-300" : ""
         )}
       >
-        {canGoBack ? (
+        {canGoBack && (
           <button onClick={onClick} className="absolute left-4">
             <svg
               className="w-7 h-7"
@@ -58,12 +56,12 @@ export default function Layout({
               ></path>
             </svg>
           </button>
-        ) : null}
-        {title ? (
+        )}
+        {title && (
           <span className={addClassNames(canGoBack ? "mx-auto" : "", "")}>
             {title}
           </span>
-        ) : null}
+        )}
       </div>
       <div className={addClassNames("pt-12", hasTabBar ? "pb-20" : "")}>
         {children}
@@ -149,4 +147,6 @@ export default function Layout({
       ) : null}
     </div>
   );
-}
+};
+
+export default Frame;

@@ -1,6 +1,6 @@
 "use client";
 
-import Layout from "@/app/components/layout";
+import Frame from "@/app/components/frame";
 import { MB, validImageExtensions } from "@/libs/constants";
 import { addClassNames } from "@/libs/utils";
 import { usePathname } from "next/navigation";
@@ -88,7 +88,7 @@ const Page = () => {
   };
 
   return (
-    <Layout canGoBack title="게시물 작성" isWhiteTitle isBorder>
+    <Frame canGoBack title="게시물 작성" isWhiteTitle isBorder>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col h-full">
         <textarea
           {...register("text", {
@@ -175,7 +175,7 @@ const Page = () => {
           </button>
         </nav>
       </form>
-    </Layout>
+    </Frame>
   );
 };
 

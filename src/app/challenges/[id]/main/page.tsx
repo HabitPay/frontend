@@ -6,7 +6,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
 import { differenceInDays, isBefore } from "date-fns";
 
-import Layout from "@/app/components/layout";
 import FloatingButton from "@/app/components/floatingButton";
 import Menu from "../components/menu";
 import ChallengeTitle from "../components/challengeTitle";
@@ -18,6 +17,7 @@ import PostsFeed from "@/app/components/postsFeed";
 import { IChallengeDetailsDto } from "@/types/challenge";
 import { toastPopupAtom } from "@/hooks/atoms";
 import Loading from "./loading";
+import Frame from "@/app/components/frame";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
@@ -81,7 +81,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   ];
 
   return (
-    <Layout canGoBack hasTabBar>
+    <Frame canGoBack hasTabBar>
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6">
           <Menu currentPage="챌린지 메인" challengeId={id} />
@@ -226,7 +226,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           </div>
         </div>
       </div>
-    </Layout>
+    </Frame>
   );
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import Layout from "@/app/components/layout";
+import Frame from "@/app/components/frame";
 import { addClassNames } from "@/libs/utils";
 import { useState } from "react";
 
@@ -35,7 +35,7 @@ const Page = () => {
   );
 
   return (
-    <Layout title="벌금 현황" canGoBack hasTabBar>
+    <Frame title="벌금 현황" canGoBack hasTabBar>
       <div className="flex flex-col px-3 mt-8">
         <div className="flex flex-col space-y-4 text-sm">
           <div className="font-bold ">
@@ -164,7 +164,7 @@ const Page = () => {
           챌린지 포기
         </div>
       </div>
-    </Layout>
+    </Frame>
   );
 };
 

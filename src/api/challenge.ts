@@ -15,14 +15,10 @@ export const fetchChallengeDetails = async (
 };
 
 export const fetchEnrolledChallenges = async (): Promise<
-  IChallengeEnrolledListItemDto[] | Error
+  IChallengeEnrolledListItemDto[]
 > => {
-  try {
-    const res = await apiManager.get(`/challenges/me`);
-    const { data }: { data: IChallengeEnrolledListItemDto[] } = res.data;
-    console.log(data);
-    return data;
-  } catch (error) {
-    return error as Error;
-  }
+  const res = await apiManager.get(`/challenges/me`);
+  const { data }: { data: IChallengeEnrolledListItemDto[] } = res.data;
+  console.log(data);
+  return data;
 };

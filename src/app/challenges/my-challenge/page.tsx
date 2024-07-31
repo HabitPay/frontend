@@ -5,7 +5,6 @@ import Image from "next/image";
 
 import { format } from "date-fns";
 
-import Layout from "@/app/components/layout";
 import FloatingButton from "@/app/components/floatingButton";
 import Challenges from "./components/challenges";
 import ChallengeStateSelector from "./components/challengeStateSelector";
@@ -16,8 +15,8 @@ import { ChallengeStatesEnum } from "@/types/enums";
 // 나중에 삭제
 import defaultProfileImage from "@/public/default-profile.jpg";
 import Loading from "./loading";
-import { verifyAccessToken } from "@/libs/authUtils";
 import withAuth from "@/app/components/withAuth";
+import Frame from "@/app/components/frame";
 
 function Page() {
   // TODO: 다른 hook 들과 겹치지 않도록 컴포넌트 분리하기
@@ -31,7 +30,7 @@ function Page() {
   }
 
   return (
-    <Layout hasTabBar>
+    <Frame hasTabBar>
       <div className="flex flex-col max-w-xl px-5 mx-auto">
         <div className="flex items-center justify-between mb-3">
           <div className="flex flex-col">
@@ -85,7 +84,7 @@ function Page() {
           <span>챌린지 생성</span>
         </div>
       </FloatingButton>
-    </Layout>
+    </Frame>
   );
 }
 
