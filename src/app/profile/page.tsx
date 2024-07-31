@@ -217,9 +217,7 @@ const Page = () => {
           top: false,
           success: true,
         }));
-        setTimeout(() => {
-          router.push("/");
-        }, 2500);
+        router.push("/");
 
         removeJwtFromSessionStorage();
       }
