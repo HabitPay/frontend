@@ -21,6 +21,7 @@ const getTokenType = () => {
 const apiManager: AxiosInstance = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_BACKEND_SERVER}/api`,
   timeout: 3000,
+  withCredentials: true,
 });
 
 apiManager.interceptors.request.use(
@@ -70,7 +71,7 @@ apiManager.interceptors.response.use(
           "/token"
         );
         if (tokenRefreshResult.status === 200) {
-          const { accessToken } = tokenRefreshResult.data;
+          const { accessToken } = tokenRefreshResult.data.data;
           sessionStorage.setItem("accessToken", accessToken);
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           return apiManager(originalRequest);
@@ -81,6 +82,8 @@ apiManager.interceptors.response.use(
         console.log(e);
         logout();
       }
+      // access token이 invalid할때와, expired되었을 때 두 가지 경우로 나눈경우
+      // 지금 코드는 두개 다 같은 상황으로 보고 토큰 재발급받음.
       // if (data.message === "Invalid token") {
       //   logout();
       // } else if (data.message === "TokenExpired") {
@@ -89,7 +92,7 @@ apiManager.interceptors.response.use(
       //       "/token"
       //     );
       //     if (tokenRefreshResult.status === 200) {
-      //       const { accessToken } = tokenRefreshResult.data;
+      //       const { accessToken } = tokenRefreshResult.data.data;
       //       sessionStorage.setItem("accessToken", accessToken);
       //       originalRequest.headers.Authorization = `Bearer ${accessToken}`;
       //       return apiManager(originalRequest);
