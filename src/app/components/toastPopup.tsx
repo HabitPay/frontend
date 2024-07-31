@@ -16,7 +16,7 @@ export default function ToastPopup() {
         setIsVisible(false);
         setTimeout(() => {
           setToastPopup({ message: "", top: true, success: true });
-        }, 500); // fadeOut 애니메이션 시간과 일치시킴
+        }, 500);
       }, TOAST_DISMISS_TIMEOUT);
 
       return () => {
@@ -25,14 +25,6 @@ export default function ToastPopup() {
     }
   }, [toastPopup, setToastPopup]);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setToastPopup({ message: "", top: true, success: true });
-  //   }, TOAST_DISMISS_TIMEOUT);
-  //   return () => {
-  //     clearTimeout(timer);
-  //   };
-  // }, [toastPopup, setToastPopup]);
   return (
     <div className="flex justify-center w-full">
       <div
