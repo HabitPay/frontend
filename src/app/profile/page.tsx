@@ -315,7 +315,7 @@ const Page = () => {
               onClose={() => setIsModalOpen(false)}
               open={isModalOpen}
             >
-              챌린지 삭제
+              계정 삭제
             </ConfirmModal>
             <button
               className="w-full py-1 border-2 rounded-md border-slate-400"
