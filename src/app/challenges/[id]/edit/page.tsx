@@ -15,11 +15,14 @@ import { Days } from "@/types/enums";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import ConfirmModal from "@/app/components/confirmModal";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, selectedDays, isLoading, error } =
     useChallengeDetails(id);
   const { register, handleSubmit } = useForm<IChallengePatchDto>({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
 
@@ -160,10 +163,18 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
             </button>
           </div>
         </form>
-        {/* TODO: 챌린지 삭제 확인 창 추가하기 */}
+        <ConfirmModal
+          onClick={handleChallengeDelete}
+          onClose={() => setIsModalOpen(false)}
+          open={isModalOpen}
+        >
+          챌린지 삭제
+        </ConfirmModal>
         <button
           className="py-2 text-sm text-white bg-[#D32F2F] rounded-2xl font-extralight"
-          onClick={handleChallengeDelete}
+          onClick={() => {
+            setIsModalOpen(true);
+          }}
         >
           챌린지 삭제
         </button>

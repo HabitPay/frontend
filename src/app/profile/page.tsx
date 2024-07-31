@@ -18,6 +18,7 @@ import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { PopupErrorMessage } from "@/types/enums";
 import withAuth from "../components/withAuth";
+import ConfirmModal from "../components/confirmModal";
 
 interface IForm {
   nickname: string;
@@ -50,6 +51,7 @@ const Page = () => {
   const [imageExtension, setImageExtension] = useState<string>("");
   const [profileImageUrl, setProfileImageUrl] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const setToastPopup = useSetRecoilState(toastPopupAtom);
 
@@ -310,9 +312,16 @@ const Page = () => {
             >
               로그아웃
             </button>
+            <ConfirmModal
+              onClick={handleDeleteUser}
+              onClose={() => setIsModalOpen(false)}
+              open={isModalOpen}
+            >
+              챌린지 삭제
+            </ConfirmModal>
             <button
               className="w-full py-1 border-2 rounded-md border-slate-400"
-              onClick={handleDeleteUser}
+              onClick={() => setIsModalOpen(true)}
             >
               계정삭제
             </button>
