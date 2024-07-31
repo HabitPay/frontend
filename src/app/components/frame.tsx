@@ -31,13 +31,11 @@ const Frame = ({
     }
   };
   return (
-    <div className="max-w-xl mx-auto">
+    <div className="h-screen max-w-xl mx-auto shadow-xl">
       <div
-        className={addClassNames(
-          "z-50 fixed top-0 flex items-center justify-center w-full h-12 max-w-xl px-10 text-lg font-medium text-gray-800",
-          isWhiteTitle ? "bg-white" : "bg-habit-background",
-          isBorder ? "border-b border-gray-300" : ""
-        )}
+        className={`z-50 fixed top-0 flex items-center justify-center w-full h-12 max-w-xl px-10 text-lg font-medium text-gray-800 ${
+          isWhiteTitle ? "bg-white" : "bg-habit-background"
+        } ${isBorder && "border-b border-gray-300"}`}
       >
         {canGoBack && (
           <button onClick={onClick} className="absolute left-4">
@@ -63,9 +61,7 @@ const Frame = ({
           </span>
         )}
       </div>
-      <div className={addClassNames("pt-12", hasTabBar ? "pb-20" : "")}>
-        {children}
-      </div>
+      <div className={`pt-12 ${hasTabBar && "pb-20"}`}>{children}</div>
       {hasTabBar ? (
         <nav className="fixed bottom-0 z-50 flex justify-center w-full max-w-xl gap-12 py-4 text-xs text-gray-700 bg-white border-t">
           <Link href="/challenges/my-challenge">
