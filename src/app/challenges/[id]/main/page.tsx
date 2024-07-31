@@ -34,7 +34,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
       top: false,
       success: false,
     });
-    router.push("/challenges/my_challenge");
+    router.push("/challenges/my-challenge");
     return <></>;
   }
 

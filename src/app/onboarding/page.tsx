@@ -46,7 +46,7 @@ function Page() {
         sessionStorage.setItem("expiresIn", expiresIn);
         // sessionStorage.setItem("refreshToken", refreshToken);
         sessionStorage.setItem("tokenType", tokenType);
-        router.push("/challenges/my_challenge");
+        router.push("/challenges/my-challenge");
       }
       console.log(res);
     } catch (error) {

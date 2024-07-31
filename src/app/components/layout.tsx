@@ -70,11 +70,11 @@ export default function Layout({
       </div>
       {hasTabBar ? (
         <nav className="fixed bottom-0 z-50 flex justify-center w-full max-w-xl gap-12 py-4 text-xs text-gray-700 bg-white border-t">
-          <Link href="/challenges/my_challenge">
+          <Link href="/challenges/my-challenge">
             <div
               className={addClassNames(
                 "flex flex-col items-center space-y-2 p-3",
-                currentPath === "/challenges/my_challenge"
+                currentPath === "/challenges/my-challenge"
                   ? "bg-[#EFF8F0] rounded-2xl text-habit-green"
                   : "hover:text-gray-500 transition-colors"
               )}

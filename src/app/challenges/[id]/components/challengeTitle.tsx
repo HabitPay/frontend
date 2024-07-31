@@ -35,12 +35,11 @@ const ChallengeTitle = ({
       <div className="flex items-center px-3 space-x-2 border-2 h-11 rounded-2xl border-habit-gray">
         <div className="flex -space-x-2">
           {profileImages.map((profileImage, index) => {
-            const className = `z-${30 - index * 10}30 rounded-full size-9`;
             return (
               <Image
                 key={index}
                 src={profileImage || defaultProfileImage}
-                className={className}
+                className={`z-${30 - index * 10} rounded-full size-9`}
                 alt="profile image"
                 width={36}
                 height={36}
