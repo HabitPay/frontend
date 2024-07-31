@@ -12,7 +12,6 @@ import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 
 import { addClassNames } from "@/libs/utils";
-import Layout from "@/app/components/layout";
 import Label from "../components/label";
 import Button from "@/app/components/button";
 import { convertKstDate } from "@/libs/date";
@@ -21,6 +20,7 @@ import { Days, SelectedStatus } from "@/types/enums";
 import { useRouter } from "next/navigation";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
+import Frame from "@/app/components/frame";
 
 const INCREASE_FEE = [100, 1000, 10000];
 
@@ -138,7 +138,7 @@ function Page() {
   };
 
   return (
-    <Layout canGoBack hasTabBar title="챌린지 생성">
+    <Frame canGoBack hasTabBar title="챌린지 생성">
       <form
         onSubmit={handleSubmit(onSubmitWithValidation)}
         className="flex flex-col px-10 mb-10 space-y-4"
@@ -351,7 +351,7 @@ function Page() {
             챌린지 생성
           </button> */}
       </form>
-    </Layout>
+    </Frame>
   );
 }
 

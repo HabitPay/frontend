@@ -21,6 +21,7 @@ export function getNickname(): string | null | undefined {
   if (jwt === null) {
     return null;
   }
+  // @ts-ignore
   return jwt.nickname;
 }
 

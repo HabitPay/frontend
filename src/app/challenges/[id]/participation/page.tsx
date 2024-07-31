@@ -1,6 +1,5 @@
 "use client";
 
-import Layout from "@/app/components/layout";
 import Menu from "../components/menu";
 import { usePathname, useRouter } from "next/navigation";
 import ChallengeTitle from "../components/challengeTitle";
@@ -13,6 +12,7 @@ import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import Loading from "../main/loading";
 import { differenceInDays, isBefore } from "date-fns";
+import Frame from "@/app/components/frame";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const currentPath = usePathname().split("/");
@@ -44,7 +44,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
 
   const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
   return (
-    <Layout hasTabBar canGoBack>
+    <Frame hasTabBar canGoBack>
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6 pb-5">
           <Menu currentPage="참여 기록" challengeId={currentPath[2]} />
@@ -86,7 +86,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           />
         </svg>
       </FloatingButton>
-    </Layout>
+    </Frame>
   );
 };
 

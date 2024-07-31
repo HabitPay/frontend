@@ -7,8 +7,7 @@ import { useForm } from "react-hook-form";
 import { StatusCodes } from "http-status-codes";
 
 import apiManager from "@/api/apiManager";
-import Layout from "@/app/components/layout";
-import { AxiosError } from "axios";
+import Frame from "../components/frame";
 
 interface IForm {
   nickname: string;
@@ -33,25 +32,25 @@ function Page() {
 
   const onSubmit = async (data: IForm) => {
     console.log(data);
-    const { nickname } = data;
-    try {
-      // TODO: /member/activate 로 변경 예정
-      const res = await apiManager.post<ITokenData>("/member", {
-        nickname,
-      });
-      if (res.status === StatusCodes.OK) {
-        // TODO: 데이터 받는 부분 수정 필요
-        const { accessToken, expiresIn, tokenType } = res.data?.data;
-        sessionStorage.setItem("accessToken", accessToken);
-        sessionStorage.setItem("expiresIn", expiresIn);
-        // sessionStorage.setItem("refreshToken", refreshToken);
-        sessionStorage.setItem("tokenType", tokenType);
-        router.push("/challenges/my-challenge");
-      }
-      console.log(res);
-    } catch (error) {
-      console.log(error);
-    }
+    // const { nickname } = data;
+    // try {
+    //   // TODO: /member/activate 로 변경 예정
+    //   const res = await apiManager.post<ITokenData>("/member", {
+    //     nickname,
+    //   });
+    //   if (res.status === StatusCodes.OK) {
+    //     // TODO: 데이터 받는 부분 수정 필요
+    //     const { accessToken, expiresIn, tokenType } = res.data?.data;
+    //     sessionStorage.setItem("accessToken", accessToken);
+    //     sessionStorage.setItem("expiresIn", expiresIn);
+    //     // sessionStorage.setItem("refreshToken", refreshToken);
+    //     sessionStorage.setItem("tokenType", tokenType);
+    //     router.push("/challenges/my-challenge");
+    //   }
+    //   console.log(res);
+    // } catch (error) {
+    //   console.log(error);
+    // }
   };
 
   useEffect(() => {
@@ -66,13 +65,13 @@ function Page() {
       // sessionStorage.setItem("tokenType", tokenType);
       router.replace("/onboarding");
     }
-  }, []);
+  }, [router, searchParams]);
 
   return (
-    <Layout canGoBack>
+    <Frame canGoBack>
       <div className="mx-5">
         <div className="mt-4 mb-4">
-          <h2 className=" text-xl font-bold">사용할 닉네임을 입력해주세요</h2>
+          <h2 className="text-xl font-bold ">사용할 닉네임을 입력해주세요</h2>
           <span className="text-sm">
             입력한 정보는 이후에 언제든 수정가능합니다.
           </span>
@@ -80,7 +79,7 @@ function Page() {
         <form className="flex flex-col" onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col">
             <input
-              className="bg-habit-background border-b-2 border-slate-200 focus:outline-none focus:border-green-500 py-2 px-1"
+              className="px-1 py-2 border-b-2 bg-habit-background border-slate-200 focus:outline-none focus:border-green-500"
               type="text"
               placeholder="닉네임을 입력해주세요."
               {...register("nickname", {
@@ -99,19 +98,19 @@ function Page() {
                 },
               })}
             />
-            <span className="mt-1 text-red-500 text-sm">
+            <span className="mt-1 text-sm text-red-500">
               {errors?.nickname?.message as string}
             </span>
-            <span className="text-sm mt-4 mb-10">
+            <span className="mt-4 mb-10 text-sm">
               닉네임은 최소 2자부터 최대 15자까지 가능합니다.(특수문자 불가)
             </span>
           </div>
-          <button className=" py-2 w-full text-sm font-medium bg-habit-green hover:bg-green-600 text-white border border-transparent rounded-md shadow-sm focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:outline-none relative bottom-0">
+          <button className="relative bottom-0 w-full py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm bg-habit-green hover:bg-green-600 focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:outline-none">
             다음
           </button>
         </form>
       </div>
-    </Layout>
+    </Frame>
   );
 }
 

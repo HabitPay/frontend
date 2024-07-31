@@ -1,12 +1,12 @@
 "use client";
 
-import Layout from "@/app/components/layout";
+import Frame from "@/app/components/frame";
 import PostItem from "@/app/components/postItem";
 import { PostsFeedExample } from "@/app/components/postsFeed";
 
 const Page = () => {
   return (
-    <Layout canGoBack>
+    <Frame canGoBack>
       <div className="flex flex-col divide-y-2">
         <div className="px-5 py-3">
           <h1 className="text-2xl font-bold">책업일치</h1>
@@ -20,7 +20,7 @@ const Page = () => {
           <PostItem {...PostsFeedExample[0]} />
         </div>
       </div>
-    </Layout>
+    </Frame>
   );
 };
 

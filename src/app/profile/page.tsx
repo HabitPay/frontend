@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import axios, { HttpStatusCode } from "axios";
-import Layout from "@/app/components/layout";
 import Button from "@/app/components/button";
 import defaultProfileImage from "@/public/default-profile.jpg";
 import apiManager from "@/api/apiManager";
@@ -19,6 +18,7 @@ import { toastPopupAtom } from "@/hooks/atoms";
 import { PopupErrorMessage } from "@/types/enums";
 import withAuth from "../components/withAuth";
 import ConfirmModal from "../components/confirmModal";
+import Frame from "../components/frame";
 
 interface IForm {
   nickname: string;
@@ -188,25 +188,6 @@ const Page = () => {
     }
   };
 
-  const getProfile = async () => {
-    try {
-      const res = await apiManager.get("/member");
-      const { nickname, imageUrl }: IProfileDTO = res.data?.data;
-
-      if (imageUrl.length > 0) {
-        setProfileImageUrl(imageUrl);
-      }
-      setNickname(nickname);
-    } catch (error) {
-      setToastPopup({
-        // @ts-ignore
-        message: error.data.message,
-        top: false,
-        success: false,
-      });
-    }
-  };
-
   const handleDeleteUser = async () => {
     try {
       const res = await apiManager.delete("/member");
@@ -237,11 +218,29 @@ const Page = () => {
   };
 
   useEffect(() => {
+    const getProfile = async () => {
+      try {
+        const res = await apiManager.get("/member");
+        const { nickname, imageUrl }: IProfileDTO = res.data?.data;
+
+        if (imageUrl.length > 0) {
+          setProfileImageUrl(imageUrl);
+        }
+        setNickname(nickname);
+      } catch (error) {
+        setToastPopup({
+          // @ts-ignore
+          message: error.data.message,
+          top: false,
+          success: false,
+        });
+      }
+    };
     getProfile();
-  }, []);
+  }, [setToastPopup]);
 
   return (
-    <Layout title="프로필" hasTabBar>
+    <Frame title="프로필" hasTabBar>
       <div className="flex flex-col items-center px-5 space-y-10">
         <form
           className="flex flex-col items-center w-full px-4 space-y-4"
@@ -326,7 +325,7 @@ const Page = () => {
           </div>
         </div>
       </div>
-    </Layout>
+    </Frame>
   );
 };
 

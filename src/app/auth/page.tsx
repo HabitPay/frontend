@@ -16,7 +16,7 @@ function Page() {
       sessionStorage.setItem("accessToken", accessToken);
       router.push("/challenges/my-challenge");
     }
-  }, []);
+  }, [router, searchParams]);
 
   return <></>;
 }

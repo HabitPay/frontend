@@ -7,7 +7,6 @@ import { ko } from "date-fns/locale";
 import apiManager from "@/api/apiManager";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Label from "@/app/challenges/components/label";
-import Layout from "@/app/components/layout";
 import TextArea from "@/app/components/textarea";
 import { addClassNames } from "@/libs/utils";
 import { IChallengePatchDto } from "@/types/challenge";
@@ -15,8 +14,9 @@ import { Days } from "@/types/enums";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ConfirmModal from "@/app/components/confirmModal";
+import Frame from "@/app/components/frame";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, selectedDays, isLoading, error } =
@@ -64,12 +64,11 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     }
   };
 
-  // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>Error...</div>;
 
   return (
-    <Layout canGoBack hasTabBar title="챌린지 정보 수정">
+    <Frame canGoBack hasTabBar title="챌린지 정보 수정">
       <div className="flex flex-col px-10 space-y-4">
         <form
           onSubmit={handleSubmit(onSubmitWithValidation)}
@@ -103,18 +102,26 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 <div className="text-sm text-habit-gray">시작 일자</div>
                 <div className="flex items-center justify-center py-2 text-sm font-light w-36 rounded-xl bg-habit-lightgray">
                   {challengeDetails &&
-                    format(challengeDetails?.startDate, "yyyy.MM.dd (EEE)", {
-                      locale: ko,
-                    })}
+                    format(
+                      new Date(challengeDetails?.startDate),
+                      "yyyy.MM.dd (EEE)",
+                      {
+                        locale: ko,
+                      }
+                    )}
                 </div>
               </div>
               <div className="flex flex-col items-center justify-center space-y-2">
                 <div className="text-sm text-habit-gray">종료 일자</div>
                 <div className="flex items-center justify-center py-2 text-sm font-light w-36 rounded-xl bg-habit-lightgray">
                   {challengeDetails &&
-                    format(challengeDetails?.endDate, "yyyy.MM.dd (EEE)", {
-                      locale: ko,
-                    })}
+                    format(
+                      new Date(challengeDetails?.endDate),
+                      "yyyy.MM.dd (EEE)",
+                      {
+                        locale: ko,
+                      }
+                    )}
                 </div>
               </div>
             </div>
@@ -140,8 +147,8 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 <span className=" text-habit-green">
                   {challengeDetails &&
                     differenceInDays(
-                      challengeDetails?.endDate,
-                      challengeDetails?.startDate
+                      new Date(challengeDetails?.endDate),
+                      new Date(challengeDetails?.startDate)
                     ) + 1}
                 </span>
                 <span>일</span>
@@ -179,7 +186,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           챌린지 삭제
         </button>
       </div>
-    </Layout>
+    </Frame>
   );
 };
 

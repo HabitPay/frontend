@@ -42,7 +42,7 @@ export const useChallengeDetails = (id: string) => {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, selectedDays]);
 
   return { challengeDetails, selectedDays, isLoading, error };
 };

@@ -1,9 +1,9 @@
-import Layout from "@/app/components/layout";
 import Menu from "../components/menu";
+import Frame from "@/app/components/frame";
 
 export default function Loading() {
   return (
-    <Layout canGoBack hasTabBar>
+    <Frame canGoBack hasTabBar>
       <div className="flex flex-col px-6 divide-y-2 animate-pulse">
         <div className="flex gap-4 pb-3">
           <div className="w-24 bg-gray-400 h-7 rounded-xl" />
@@ -18,6 +18,6 @@ export default function Loading() {
           <div className="h-8 bg-gray-400 w-wull rounded-xl" />
         </div>
       </div>
-    </Layout>
+    </Frame>
   );
 }
