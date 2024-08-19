@@ -1,0 +1,25 @@
+name: Deploy Next.js at AWS Lambda using SST ion
+on: push
+
+# Concurrency group name ensures concurrent workflow runs wait for any in-progress job to finish
+concurrency:
+  group: merge-${{ github.ref }}
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
+jobs:
+  deploy-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::????????:role/Ssoon
+          aws-region: us-east-1
+      - name: Deploy app
+        run: |
+          npm i && npx sst deploy --stage production
