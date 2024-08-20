@@ -14,10 +14,16 @@ import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Enrollment from "../components/enrollment";
 import { getParentPath } from "@/libs/utils";
 import PostsFeed from "@/app/components/postsFeed";
-import { IChallengeDetailsDto } from "@/types/challenge";
+import {
+  ChallengeContentResponseDTO,
+  IChallengeDetailsDto,
+} from "@/types/challenge";
 import { toastPopupAtom } from "@/hooks/atoms";
 import Loading from "./loading";
 import Frame from "@/app/components/frame";
+import apiManager from "@/api/apiManager";
+import { useInfiniteQuery } from "react-query";
+import { AxiosError } from "axios";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
@@ -48,8 +54,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     isHost,
     isMemberEnrolledInChallenge,
   }: IChallengeDetailsDto = challengeDetails;
-  // if (challengeDetails === null) {
-  // }
 
   const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
 
@@ -204,7 +208,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 <span className="px-5 py-3 text-sm font-light bg-white rounded-xl">
                   어제
                 </span>
-                <PostsFeed initialFeed={initialFeed} />
+                <PostsFeed id={id} />
                 <FloatingButton href={`${getParentPath(pathname)}/post`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
