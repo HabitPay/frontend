@@ -6,6 +6,11 @@ export default $config({
       name: "frontend",
       removal: input?.stage === "production" ? "retain" : "remove",
       home: "aws",
+      providers: {
+        aws: {
+          region: "ap-northeast-2",
+        },
+      },
     };
   },
   console: {
