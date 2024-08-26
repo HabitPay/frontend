@@ -39,7 +39,11 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
 
   const currentPath = usePathname();
 
-  const uploadImagesToS3 = async (preSignedUrls: string[], image: File) => {
+  const uploadImageToS3 = async (
+    preSignedUrl: string,
+    image: File,
+    imageExtension: string
+  ) => {
     try {
       const res = await axios.put(preSignedUrl, image, {
         headers: {
@@ -56,6 +60,21 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
       });
     }
   };
+
+  const uploadImagesToS3 = async (
+    preSignedUrls: string[],
+    imageFiles: FileList | undefined
+  ) => {
+    if (!imageFiles) return;
+    for (let i = 0; i < preSignedUrls.length; ++i) {
+      uploadImageToS3(
+        preSignedUrls[i],
+        imageFiles[i],
+        imageFiles[i].type.slice(imageFiles[i].type.indexOf("/") + 1)
+      );
+    }
+  };
+
   const convertFilesToPhotoDTOs = (files: FileList | undefined) => {
     if (!files || !files.length) {
       return [];
@@ -91,7 +110,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
         success: true,
       });
       const preSignedUrls: string[] = res.data?.data;
-      // router.push(`/challenges/${id}/main`);
+      uploadImagesToS3(preSignedUrls, form.photos);
     } catch (error) {
       setToastPopup({
         // @ts-ignore

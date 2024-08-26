@@ -4,6 +4,7 @@ import apiManager from "@/api/apiManager";
 import { useInfiniteQuery } from "react-query";
 import { AxiosError } from "axios";
 import PostItem from "./postItem";
+import { OnIntersect, useObserver } from "@/hooks/useObserver";
 
 interface PostsFeedProps {
   id: string;
@@ -11,7 +12,7 @@ interface PostsFeedProps {
 
 export default function PostsFeed({ id }: PostsFeedProps) {
   const bottom = useRef<HTMLDivElement | null>(null);
-  const OFFSET = 5;
+  const OFFSET = 10;
   const getAnnouncementsPosts = async ({
     pageParam = 0,
   }: {
@@ -32,14 +33,15 @@ export default function PostsFeed({ id }: PostsFeedProps) {
   }): Promise<ChallengeContentResponseDTO> => {
     const res = await apiManager.get(`/challenges/${id}/posts`, {
       params: {
-        limit: OFFSET,
-        offset: pageParam,
+        size: OFFSET,
+        page: pageParam,
       },
     });
-    console.log(res);
-    return res.data;
+    console.log("res:", res.data.data);
+    return res.data.data;
   };
   getPosts({ pageParam: 0 });
+
   const {
     data,
     error,
@@ -53,8 +55,8 @@ export default function PostsFeed({ id }: PostsFeedProps) {
     getPosts,
     {
       getNextPageParam: (lastPage) => {
-        if (!lastPage.last) {
-          console.log(lastPage);
+        if (lastPage.last === false) {
+          console.log("it is not last page");
           return lastPage.pageable.pageNumber + 1;
         }
         return undefined;
@@ -62,19 +64,24 @@ export default function PostsFeed({ id }: PostsFeedProps) {
     }
   );
 
+  const onIntersect: OnIntersect = ([entry]) =>
+    entry.isIntersecting && fetchNextPage();
+
+  useObserver({ target: bottom, onIntersect });
+
   return (
     <div className="flex flex-col w-full pb-4">
       {status === "loading" && <p>불러오는 중</p>}
       {status === "error" && <p>{error?.message}</p>}
       {status === "success" &&
         data?.pages.map((posts, index) => (
-          <div key={index}>
-            {posts.content.map((post) => (
-              <PostItem {...post} key={post.id} />
-            ))}
+          <div key={index} className="flex flex-col gap-3">
+            {posts?.content?.length > 0 &&
+              posts.content.map((post) => <PostItem {...post} key={post.id} />)}
           </div>
         ))}
       <div ref={bottom} />
+      {isFetchingNextPage && <p>계속 불러오는 중</p>}
     </div>
   );
 }
