@@ -57,33 +57,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
 
   const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
 
-  // PostsFeed의 prop으로 주기위한 예시. 백엔드완성되면 삭제
-  const initialFeed = [
-    {
-      defaultProfileImage: "/defaultProfileImage.jpeg",
-      nickname: "hogkim",
-      createdAt: new Date(),
-      isNotification: true,
-      imageList: [
-        "/default-profile.jpg",
-        "/defaultProfileImage.jpeg",
-        "/chungking_express__movie_poster__by_seblakes31_dep34tb-fullview.jpg",
-        "/manaca.JPG",
-      ],
-      contents:
-        "test contents test contents test contents test contents test contents test contents test contents test contents test contents",
-    },
-    {
-      defaultProfileImage: "/default-profile.jpg",
-      nickname: "jkwak",
-      createdAt: new Date(),
-      isNotification: false,
-      imageList: ["/defaultProfileImage.jpeg", "/default-profile.jpg"],
-      contents:
-        "example contents example contents example contents example contents example contents example contents example contents example contents example contents example contents example contents ",
-    },
-  ];
-
   return (
     <Frame canGoBack hasTabBar>
       <div className="flex flex-col divide-y-2">
