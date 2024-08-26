@@ -18,7 +18,6 @@ export default $config({
         ) {
           return {
             stage: "production",
-            runner: { engine: "codebuild", compute: "large" },
           };
         }
       },
