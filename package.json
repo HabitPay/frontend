@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^16.6.0",
@@ -28,7 +28,8 @@
     "react-query": "^3.39.3",
     "react-slick": "^0.30.2",
     "recoil": "^0.7.7",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "sst": "ion"
   },
   "devDependencies": {
     "@types/node": "^20",
