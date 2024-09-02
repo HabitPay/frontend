@@ -114,12 +114,6 @@ const Page = () => {
         },
       });
       console.log(res);
-      // setToastPopup({
-      //   // @ts-ignore
-      //   message: res.data.message,
-      //   top: false,
-      //   success: true,
-      // });
     } catch (error) {
       setToastPopup({
         // @ts-ignore

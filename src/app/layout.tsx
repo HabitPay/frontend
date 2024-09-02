@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import RecoilRootWrapper from "./components/recoilWrapper";
 import ToastPopup from "./components/toastPopup";
+import ReactQueryProviders from "@/hooks/useReactQuery";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <RecoilRootWrapper>
-          {children}
+          <ReactQueryProviders>{children}</ReactQueryProviders>
           <ToastPopup />
         </RecoilRootWrapper>
 

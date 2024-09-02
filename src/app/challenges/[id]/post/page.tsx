@@ -7,6 +7,12 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import PreviewList from "./components/previewList";
+import apiManager from "@/api/apiManager";
+import { ICreatePostDTO, PhotoDTO } from "@/types/post";
+import { useSetRecoilState } from "recoil";
+import { toastPopupAtom } from "@/hooks/atoms";
+import { useRouter } from "next/navigation";
+import axios from "axios";
 
 export interface imageInfo {
   file: File;
@@ -14,11 +20,11 @@ export interface imageInfo {
 }
 
 interface IForm {
-  text: string;
-  photos?: imageInfo[];
+  content: string;
+  photos?: FileList;
 }
 
-const Page = () => {
+const Page = ({ params: { id } }: { params: { id: string } }) => {
   const {
     register,
     handleSubmit,
@@ -26,14 +32,93 @@ const Page = () => {
     formState: { errors },
   } = useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
-  const [isNotice, setIsNotice] = useState(false);
+  const [isAnnouncement, setIsAnnouncement] = useState(false);
   const [isManager, setIsManager] = useState(false);
+  const setToastPopup = useSetRecoilState(toastPopupAtom);
+  const router = useRouter();
 
-  // for identify pathname
   const currentPath = usePathname();
 
-  const onSubmit = async (data: IForm) => {
-    console.log(data);
+  const uploadImageToS3 = async (
+    preSignedUrl: string,
+    image: File,
+    imageExtension: string
+  ) => {
+    try {
+      const res = await axios.put(preSignedUrl, image, {
+        headers: {
+          "Content-Type": "image/" + imageExtension,
+        },
+      });
+      console.log(res);
+    } catch (error) {
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
+    }
+  };
+
+  const uploadImagesToS3 = async (
+    preSignedUrls: string[],
+    imageFiles: FileList | undefined
+  ) => {
+    if (!imageFiles) return;
+    for (let i = 0; i < preSignedUrls.length; ++i) {
+      uploadImageToS3(
+        preSignedUrls[i],
+        imageFiles[i],
+        imageFiles[i].type.slice(imageFiles[i].type.indexOf("/") + 1)
+      );
+    }
+  };
+
+  const convertFilesToPhotoDTOs = (files: FileList | undefined) => {
+    if (!files || !files.length) {
+      return [];
+    }
+    let photosData: PhotoDTO[] = [];
+    for (let i = 0; i < files.length; ++i) {
+      let photoData: PhotoDTO = {
+        viewOrder: 0,
+        contentLength: 0,
+        imageExtension: "",
+      };
+      photoData.viewOrder = i + 1;
+      photoData.contentLength = files[i].size;
+      photoData.imageExtension = files[i].type.slice(
+        files[i].type.indexOf("/") + 1
+      );
+      photosData.push(photoData);
+    }
+    return photosData;
+  };
+
+  const onSubmitWithValidation = async (form: IForm) => {
+    try {
+      const data: ICreatePostDTO = {
+        content: form.content,
+        isAnnouncement: isAnnouncement,
+        photos: convertFilesToPhotoDTOs(form.photos),
+      };
+      const res = await apiManager.post(`/challenges/${id}/post`, data);
+      setToastPopup({
+        message: res.data.message,
+        top: false,
+        success: true,
+      });
+      const preSignedUrls: string[] = res.data?.data;
+      uploadImagesToS3(preSignedUrls, form.photos);
+    } catch (error) {
+      setToastPopup({
+        // @ts-ignore
+        message: error.data.message,
+        top: false,
+        success: false,
+      });
+    }
   };
 
   const onImageFilesChange = async (
@@ -89,9 +174,12 @@ const Page = () => {
 
   return (
     <Frame canGoBack title="게시물 작성" isWhiteTitle isBorder>
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col h-full">
+      <form
+        onSubmit={handleSubmit(onSubmitWithValidation)}
+        className="flex flex-col h-full"
+      >
         <textarea
-          {...register("text", {
+          {...register("content", {
             required: { value: true, message: "내용을 입력해주세요." },
           })}
           className="w-full h-screen px-4 pt-4 border-gray-300"
@@ -144,7 +232,7 @@ const Page = () => {
             </div>
             {isManager ? (
               <div
-                onClick={() => setIsNotice((prev) => !prev)}
+                onClick={() => setIsAnnouncement((prev) => !prev)}
                 className="flex items-center space-x-1"
               >
                 <svg
@@ -155,7 +243,7 @@ const Page = () => {
                   stroke="currentColor"
                   className={addClassNames(
                     "size-7",
-                    isNotice
+                    isAnnouncement
                       ? "text-habit-green"
                       : "hover:text-gray-500 transition-colors"
                   )}
