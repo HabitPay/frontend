@@ -58,7 +58,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
 
   return (
-    <Frame canGoBack hasTabBar>
+    <Frame canGoBack hasTabBar autoHeight>
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6">
           <Menu currentPage="챌린지 메인" challengeId={id} />
