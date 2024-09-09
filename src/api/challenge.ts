@@ -3,7 +3,6 @@ import {
   IChallengeDetailsDto,
   IChallengeEnrolledListItemDto,
 } from "@/types/challenge";
-import Error from "next/error";
 
 export const fetchChallengeDetails = async (
   id: string

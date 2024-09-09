@@ -1,11 +1,10 @@
 import apiManager from "@/api/apiManager";
-import { IMemberProfileDto } from "@/types/member";
+import { IProfileDTO } from "@/types/member";
 
-export const fetchMemberProfile = async (
-): Promise<IMemberProfileDto | null> => {
+export const fetchMemberProfile = async (): Promise<IProfileDTO | null> => {
   try {
     const res = await apiManager.get(`/member`);
-    const { data }: { data: IMemberProfileDto } = res.data;
+    const { data }: { data: IProfileDTO } = res.data;
     console.log(data);
     return data;
   } catch (error) {

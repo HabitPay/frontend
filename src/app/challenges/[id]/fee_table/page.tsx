@@ -1,8 +1,16 @@
 "use client";
 
+import apiManager from "@/api/apiManager";
 import Frame from "@/app/components/frame";
+import { toastPopupAtom } from "@/hooks/atoms";
 import { addClassNames } from "@/libs/utils";
-import { useState } from "react";
+import {
+  IChallengeFeeListDto,
+  MemberFeeView,
+} from "@/types/challenge/challengeFeeList.interface";
+import { IProfileDTO } from "@/types/member";
+import { useEffect, useState } from "react";
+import { useSetRecoilState } from "recoil";
 
 interface Participant {
   nickname: string;
@@ -17,21 +25,57 @@ const feeOfParticipants: Participant[] = [
   { nickname: "개포동푹신푸딩", fee: 0, achvRate: 50 },
 ];
 
-const Page = () => {
+const Page = ({ params: { id } }: { params: { id: string } }) => {
+  const setToastPopup = useSetRecoilState(toastPopupAtom);
+  const [myNickname, setMyNickname] = useState<string>("");
+  const [myFee, setMyFee] = useState<number>(0);
+  const [totalFee, setTotalFee] = useState<number>(0);
+  const [feeList, setFeeList] = useState<MemberFeeView[]>([]);
+
+  useEffect(() => {
+    const getFeeList = async () => {
+      try {
+        const res = await apiManager.get(`/challenges/${id}/fee`);
+        const data: IChallengeFeeListDto = res.data?.data;
+        setFeeList(data.memberFeeList);
+        setTotalFee(data.totalFee);
+        setMyFee(data.myFee);
+      } catch (error) {
+        setToastPopup({
+          // @ts-ignore
+          message: error.data.message,
+          top: false,
+          success: false,
+        });
+      }
+    };
+    const getMyNickname = async () => {
+      try {
+        const res = await apiManager.get("/member");
+        const { nickname }: IProfileDTO = res.data?.data;
+        setMyNickname(nickname);
+      } catch (error) {
+        setToastPopup({
+          // @ts-ignore
+          message: error.data.message,
+          top: false,
+          success: false,
+        });
+      }
+    };
+    getMyNickname();
+    getFeeList();
+  }, [id, setToastPopup]);
+
   const [criteria, setCriteria] = useState<"rankByFee" | "rankByAchvRate">(
     "rankByFee"
   );
-  const myNickname = "joonhan";
 
-  const totalFee = feeOfParticipants.reduce(
-    (acc, participant) => acc + participant.fee,
-    0
+  const rankByFee: MemberFeeView[] = [...feeList].sort(
+    (a, b) => b.totalFee - a.totalFee
   );
-  const rankByFee: Participant[] = [...feeOfParticipants].sort(
-    (a, b) => b.fee - a.fee
-  );
-  const rankByAchvRate: Participant[] = [...feeOfParticipants].sort(
-    (a, b) => b.achvRate - a.achvRate
+  const rankByAchvRate: MemberFeeView[] = [...feeList].sort(
+    (a, b) => b.completionRate - a.completionRate
   );
 
   return (
@@ -47,9 +91,7 @@ const Page = () => {
           </div>
           <div>
             <span>나의 누적 벌금 총합 : </span>
-            <span className="text-red-600">
-              {feeOfParticipants[0].fee.toLocaleString()}
-            </span>
+            <span className="text-red-600">{myFee.toLocaleString()}</span>
             <span>원</span>
           </div>
         </div>
@@ -82,25 +124,25 @@ const Page = () => {
             <tr>
               <th
                 scope="col"
-                className="px-6 py-3 font-light tracking-wider text-left uppercase"
+                className="px-4 py-3 font-light tracking-tighter text-left uppercase"
               >
                 순위
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 font-light tracking-wider text-left uppercase"
+                className="px-4 py-3 font-light tracking-tighter text-left uppercase"
               >
                 닉네임
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 font-light tracking-wider text-left uppercase"
+                className="px-4 py-3 font-light tracking-tighter text-left uppercase"
               >
                 누적 벌금
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 font-light tracking-wider text-left uppercase"
+                className="px-4 py-3 font-light tracking-tighter text-left uppercase"
               >
                 달성률
               </th>
@@ -118,15 +160,15 @@ const Page = () => {
                       : "bg-white"
                   )}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-4 whitespace-nowrap">{index + 1}</td>
+                  <td className="px-4 py-4 whitespace-nowrap">
                     {participant.nickname}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {participant.fee.toLocaleString()}원
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    {participant.totalFee.toLocaleString()}원
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {participant.achvRate}%
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    {participant.completionRate}%
                   </td>
                 </tr>
               ))}
@@ -143,15 +185,15 @@ const Page = () => {
                       : "bg-white"
                   )}
                 >
-                  <td className="px-6 py-4 whitespace-nowrap">{index + 1}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
+                  <td className="px-4 py-4 whitespace-nowrap">{index + 1}</td>
+                  <td className="px-4 py-4 whitespace-nowrap ">
                     {participant.nickname}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {participant.fee.toLocaleString()}원
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    {participant.totalFee.toLocaleString()}원
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {participant.achvRate}%
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    {participant.completionRate}%
                   </td>
                 </tr>
               ))}
