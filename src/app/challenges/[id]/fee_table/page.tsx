@@ -4,6 +4,7 @@ import apiManager from "@/api/apiManager";
 import Frame from "@/app/components/frame";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { addClassNames } from "@/libs/utils";
+import { IChallengeDetailsDto } from "@/types/challenge";
 import {
   IChallengeFeeListDto,
   MemberFeeView,
@@ -12,34 +13,21 @@ import { IProfileDTO } from "@/types/member";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 
-interface Participant {
-  nickname: string;
-  fee: number;
-  achvRate: number;
-}
-
-const feeOfParticipants: Participant[] = [
-  { nickname: "joonhan", fee: 4000, achvRate: 20 },
-  { nickname: "신길동매운짬뽕", fee: 2000, achvRate: 35 },
-  { nickname: "영등포불꽃주먹", fee: 3000, achvRate: 35 },
-  { nickname: "개포동푹신푸딩", fee: 0, achvRate: 50 },
-];
-
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const setToastPopup = useSetRecoilState(toastPopupAtom);
-  const [myNickname, setMyNickname] = useState<string>("");
-  const [myFee, setMyFee] = useState<number>(0);
-  const [totalFee, setTotalFee] = useState<number>(0);
-  const [feeList, setFeeList] = useState<MemberFeeView[]>([]);
+  const [feeData, setFeeData] = useState<IChallengeFeeListDto>({
+    myFee: 0,
+    totalFee: 0,
+    memberFeeList: [],
+  });
+  const [isEnrolled, setIsEnrolled] = useState<boolean>(false);
 
   useEffect(() => {
     const getFeeList = async () => {
       try {
         const res = await apiManager.get(`/challenges/${id}/fee`);
         const data: IChallengeFeeListDto = res.data?.data;
-        setFeeList(data.memberFeeList);
-        setTotalFee(data.totalFee);
-        setMyFee(data.myFee);
+        setFeeData(data);
       } catch (error) {
         setToastPopup({
           // @ts-ignore
@@ -49,11 +37,11 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
         });
       }
     };
-    const getMyNickname = async () => {
+    const getChallengeInfo = async () => {
       try {
-        const res = await apiManager.get("/member");
-        const { nickname }: IProfileDTO = res.data?.data;
-        setMyNickname(nickname);
+        const res = await apiManager.get(`/challenges/${id}`);
+        const data: IChallengeDetailsDto = res.data?.data;
+        setIsEnrolled(data.isMemberEnrolledInChallenge);
       } catch (error) {
         setToastPopup({
           // @ts-ignore
@@ -63,18 +51,18 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
         });
       }
     };
-    getMyNickname();
     getFeeList();
+    getChallengeInfo();
   }, [id, setToastPopup]);
 
   const [criteria, setCriteria] = useState<"rankByFee" | "rankByAchvRate">(
     "rankByFee"
   );
 
-  const rankByFee: MemberFeeView[] = [...feeList].sort(
+  const rankByFee: MemberFeeView[] = [...feeData.memberFeeList].sort(
     (a, b) => b.totalFee - a.totalFee
   );
-  const rankByAchvRate: MemberFeeView[] = [...feeList].sort(
+  const rankByAchvRate: MemberFeeView[] = [...feeData.memberFeeList].sort(
     (a, b) => b.completionRate - a.completionRate
   );
 
@@ -85,13 +73,15 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           <div className="font-bold ">
             <span>전체 누적 벌금 총합 : </span>
             <span className=" text-habit-green">
-              {totalFee.toLocaleString()}
+              {feeData.totalFee.toLocaleString()}
             </span>
             <span>원</span>
           </div>
           <div>
             <span>나의 누적 벌금 총합 : </span>
-            <span className="text-red-600">{myFee.toLocaleString()}</span>
+            <span className="text-red-600">
+              {feeData.myFee.toLocaleString()}
+            </span>
             <span>원</span>
           </div>
         </div>
@@ -155,9 +145,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                   key={index}
                   className={addClassNames(
                     "",
-                    participant.nickname === myNickname
-                      ? "bg-habit-green"
-                      : "bg-white"
+                    true ? "bg-habit-green" : "bg-white"
                   )}
                 >
                   <td className="px-4 py-4 whitespace-nowrap">{index + 1}</td>
@@ -180,9 +168,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                   key={index}
                   className={addClassNames(
                     "",
-                    participant.nickname === myNickname
-                      ? "bg-habit-green"
-                      : "bg-white"
+                    participant.isMe ? "bg-habit-green" : "bg-white"
                   )}
                 >
                   <td className="px-4 py-4 whitespace-nowrap">{index + 1}</td>
@@ -202,9 +188,12 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
         </table>
       </div>
       <div className="flex items-center justify-center mt-10">
-        <div className="px-28 py-2 font-light text-sm rounded-2xl text-center bg-[#D32F2F] text-white">
+        <button
+          disabled={isEnrolled ? false : true}
+          className={`px-28 py-2 font-light text-sm rounded-2xl text-center bg-[#D32F2F] text-white disabled:bg-slate-400`}
+        >
           챌린지 포기
-        </div>
+        </button>
       </div>
     </Frame>
   );
