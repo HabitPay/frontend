@@ -16,9 +16,15 @@ export default $config({
   console: {
     autodeploy: {
       target(event) {
-        return {
-          stage: "production",
-        };
+        if (
+          event.type === "pull_request" &&
+          event.action === "pushed" &&
+          event.base === "main"
+        ) {
+          return {
+            stage: "production",
+          };
+        }
       },
     },
   },
