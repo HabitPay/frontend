@@ -2,7 +2,18 @@
 
 import Frame from "@/app/components/frame";
 import PostItem from "@/app/components/postItem";
-import { PostsFeedExample } from "@/app/components/postsFeed";
+// import { PostsFeedExample } from "@/app/components/postsFeed";
+import { ContentDTO } from "@/types/challenge";
+
+const postFeedExample: ContentDTO = {
+  id: 1,
+  challengeEnrollmentId: 1,
+  content: "content",
+  writer: "writer",
+  isAnnouncement: false,
+  createdAt: "2021-09-01",
+  photoViewList: [],
+};
 
 const Page = () => {
   return (
@@ -17,7 +28,7 @@ const Page = () => {
             <div>삭제</div>
             <div className="ml-auto">목록</div>
           </div>
-          <PostItem {...PostsFeedExample[0]} />
+          <PostItem {...postFeedExample} />
         </div>
       </div>
     </Frame>
