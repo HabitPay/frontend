@@ -8,7 +8,7 @@ export default $config({
       home: "aws",
       providers: {
         aws: {
-          region: process.env.AWS_REGION,
+          region: "ap-northeast-2",
         },
       },
     };
