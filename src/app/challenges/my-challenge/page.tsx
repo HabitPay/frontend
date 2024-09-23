@@ -17,6 +17,7 @@ import defaultProfileImage from "@/public/default-profile.jpg";
 import Loading from "./loading";
 import withAuth from "@/app/components/withAuth";
 import Frame from "@/app/components/frame";
+// import Head from "next/head";
 
 function Page() {
   // TODO: 다른 hook 들과 겹치지 않도록 컴포넌트 분리하기
@@ -24,7 +25,9 @@ function Page() {
   const { challengeEnrolledList } = useChallengeEnrolledList();
   const [challengeStateSelection, setChallengeStateSelection] =
     useState<ChallengeStatesEnum>(ChallengeStatesEnum.InProgress);
-
+  // useEffect(() => {
+  //   document.title = "My Challenge | HabitPay";
+  // }, []);
   if (memberProfile === null || challengeEnrolledList === null) {
     return <Loading />;
   }

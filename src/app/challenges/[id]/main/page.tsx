@@ -24,13 +24,16 @@ import Frame from "@/app/components/frame";
 import apiManager from "@/api/apiManager";
 import { useInfiniteQuery } from "react-query";
 import { AxiosError } from "axios";
+import { useEffect } from "react";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
   const pathname = usePathname();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
-
+  // useEffect(() => {
+  //   document.title = "My Challenge | HabitPay";
+  // }, []);
   // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
   if (isLoading) return <Loading />;
   if (error || challengeDetails === null) {
