@@ -55,14 +55,14 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     getChallengeInfo();
   }, [id, setToastPopup]);
 
-  const [criteria, setCriteria] = useState<"rankByFee" | "rankByAchvRate">(
-    "rankByFee"
-  );
+  const [criteria, setCriteria] = useState<
+    "rankByFee" | "rankByCompletionRate"
+  >("rankByFee");
 
   const rankByFee: MemberFeeView[] = [...feeData.memberFeeList].sort(
     (a, b) => b.totalFee - a.totalFee
   );
-  const rankByAchvRate: MemberFeeView[] = [...feeData.memberFeeList].sort(
+  const rankByCompletionRate: MemberFeeView[] = [...feeData.memberFeeList].sort(
     (a, b) => b.completionRate - a.completionRate
   );
 
@@ -98,10 +98,10 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
             벌금 높은 순
           </div>
           <div
-            onClick={() => setCriteria("rankByAchvRate")}
+            onClick={() => setCriteria("rankByCompletionRate")}
             className={addClassNames(
               "px-3 py-2 rounded-xl ",
-              criteria === "rankByAchvRate"
+              criteria === "rankByCompletionRate"
                 ? " border-2 border-habit-green text-habit-green bg-white"
                 : " border-2 border-habit-lightgray bg-habit-lightgray"
             )}
@@ -163,7 +163,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
             </tbody>
           ) : (
             <tbody className="text-sm bg-white divide-y divide-gray-200">
-              {rankByAchvRate.map((participant, index) => (
+              {rankByCompletionRate.map((participant, index) => (
                 <tr
                   key={index}
                   className={addClassNames(
