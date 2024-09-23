@@ -4,7 +4,7 @@ import Frame from "@/app/components/frame";
 import { MB, validImageExtensions } from "@/libs/constants";
 import { addClassNames } from "@/libs/utils";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import PreviewList from "./components/previewList";
 import apiManager from "@/api/apiManager";
@@ -36,6 +36,9 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   const [isManager, setIsManager] = useState(false);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
+  useEffect(() => {
+    document.title = "Challenge Post | HabitPay";
+  }, []);
 
   const currentPath = usePathname();
 

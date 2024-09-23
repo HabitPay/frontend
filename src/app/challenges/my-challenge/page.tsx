@@ -25,9 +25,9 @@ function Page() {
   const { challengeEnrolledList } = useChallengeEnrolledList();
   const [challengeStateSelection, setChallengeStateSelection] =
     useState<ChallengeStatesEnum>(ChallengeStatesEnum.InProgress);
-  // useEffect(() => {
-  //   document.title = "My Challenge | HabitPay";
-  // }, []);
+  useEffect(() => {
+    document.title = "My Challenge | HabitPay";
+  }, []);
   if (memberProfile === null || challengeEnrolledList === null) {
     return <Loading />;
   }

@@ -31,9 +31,9 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   const pathname = usePathname();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
-  // useEffect(() => {
-  //   document.title = "My Challenge | HabitPay";
-  // }, []);
+  useEffect(() => {
+    document.title = "Challenge Main | HabitPay";
+  }, []);
   // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
   if (isLoading) return <Loading />;
   if (error || challengeDetails === null) {

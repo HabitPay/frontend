@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { format, differenceInDays, set, addDays } from "date-fns";
 import { useForm, Controller } from "react-hook-form";
@@ -58,6 +58,9 @@ function Page() {
 
   const router = useRouter();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
+  useEffect(() => {
+    document.title = "Create Challenge | HabitPay";
+  }, []);
 
   const [selectedDays, setSelectedDays] = useState<number[]>(
     new Array(7).fill(SelectedStatus.NOT_SELECTED)
