@@ -1,4 +1,4 @@
-export interface IMemberProfileDto {
-	nickname: string;
-	imageUrl: string;
-  }
+export interface IProfileDTO {
+  nickname: string;
+  imageUrl: string;
+}

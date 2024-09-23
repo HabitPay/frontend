@@ -19,15 +19,11 @@ import { PopupErrorMessage } from "@/types/enums";
 import withAuth from "../components/withAuth";
 import ConfirmModal from "../components/confirmModal";
 import Frame from "../components/frame";
+import { IProfileDTO } from "@/types/member";
 
 interface IForm {
   nickname: string;
   profileImage: FileList | null;
-}
-
-interface IProfileDTO {
-  nickname: string;
-  imageUrl: string;
 }
 
 interface INicknameDto {
