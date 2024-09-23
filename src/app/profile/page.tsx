@@ -208,6 +208,7 @@ const Page = () => {
   };
 
   useEffect(() => {
+    document.title = "Profile | HabitPay";
     const getProfile = async () => {
       try {
         const res = await apiManager.get("/member");

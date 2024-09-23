@@ -13,13 +13,16 @@ import { toastPopupAtom } from "@/hooks/atoms";
 import Loading from "../main/loading";
 import { differenceInDays, isBefore } from "date-fns";
 import Frame from "@/app/components/frame";
+import { useEffect } from "react";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const currentPath = usePathname().split("/");
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
   const router = useRouter();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
-
+  useEffect(() => {
+    document.title = "My Participation | HabitPay";
+  }, []);
   if (isLoading) return <Loading />;
   if (error || challengeDetails === null) {
     setToastPopup({

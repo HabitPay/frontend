@@ -21,7 +21,9 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     memberFeeList: [],
   });
   const [isEnrolled, setIsEnrolled] = useState<boolean>(false);
-
+  useEffect(() => {
+    document.title = "Fee Table | HabitPay";
+  }, []);
   useEffect(() => {
     const getFeeList = async () => {
       try {

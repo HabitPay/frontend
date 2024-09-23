@@ -25,7 +25,9 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
-
+  useEffect(() => {
+    document.title = "Challenge Edit | HabitPay";
+  }, []);
   const onSubmitWithValidation = async (form: IChallengePatchDto) => {
     try {
       const res = await apiManager.patch(`/challenges/${id}`, form);
