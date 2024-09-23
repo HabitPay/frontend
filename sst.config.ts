@@ -8,7 +8,7 @@ export default $config({
       home: "aws",
       providers: {
         aws: {
-          region: process.env.AWS_REGION,
+          region: "ap-northeast-2",
         },
       },
     };
@@ -18,8 +18,8 @@ export default $config({
       target(event) {
         if (
           event.type === "branch" &&
-          event.branch === "main" &&
-          event.action === "pushed"
+          event.action === "pushed" &&
+          event.branch === "main"
         ) {
           return {
             stage: "production",
