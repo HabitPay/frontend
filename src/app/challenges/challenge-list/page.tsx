@@ -14,6 +14,7 @@ import defaultProfileImage from "@/public/default-profile.jpg";
 import Loading from "./loading";
 import withAuth from "@/app/components/withAuth";
 import Frame from "@/app/components/frame";
+import ChallengeList from "@/app/components/challengeList";
 // import Head from "next/head";
 
 function Page() {
@@ -43,12 +44,13 @@ function Page() {
             alt="Picture of Avatar"
           />
         </div>
-        <div className="flex flex-col mb-10">
+        <div className="flex flex-col">
           <span className="mb-2 text-sm font-light">
             {format(new Date(), "yyyy년 MM월 dd일")}
           </span>
           <h3 className="mb-5 text-lg font-semibold">챌린지 목록</h3>
         </div>
+        <ChallengeList />
       </div>
       <FloatingButton href="/challenges/create_challenge">
         <div className="flex items-center justify-center text-sm">
