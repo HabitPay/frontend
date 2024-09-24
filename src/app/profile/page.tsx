@@ -20,6 +20,7 @@ import withAuth from "../components/withAuth";
 import ConfirmModal from "../components/confirmModal";
 import Frame from "../components/frame";
 import { IProfileDTO } from "@/types/member";
+import Link from "next/link";
 
 interface IForm {
   nickname: string;
@@ -312,6 +313,18 @@ const Page = () => {
               onClick={() => setIsModalOpen(true)}
             >
               계정삭제
+            </button>
+          </div>
+        </div>
+        <div className="w-full px-4 pt-4 bg-white rounded-xl">
+          <div className="pb-2 text-lg font-bold">
+            버그 제보 및 기능 개선 제안
+          </div>
+          <div className="flex flex-col items-center py-4 space-y-3 border-t-2">
+            <button className="w-full py-1 border-2 rounded-md border-slate-400">
+              <Link href="https://forms.gle/mHAKjiG51eEsZqMx5" target="_blank">
+                작성하기
+              </Link>
             </button>
           </div>
         </div>
