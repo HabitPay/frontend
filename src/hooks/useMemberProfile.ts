@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
-import { 의도된실수 } from "@/types/member";
+import { IProfileDTO } from "@/types/member";
 import { fetchMemberProfile } from "@/api/member";
 
 export const useMemberProfile = () => {
-  const [memberProfile, setMemberProfile] = useState<의도된실수 | null>(null);
+  const [memberProfile, setMemberProfile] = useState<IProfileDTO | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
