@@ -1,3 +1,10 @@
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["500"],
+});
+
 interface ICustomButton {
   onClick: () => void;
 }
@@ -6,7 +13,7 @@ const CustomButton = ({ onClick }: ICustomButton) => {
   return (
     <button
       onClick={onClick}
-      className="flex w-full justify-center items-center rounded-md bg-white px-4 py-2 text-sm font-semibold leading-6 text-neutral-500 border border-neutral-300 shadow-sm hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+      className={`flex w-full justify-center items-center rounded-md bg-white px-4 py-2 text-sm font-semibold leading-6 text-neutral-500 border border-neutral-300 shadow-sm hover:bg-neutral-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 ${roboto.className}`}
     >
       <svg
         className="mr-2 h-5 w-5"
@@ -32,7 +39,7 @@ const CustomButton = ({ onClick }: ICustomButton) => {
           d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
         ></path>
       </svg>
-      Sign in with Google
+      <span>Sign in with Google</span>
     </button>
   );
 };
