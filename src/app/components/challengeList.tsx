@@ -65,10 +65,10 @@ export default function ChallengeList() {
                 <Link
                   href={`/challenges/${challenge.id}/main`}
                   key={index}
-                  className="flex flex-col bg-white rounded-xl py-2 px-3"
+                  className="flex flex-col bg-white rounded-xl py-3 px-3"
                 >
-                  <div className="flex justify-between">
-                    <div className=" text-2xl font-semibold">
+                  <div className="flex justify-between items-center mb-2">
+                    <div className=" text-xl font-semibold">
                       {challenge.title}
                     </div>
                     <div className="flex items-center gap-1 font-light text-sm">
