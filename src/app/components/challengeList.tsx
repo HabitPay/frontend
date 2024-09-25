@@ -1,13 +1,16 @@
-import { ChallengeListResponseDTO } from "@/types/challenge";
 import { useEffect, useRef, useState } from "react";
-import apiManager from "@/api/apiManager";
+import Image from "next/image";
+import Link from "next/link";
+
+import { format } from "date-fns";
 import { useInfiniteQuery } from "react-query";
 import { AxiosError } from "axios";
-import PostItem from "./postItem";
+
+import apiManager from "@/api/apiManager";
 import { OnIntersect, useObserver } from "@/hooks/useObserver";
-import Image from "next/image";
-import { format } from "date-fns";
-import Link from "next/link";
+import { ChallengeListResponseDTO } from "@/types/challenge";
+import PostItem from "./postItem";
+import defaultProfileImage from "@/public/default-profile.jpg";
 
 export default function ChallengeList() {
   const bottom = useRef<HTMLDivElement | null>(null);
@@ -74,7 +77,7 @@ export default function ChallengeList() {
                     <div className="flex items-center gap-1 font-light text-sm">
                       <div>{challenge.hostNickname}</div>
                       <Image
-                        src={challenge.hostProfileImage}
+                        src={challenge.hostProfileImage || defaultProfileImage}
                         alt="ProfileImage of host"
                         className="rounded-full size-7"
                         width={7}
