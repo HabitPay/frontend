@@ -2,7 +2,6 @@
 
 import Frame from "@/app/components/frame";
 import PostItem from "@/app/components/postItem";
-// import { PostsFeedExample } from "@/app/components/postsFeed";
 import { ContentDTO } from "@/types/challenge";
 
 const postFeedExample: ContentDTO = {
