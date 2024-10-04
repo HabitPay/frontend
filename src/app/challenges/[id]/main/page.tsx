@@ -24,16 +24,31 @@ import Frame from "@/app/components/frame";
 import apiManager from "@/api/apiManager";
 import { useInfiniteQuery } from "react-query";
 import { AxiosError } from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import PostItem from "@/app/components/postItem";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
+  const [isAnnouncements, setIsAnnouncements] = useState(false);
+  const [announcements, setAnnouncements] =
+    useState<ChallengeContentResponseDTO | null>(null);
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
   const pathname = usePathname();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
+
   useEffect(() => {
     document.title = "Challenge Main | HabitPay";
-  }, []);
+    const getAnnouncementsPosts = async () => {
+      const res = await apiManager.get(`/challenges/${id}/posts/announcements`);
+      console.log(res.data.content);
+      if (res.data.content) {
+        setAnnouncements(res.data);
+      }
+    };
+
+    getAnnouncementsPosts();
+  }, [id]);
+
   // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
   if (isLoading) return <Loading />;
   if (error || challengeDetails === null) {
@@ -108,50 +123,40 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
             <div className="px-3 py-2 bg-white rounded-2xl">{description}</div>
           </div>
           <div className="flex flex-col mt-5 space-y-3">
-            <div className="flex items-center justify-between px-4 py-2 text-sm bg-red-100 font-extralight">
-              <div className="flex items-center space-x-4">
-                <div className="px-2 py-1 text-white bg-red-600 rounded-full">
-                  공지
+            {announcements ? (
+              <div className="flex items-center justify-between px-4 py-2 text-sm bg-red-100 font-extralight">
+                <div className="flex items-center space-x-4">
+                  <div className="px-2 py-1 text-white bg-red-600 rounded-full">
+                    공지
+                  </div>
+                  <div onClick={(prev) => setIsAnnouncements(!prev)}>
+                    챌린지 규칙입니다. 반드시 확인해주세요!
+                  </div>
+                  {isAnnouncements ? (
+                    <div className="flex flex-col gap-3">
+                      {announcements?.content?.length > 0 &&
+                        announcements.content.map((announcement) => (
+                          <PostItem {...announcement} key={announcement.id} />
+                        ))}
+                    </div>
+                  ) : null}
                 </div>
-                <div>챌린지 규칙입니다. 반드시 확인해주세요!</div>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-4"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                  />
+                </svg>
               </div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                />
-              </svg>
-            </div>
-            <div className="flex items-center justify-between px-4 py-2 text-sm bg-red-100 font-extralight">
-              <div className="flex items-center space-x-4">
-                <div className="px-2 py-1 text-white bg-red-600 rounded-full">
-                  공지
-                </div>
-                <div>챌린지 규칙입니다. 반드시 확인해주세요!</div>
-              </div>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                />
-              </svg>
-            </div>
+            ) : null}
           </div>
           <div className="flex flex-col pb-4 mt-6">
             <div className="flex items-center justify-between text-sm">
@@ -181,9 +186,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
               />
             ) : (
               <>
-                <span className="px-5 py-3 text-sm font-light bg-white rounded-xl">
-                  어제
-                </span>
                 <PostsFeed id={id} />
                 <FloatingButton href={`${getParentPath(pathname)}/post`}>
                   <svg

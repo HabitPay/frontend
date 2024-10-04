@@ -8,9 +8,10 @@ import { OnIntersect, useObserver } from "@/hooks/useObserver";
 
 interface PostsFeedProps {
   id: string;
+  isAnnouncements?: boolean;
 }
 
-export default function PostsFeed({ id }: PostsFeedProps) {
+export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
   const bottom = useRef<HTMLDivElement | null>(null);
   const OFFSET = 10;
   const getAnnouncementsPosts = async ({
@@ -37,7 +38,6 @@ export default function PostsFeed({ id }: PostsFeedProps) {
         page: pageParam,
       },
     });
-    console.log("res:", res.data.data);
     return res.data.data;
   };
   getPosts({ pageParam: 0 });
@@ -56,7 +56,6 @@ export default function PostsFeed({ id }: PostsFeedProps) {
     {
       getNextPageParam: (lastPage) => {
         if (lastPage.last === false) {
-          console.log("it is not last page");
           return lastPage.pageable.pageNumber + 1;
         }
         return undefined;
