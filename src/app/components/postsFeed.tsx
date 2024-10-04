@@ -19,7 +19,7 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
   }: {
     pageParam?: number;
   }): Promise<ChallengeContentResponseDTO> => {
-    const res = await apiManager.get(`/challenges/${id}/announcements`, {
+    const res = await apiManager.get(`/challenges/${id}/posts/announcements`, {
       params: {
         limit: OFFSET,
         offset: pageParam,
