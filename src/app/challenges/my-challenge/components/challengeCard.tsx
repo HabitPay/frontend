@@ -13,7 +13,6 @@ interface IChallengeCardProps {
 
 function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
   const now = new Date();
-  console.log(items);
   return (
     <>
       {items.map((item, index) => {
@@ -62,7 +61,7 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
                         )}
                     </div>
                   </div>
-                  
+
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
