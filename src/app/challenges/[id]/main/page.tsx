@@ -63,9 +63,8 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     };
     getAnnouncementsPosts();
     getChallengeInfo();
-  }, [id]);
+  }, [id, selectedDays]);
 
-  // TODO: CSS 적용하기 or 스켈레톤으로 처리하기
   if (isLoading) return <Loading />;
   if (error || challengeDetails === null) {
     setToastPopup({
