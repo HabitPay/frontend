@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 
-import { format, differenceInDays, set, addDays } from "date-fns";
+import { format, differenceInDays } from "date-fns";
 import { useForm, Controller } from "react-hook-form";
 import { ko } from "date-fns/locale";
 import { addYears } from "date-fns";
@@ -14,7 +14,6 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { addClassNames } from "@/libs/utils";
 import Label from "../components/label";
 import Button from "@/app/components/button";
-import { convertKstDate } from "@/libs/date";
 import apiManager from "@/api/apiManager";
 import { Days, SelectedStatus } from "@/types/enums";
 import { useRouter } from "next/navigation";
@@ -38,8 +37,8 @@ interface IChallengeForm {
 interface IChallengeDto {
   title: string;
   description: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   participatingDays: number;
   feePerAbsence: number;
 }
@@ -82,8 +81,8 @@ function Page() {
         description: form.description,
         participatingDays: form.participatingDays,
         feePerAbsence: form.feePerAbsence,
-        startDate: convertKstDate(form.startDate, form.startTime),
-        endDate: convertKstDate(form.endDate, form.endTime),
+        startDate: new Date(`${form.startDate} ${form.startTime}`),
+        endDate: new Date(`${form.endDate} ${form.endTime}`),
       };
       const res = await apiManager.post("/challenges", data);
       setToastPopup({
