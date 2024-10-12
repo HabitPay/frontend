@@ -38,8 +38,8 @@ interface IChallengeForm {
 interface IChallengeDto {
   title: string;
   description: string;
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
   participatingDays: number;
   feePerAbsence: number;
 }
@@ -82,8 +82,8 @@ function Page() {
         description: form.description,
         participatingDays: form.participatingDays,
         feePerAbsence: form.feePerAbsence,
-        startDate: convertKstDate(form.startDate, form.startTime),
-        endDate: convertKstDate(form.endDate, form.endTime),
+        startDate: new Date(`${form.startDate} ${form.startTime}`),
+        endDate: new Date(`${form.endDate} ${form.endTime}`),
       };
       const res = await apiManager.post("/challenges", data);
       setToastPopup({
