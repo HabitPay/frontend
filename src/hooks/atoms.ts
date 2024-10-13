@@ -8,5 +8,5 @@ export interface IToast {
 
 export const toastPopupAtom = atom<IToast>({
   key: "toastPopup",
-  default: { message: "", top: false, success: true },
+  default: { message: "", top: true, success: true },
 });
