@@ -10,10 +10,7 @@ import FloatingButton from "@/app/components/floatingButton";
 import Menu from "../components/menu";
 import ChallengeTitle from "../components/challengeTitle";
 import IsCompleteToday from "../components/isCompleteToday";
-import {
-  calculateSelectedDays,
-  useChallengeDetails,
-} from "@/hooks/useChallengeDetails";
+import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Enrollment from "../components/enrollment";
 import { addClassNames, getParentPath } from "@/libs/utils";
 import PostsFeed from "@/app/components/postsFeed";
@@ -27,19 +24,17 @@ import Frame from "@/app/components/frame";
 import apiManager from "@/api/apiManager";
 import { useEffect, useState } from "react";
 import PostItem from "@/app/components/postItem";
-import { Days, SelectedStatus } from "@/types/enums";
+import { Days } from "@/types/enums";
 import Label from "../../components/label";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const [challengeDetail, setChallengeDetail] = useState(false);
-  const [selectedDays, setSelectedDays] = useState<number[]>(
-    new Array(7).fill(SelectedStatus.NOT_SELECTED)
-  );
-  const [totalAbsenceFee, setTotalAbsenceFee] = useState(0);
+  const [totalAbsenceFee, setTotalAbsenceFee] = useState<number | undefined>(0);
   const [isAnnouncements, setIsAnnouncements] = useState(false);
   const [announcements, setAnnouncements] =
     useState<ChallengeContentResponseDTO | null>(null);
-  const { challengeDetails, isLoading, error } = useChallengeDetails(id);
+  const { challengeDetails, selectedDays, isLoading, error } =
+    useChallengeDetails(id);
   const pathname = usePathname();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
@@ -52,18 +47,9 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
         setAnnouncements(res.data);
       }
     };
-    const getChallengeInfo = async () => {
-      const res = await apiManager.get(`/challenges/${id}`);
-      if (res.data.data) {
-        setTotalAbsenceFee(res.data.data.totalAbsenceFee);
-        setSelectedDays(
-          calculateSelectedDays(selectedDays, res.data.data.participatingDays)
-        );
-      }
-    };
     getAnnouncementsPosts();
-    getChallengeInfo();
-  }, [id, selectedDays]);
+    setTotalAbsenceFee(challengeDetails?.totalAbsenceFee);
+  }, [id, challengeDetails?.totalAbsenceFee]);
 
   if (isLoading) return <Loading />;
   if (error || challengeDetails === null) {
