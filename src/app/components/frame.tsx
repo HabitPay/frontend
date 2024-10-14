@@ -36,11 +36,7 @@ const Frame = ({
     }
   };
   return (
-    <div
-      className={`h-screen max-w-xl mx-auto shadow-xl ${
-        autoHeight && "h-auto"
-      }`}
-    >
+    <div className={`min-h-screen max-w-xl mx-auto shadow-xl h-auto`}>
       <div
         className={`z-50 fixed top-0 flex items-center justify-center w-full h-12 max-w-xl px-10 text-lg font-medium text-gray-800 ${
           isWhiteTitle ? "bg-white" : "bg-habit-background"

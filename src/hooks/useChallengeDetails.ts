@@ -5,7 +5,7 @@ import { SelectedStatus } from "@/types/enums";
 import { fetchChallengeDetails } from "../api/challenge";
 import Error from "next/error";
 
-const calculateSelectedDays = (selectedDays: number[], days: number) => {
+export const calculateSelectedDays = (selectedDays: number[], days: number) => {
   selectedDays.forEach((_, idx) => {
     if (days & (1 << (6 - idx))) {
       selectedDays[idx] = SelectedStatus.SELECTED;

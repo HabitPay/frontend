@@ -13,6 +13,7 @@ import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { IChallengeDetailsDto } from "@/types/challenge";
 
 export interface imageInfo {
   file: File;
@@ -38,7 +39,14 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   const router = useRouter();
   useEffect(() => {
     document.title = "Challenge Post | HabitPay";
-  }, []);
+    const getChallengeInfo = async () => {
+      const res = await apiManager.get(`/challenges/${id}`);
+      const data: IChallengeDetailsDto = res.data.data;
+      setIsManager(data.isHost);
+    };
+
+    getChallengeInfo();
+  }, [id]);
 
   const currentPath = usePathname();
 
@@ -236,7 +244,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
             {isManager ? (
               <div
                 onClick={() => setIsAnnouncement((prev) => !prev)}
-                className="flex items-center space-x-1"
+                className="flex items-center space-x-1 w-24"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -257,11 +265,11 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                     d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                   />
                 </svg>
-                <span className="text-lg ">공지로 등록</span>
+                <span className="text-sm">공지로 등록</span>
               </div>
             ) : null}
           </div>
-          <button className="px-12 py-4 text-lg font-thin text-white border border-transparent shadow-sm bg-habit-green hover:bg-green-600 rounded-2xl focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:outline-none">
+          <button className="px-10 py-2 text-lg font-thin text-white border border-transparent shadow-sm bg-habit-green hover:bg-green-600 rounded-2xl focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:outline-none">
             저장
           </button>
         </nav>
