@@ -13,7 +13,6 @@ interface IChallengeCardProps {
 
 function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
   const now = new Date();
-  console.log(items);
   return (
     <>
       {items.map((item, index) => {

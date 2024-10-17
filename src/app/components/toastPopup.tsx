@@ -18,7 +18,7 @@ export default function ToastPopup() {
           setToastPopup({ message: "", top: true, success: true });
         }, 500);
       }, TOAST_DISMISS_TIMEOUT);
-
+      console.log(toastPopup);
       return () => {
         clearTimeout(timer);
       };
