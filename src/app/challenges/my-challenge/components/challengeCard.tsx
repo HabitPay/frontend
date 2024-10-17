@@ -18,7 +18,8 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
     <>
       {items.map((item, index) => {
         const progressPercent: number =
-          (item.successCount / item.totalParticipatingDaysCount) * 100;
+          Math.round(item.successCount / item.totalParticipatingDaysCount) *
+          100;
 
         return (
           <div
@@ -62,7 +63,7 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
                         )}
                     </div>
                   </div>
-                  
+
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"

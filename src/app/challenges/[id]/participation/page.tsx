@@ -7,22 +7,56 @@ import IsCompleteToday from "../components/isCompleteToday";
 import Calendar from "react-calendar";
 import FloatingButton from "@/app/components/floatingButton";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
-import { IChallengeDetailsDto } from "@/types/challenge";
+import {
+  ChallengeContentResponseDTO,
+  ContentDTO,
+  IChallengeDetailsDto,
+} from "@/types/challenge";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import Loading from "../main/loading";
-import { differenceInDays, isBefore } from "date-fns";
+import { differenceInDays, isBefore, isSameDay } from "date-fns";
 import Frame from "@/app/components/frame";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import apiManager from "@/api/apiManager";
+import { getParentPath } from "@/libs/utils";
+
+import "@/styles/CustomCalendar.css";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
+  const days = [
+    new Date(2024, 9, 14), // 성공 (예: 2024-10-14, 월요일)
+    new Date(2024, 9, 16), // 성공 (예: 2024-10-16, 수요일)
+  ];
+
+  const failedDays = [
+    new Date(2024, 9, 18), // 실패 (예: 2024-10-18, 금요일)
+  ];
+
+  const pathname = usePathname();
   const currentPath = usePathname().split("/");
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
+  const [myPosts, setMyPosts] = useState<ContentDTO[]>([]);
   const router = useRouter();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   useEffect(() => {
+    const getMyPosts = async () => {
+      try {
+        const res = await apiManager.get(`/challenges/${id}/posts/me`);
+        const data: ChallengeContentResponseDTO = res.data?.data;
+        console.log(data);
+      } catch (error) {
+        setToastPopup({
+          // @ts-ignore
+          message: error.data.message,
+          top: false,
+          success: false,
+        });
+      }
+    };
+    getMyPosts();
     document.title = "My Participation | HabitPay";
-  }, []);
+  }, [id, setToastPopup]);
   if (isLoading) return <Loading />;
   if (error || challengeDetails === null) {
     setToastPopup({
@@ -46,6 +80,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   }: IChallengeDetailsDto = challengeDetails;
 
   const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
+
   return (
     <Frame hasTabBar canGoBack>
       <div className="flex flex-col divide-y-2">
@@ -61,8 +96,24 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           />
           <IsCompleteToday complete={false} />
         </div>
-        <div className="flex flex-col px-6 py-6">
-          <Calendar className="px-8 py-6 space-y-4 bg-white shadow-lg" />
+        <div className="flex flex-col px-6 py-6 ">
+          <Calendar
+            className="px-8 py-6 space-y-4 bg-white shadow-lg mx-auto"
+            formatDay={(locale, date) => date.getDate().toString()}
+            tileContent={({ date }) => {
+              return (
+                <div className="flex justify-center items-center relative">
+                  {days.some((day) => isSameDay(day, date)) && (
+                    <div className="dot-success"></div>
+                  )}
+                  {failedDays.some((day) => isSameDay(day, date)) && (
+                    <div className="dot-failure"></div>
+                  )}
+                  <div className="dot-none"></div>
+                </div>
+              );
+            }}
+          />
           {/* 참여 기록 컴포넌트화 하기 */}
           <div className="mt-4 space-y-4">
             <span className="px-4 text-sm">참여 기록</span>
@@ -73,7 +124,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           </div>
         </div>
       </div>
-      <FloatingButton href={"챌린지 작성"}>
+      <FloatingButton href={`${getParentPath(pathname)}/post`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
