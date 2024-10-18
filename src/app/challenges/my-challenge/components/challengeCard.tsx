@@ -16,7 +16,9 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
   return (
     <>
       {items.map((item, index) => {
-        let progressPercent: number = Math.round(0 / 0) * 100;
+        let progressPercent: number =
+          Math.round(item.successCount / item.totalParticipatingDaysCount) *
+          100;
         if (isNaN(progressPercent) || !isFinite(progressPercent)) {
           progressPercent = 100;
         }
