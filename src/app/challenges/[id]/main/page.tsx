@@ -245,7 +245,10 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 벌금 현황 보기
               </Link>
             </div>
-            <IsCompleteToday complete={false} />
+            <IsCompleteToday
+              isParticipatedToday={challengeDetails.isParticipatedToday}
+              isTodayParticipatingDay={challengeDetails.isTodayParticipatingDay}
+            />
           </div>
         </div>
         <div className="flex flex-col px-6 pt-4">

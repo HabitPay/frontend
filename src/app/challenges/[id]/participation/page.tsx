@@ -94,7 +94,10 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
             participants={numberOfParticipants}
             profileImages={enrolledMembersProfileImageList}
           />
-          <IsCompleteToday complete={false} />
+          <IsCompleteToday
+            isParticipatedToday={challengeDetails.isParticipatedToday}
+            isTodayParticipatingDay={challengeDetails.isTodayParticipatingDay}
+          />
         </div>
         <div className="flex flex-col px-6 py-6 ">
           <Calendar
