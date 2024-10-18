@@ -21,6 +21,7 @@ const PostItem = ({
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    infinite: false,
   };
   return (
     <div className="flex flex-col px-5 py-5 bg-white rounded-2xl">

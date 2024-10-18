@@ -16,9 +16,12 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
   return (
     <>
       {items.map((item, index) => {
-        const progressPercent: number =
-          (item.successCount / item.totalParticipatingDaysCount) * 100;
-
+        let progressPercent: number =
+          Math.round(item.successCount / item.totalParticipatingDaysCount) *
+          100;
+        if (isNaN(progressPercent) || !isFinite(progressPercent)) {
+          progressPercent = 100;
+        }
         return (
           <div
             key={index}
@@ -170,7 +173,7 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
             {challengeState == ChallengeStatesEnum.InProgress &&
               item.isTodayParticipatingDay &&
               item.isParticipatedToday && (
-                <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-green rounded-xl">
+                <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-gray  rounded-xl">
                   이미 참여했습니다.
                 </button>
               )}
@@ -178,9 +181,12 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
             {challengeState == ChallengeStatesEnum.InProgress &&
               item.isTodayParticipatingDay &&
               !item.isParticipatedToday && (
-                <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-green rounded-xl">
+                <Link
+                  href={`/challenges/${item.challengeId}/post`}
+                  className="w-full py-[6px] text-sm font-thin text-center text-white bg-habit-green rounded-xl"
+                >
                   참여하기
-                </button>
+                </Link>
               )}
 
             {challengeState == ChallengeStatesEnum.InProgress &&

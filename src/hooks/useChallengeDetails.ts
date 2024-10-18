@@ -27,8 +27,8 @@ export const useChallengeDetails = (id: string) => {
     const fetchData = async () => {
       try {
         const data = await fetchChallengeDetails(id);
-
         if (data) {
+          console.log(data);
           setChallengeDetails(data);
           setSelectedDays(
             calculateSelectedDays(selectedDays, data.participatingDays)

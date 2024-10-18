@@ -3,6 +3,7 @@
 import { NextPage } from "next";
 import { useEffect, useState } from "react";
 import ConfirmModal from "../components/confirmModal";
+import Calendar from "react-calendar";
 
 const Page: NextPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,15 +15,7 @@ const Page: NextPage = () => {
   };
   return (
     <div>
-      <span>def</span>
-      <span>ghi</span>
-      <ConfirmModal
-        onClick={onClick}
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      >
-        삭제
-      </ConfirmModal>
+      <Calendar />
     </div>
   );
 };
