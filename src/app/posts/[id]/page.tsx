@@ -9,6 +9,7 @@ const postFeedExample: ContentDTO = {
   challengeEnrollmentId: 1,
   content: "content",
   writer: "writer",
+  profileUrl: "",
   isAnnouncement: false,
   createdAt: "2021-09-01",
   photoViewList: [],
