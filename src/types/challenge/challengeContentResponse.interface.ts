@@ -11,6 +11,7 @@ export interface ContentDTO {
   challengeEnrollmentId: number;
   content: string;
   writer: string;
+  profileUrl: string;
   isAnnouncement: boolean;
   createdAt: string;
   photoViewList: PhotoViewDTO[];

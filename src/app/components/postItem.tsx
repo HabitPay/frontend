@@ -7,10 +7,12 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { formatToTimeAgo } from "@/libs/utils";
 import { ContentDTO } from "@/types/challenge";
+import { formatDistanceToNow, parseISO } from "date-fns";
 
 const PostItem = ({
   // profileImage,
   writer,
+  profileUrl,
   createdAt,
   isAnnouncement,
   photoViewList,
@@ -26,13 +28,13 @@ const PostItem = ({
   return (
     <div className="flex flex-col px-5 py-5 bg-white rounded-2xl">
       <div className="flex items-center gap-2 pb-4 border-b-2">
-        {/* <Image
-          src={profileImage}
+        <Image
+          src={profileUrl}
           className="z-30 rounded-full size-12"
           alt="profileImage of writer"
           width={12}
           height={12}
-        /> */}
+        />
         <div className="flex flex-col justify-center gap-1">
           <span className="text-sm font-semibold">{writer}</span>
           <span className="text-sm text-habit-gray">
