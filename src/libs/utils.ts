@@ -18,11 +18,24 @@ export function getParentPath(pathname: string) {
 
 // 게시물등에서 사용하는 시간 함수. (몇 일 전으로 표기 해줌.)
 export function formatToTimeAgo(date: string): string {
-  const dayInMs = 1000 * 60 * 60 * 24;
+  const SEC = 1000;
+  const MIN = SEC * 60;
+  const HOUR = MIN * 60;
+  const DAY = HOUR * 24;
+
   const time = new Date(date).getTime();
+  const kstTime = new Date(time + 9 * HOUR).getTime();
   const now = new Date().getTime();
-  const diff = Math.round((time - now) / dayInMs);
+  const diff = kstTime - now;
 
   const formatter = new Intl.RelativeTimeFormat("ko");
-  return formatter.format(diff, "days");
+  if (-diff <= MIN) {
+    return formatter.format(Math.round(diff / SEC), "seconds");
+  } else if (-diff <= HOUR) {
+    return formatter.format(Math.round(diff / MIN), "minutes");
+  } else if (-diff <= DAY) {
+    return formatter.format(Math.round(diff / HOUR), "hours");
+  } else {
+    return formatter.format(Math.round(diff / DAY), "days");
+  }
 }

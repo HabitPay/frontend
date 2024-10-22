@@ -122,6 +122,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
       });
       const preSignedUrls: string[] = res.data?.data;
       uploadImagesToS3(preSignedUrls, form.photos);
+      router.push(`/challenges/${id}/main`);
     } catch (error) {
       setToastPopup({
         // @ts-ignore
