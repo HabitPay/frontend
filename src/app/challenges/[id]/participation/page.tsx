@@ -3,7 +3,6 @@
 import Menu from "../components/menu";
 import { usePathname, useRouter } from "next/navigation";
 import ChallengeTitle from "../components/challengeTitle";
-import IsCompleteToday from "../components/isCompleteToday";
 import Calendar from "react-calendar";
 import FloatingButton from "@/app/components/floatingButton";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
@@ -22,6 +21,7 @@ import apiManager from "@/api/apiManager";
 import { getParentPath } from "@/libs/utils";
 
 import "@/styles/CustomCalendar.css";
+import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const days = [
@@ -94,7 +94,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
             participants={numberOfParticipants}
             profileImages={enrolledMembersProfileImageList}
           />
-          <IsCompleteToday
+          <ChallengeParticipationStatus
             isParticipatedToday={challengeDetails.isParticipatedToday}
             isTodayParticipatingDay={challengeDetails.isTodayParticipatingDay}
           />

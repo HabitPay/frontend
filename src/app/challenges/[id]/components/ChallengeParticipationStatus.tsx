@@ -1,12 +1,12 @@
-interface IIsCompleteTodayProps {
+interface IChallengeParticipationStatusProps {
   isParticipatedToday: boolean;
   isTodayParticipatingDay: boolean;
 }
 
-const IsCompleteToday = ({
+const ChallengeParticipationStatus = ({
   isParticipatedToday,
   isTodayParticipatingDay,
-}: IIsCompleteTodayProps) => {
+}: IChallengeParticipationStatusProps) => {
   return isParticipatedToday === true ? (
     <span className="mt-5 text-center text-habit-green">
       오늘은 챌린지에 참여완료 하셨습니다.
@@ -22,4 +22,4 @@ const IsCompleteToday = ({
   );
 };
 
-export default IsCompleteToday;
+export default ChallengeParticipationStatus;
