@@ -5,3 +5,4 @@ export * from "./challengePatchDto.interface";
 export * from "./challengeContentResponse.interface";
 export * from "./challengeFeeList.interface";
 export * from "./challengeListResponse.interface";
+export * from "./challengeParticipation.interface";
