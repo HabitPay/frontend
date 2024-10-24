@@ -154,6 +154,16 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                   </div>
                 ))
               : null}
+            {participationRecords.failureDayList
+              ? participationRecords.failureDayList.map((item, index) => (
+                  <div
+                    key={index}
+                    className="px-5 py-3 text-sm bg-white rounded-xl"
+                  >
+                    <div className="space-x-2">❌{` ${item}`}</div>
+                  </div>
+                ))
+              : null}
           </div>
         </div>
       </div>
