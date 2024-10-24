@@ -7,10 +7,8 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { formatToTimeAgo } from "@/libs/utils";
 import { ContentDTO } from "@/types/challenge";
-import { formatDistanceToNow, parseISO } from "date-fns";
 
 const PostItem = ({
-  // profileImage,
   writer,
   profileUrl,
   createdAt,
