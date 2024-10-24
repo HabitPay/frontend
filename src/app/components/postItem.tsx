@@ -7,6 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import { formatToTimeAgo } from "@/libs/utils";
 import { ContentDTO } from "@/types/challenge";
+import defaultProfileImage from "@/public/default-profile.jpg";
 
 const PostItem = ({
   writer,
@@ -27,7 +28,7 @@ const PostItem = ({
     <div className="flex flex-col px-5 py-5 bg-white rounded-2xl">
       <div className="flex items-center gap-2 pb-4 border-b-2">
         <Image
-          src={profileUrl}
+          src={profileUrl || defaultProfileImage}
           className="z-30 rounded-full size-12"
           alt="profileImage of writer"
           width={12}

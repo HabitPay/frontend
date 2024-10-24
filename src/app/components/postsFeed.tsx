@@ -51,7 +51,7 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
     isFetchingNextPage,
     status,
   } = useInfiniteQuery<ChallengeContentResponseDTO, AxiosError>(
-    "feedPosts",
+    ["feedPosts", id],
     getPosts,
     {
       getNextPageParam: (lastPage) => {
