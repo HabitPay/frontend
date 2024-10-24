@@ -2,30 +2,30 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-
+import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 import { differenceInDays, isBefore } from "date-fns";
 
 import FloatingButton from "@/app/components/floatingButton";
-import Menu from "../components/menu";
-import ChallengeTitle from "../components/challengeTitle";
-import IsCompleteToday from "../components/isCompleteToday";
-import { useChallengeDetails } from "@/hooks/useChallengeDetails";
-import Enrollment from "../components/enrollment";
-import { addClassNames, getParentPath } from "@/libs/utils";
+import Frame from "@/app/components/frame";
+import PostItem from "@/app/components/postItem";
 import PostsFeed from "@/app/components/postsFeed";
+import apiManager from "@/api/apiManager";
 import {
   ChallengeContentResponseDTO,
   IChallengeDetailsDto,
 } from "@/types/challenge";
-import { toastPopupAtom } from "@/hooks/atoms";
-import Loading from "./loading";
-import Frame from "@/app/components/frame";
-import apiManager from "@/api/apiManager";
-import { useEffect, useState } from "react";
-import PostItem from "@/app/components/postItem";
 import { Days } from "@/types/enums";
+import { addClassNames, getParentPath } from "@/libs/utils";
+import { toastPopupAtom } from "@/hooks/atoms";
+import { useChallengeDetails } from "@/hooks/useChallengeDetails";
+
+import Menu from "../components/menu";
+import ChallengeTitle from "../components/challengeTitle";
+import Enrollment from "../components/enrollment";
 import Label from "../../components/label";
+import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
+import Loading from "./loading";
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const [challengeDetail, setChallengeDetail] = useState(false);
@@ -245,7 +245,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 벌금 현황 보기
               </Link>
             </div>
-            <IsCompleteToday
+            <ChallengeParticipationStatus
               isParticipatedToday={challengeDetails.isParticipatedToday}
               isTodayParticipatingDay={challengeDetails.isTodayParticipatingDay}
             />
