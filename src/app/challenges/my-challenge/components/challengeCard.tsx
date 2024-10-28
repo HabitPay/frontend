@@ -41,7 +41,11 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
                       />
                       <div className="flex items-center justify-center rounded-full size-12 bg-habit-lightgray">
                         <span className="text-lg text-gray-600">
-                          {`+${item.numberOfParticipants - 1}`}
+                          {`+${
+                            item.numberOfParticipants === 0
+                              ? 0
+                              : item.numberOfParticipants - 1
+                          }`}
                         </span>
                       </div>
                     </div>
