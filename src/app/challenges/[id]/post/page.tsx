@@ -114,7 +114,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
         isAnnouncement: isAnnouncement,
         photos: convertFilesToPhotoDTOs(form.photos),
       };
-      const res = await apiManager.post(`/challenges/${id}/post`, data);
+      const res = await apiManager.post(`/challenges/${id}/posts`, data);
       setToastPopup({
         message: res.data.message,
         top: false,
