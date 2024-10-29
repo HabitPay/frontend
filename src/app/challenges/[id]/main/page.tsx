@@ -239,7 +239,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 모였습니다!
               </span>
               <Link
-                href={`/challenges/${id}/fee_table`}
+                href={`/challenges/${id}/fee-table`}
                 className="px-3 py-2 text-white rounded-xl font-extralight bg-habit-green"
               >
                 벌금 현황 보기
