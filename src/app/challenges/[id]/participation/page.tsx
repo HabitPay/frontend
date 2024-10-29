@@ -8,14 +8,14 @@ import FloatingButton from "@/app/components/floatingButton";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import {
   ChallengeContentResponseDTO,
-  ChallengeParticipation,
-  ContentDTO,
+  ChallengeParticipationDto,
+  ChallengeParticipationRecords,
   IChallengeDetailsDto,
 } from "@/types/challenge";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import Loading from "../main/loading";
-import { differenceInDays, isBefore, isSameDay } from "date-fns";
+import { differenceInDays, format, isBefore } from "date-fns";
 import Frame from "@/app/components/frame";
 import { useEffect, useState } from "react";
 import apiManager from "@/api/apiManager";
@@ -26,20 +26,11 @@ import ChallengeParticipationStatus from "../components/ChallengeParticipationSt
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
   const [participationRecords, setParticipationRecords] =
-    useState<ChallengeParticipation>({
-      failureDayList: [],
-      successDayList: [],
-      upcomingDayList: [],
+    useState<ChallengeParticipationRecords>({
+      failureDaysSet: new Set(),
+      successDaysSet: new Set(),
+      upcomingDaysSet: new Set(),
     });
-  const days = [
-    new Date(2024, 9, 14), // 성공 (예: 2024-10-14, 월요일)
-    new Date(2024, 9, 16), // 성공 (예: 2024-10-16, 수요일)
-  ];
-
-  const failedDays = [
-    new Date(2024, 9, 18), // 실패 (예: 2024-10-18, 금요일)
-  ];
-
   const pathname = usePathname();
   const currentPath = usePathname().split("/");
   const { challengeDetails, isLoading, error } = useChallengeDetails(id);
@@ -63,8 +54,12 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     const getParticipationRecords = async () => {
       try {
         const res = await apiManager.get(`/challenges/${id}/records`);
-        const data: ChallengeParticipation = res.data?.data;
-        setParticipationRecords(data);
+        const data: ChallengeParticipationDto = res.data?.data;
+        setParticipationRecords({
+          successDaysSet: new Set(data.successDayList),
+          failureDaysSet: new Set(data.failureDayList),
+          upcomingDaysSet: new Set(data.upcomingDayList),
+        });
       } catch (error) {
         setToastPopup({
           // @ts-ignore
@@ -91,13 +86,10 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   }
   const {
     title,
-    description,
     startDate,
     endDate,
     numberOfParticipants,
     enrolledMembersProfileImageList,
-    isHost,
-    isMemberEnrolledInChallenge,
   }: IChallengeDetailsDto = challengeDetails;
 
   const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
@@ -125,17 +117,18 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
             className="px-8 py-6 space-y-4 bg-white shadow-lg mx-auto"
             formatDay={(locale, date) => date.getDate().toString()}
             tileContent={({ date }) => {
+              const day = format(date, "yyyy-MM-dd");
               return (
                 <div className="flex justify-center items-center relative">
-                  {participationRecords.successDayList.some((day) =>
-                    isSameDay(new Date(day), date)
-                  ) && <div className="dot-success"></div>}
-                  {participationRecords.failureDayList.some((day) =>
-                    isSameDay(new Date(day), date)
-                  ) && <div className="dot-failure"></div>}
-                  {participationRecords.upcomingDayList.some((day) =>
-                    isSameDay(new Date(day), date)
-                  ) && <div className="dot-yet"></div>}
+                  {participationRecords.successDaysSet.has(day) && (
+                    <div className="dot-success"></div>
+                  )}
+                  {participationRecords.failureDaysSet.has(day) && (
+                    <div className="dot-failure"></div>
+                  )}
+                  {participationRecords.upcomingDaysSet.has(day) && (
+                    <div className="dot-yet"></div>
+                  )}
 
                   <div className="dot-none"></div>
                 </div>
@@ -144,25 +137,29 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           />
           <div className="mt-4 space-y-4">
             <span className="px-4 text-sm">참여 기록</span>
-            {participationRecords.successDayList
-              ? participationRecords.successDayList.map((item, index) => (
-                  <div
-                    key={index}
-                    className="px-5 py-3 text-sm bg-white rounded-xl"
-                  >
-                    <div className="space-x-2">✅{` ${item}`}</div>
-                  </div>
-                ))
+            {participationRecords.successDaysSet
+              ? Array.from(participationRecords.successDaysSet).map(
+                  (item, index) => (
+                    <div
+                      key={index}
+                      className="px-5 py-3 text-sm bg-white rounded-xl"
+                    >
+                      <div className="space-x-2">✅{` ${item}`}</div>
+                    </div>
+                  )
+                )
               : null}
-            {participationRecords.failureDayList
-              ? participationRecords.failureDayList.map((item, index) => (
-                  <div
-                    key={index}
-                    className="px-5 py-3 text-sm bg-white rounded-xl"
-                  >
-                    <div className="space-x-2">❌{` ${item}`}</div>
-                  </div>
-                ))
+            {participationRecords.failureDaysSet
+              ? Array.from(participationRecords.failureDaysSet).map(
+                  (item, index) => (
+                    <div
+                      key={index}
+                      className="px-5 py-3 text-sm bg-white rounded-xl"
+                    >
+                      <div className="space-x-2">❌{` ${item}`}</div>
+                    </div>
+                  )
+                )
               : null}
           </div>
         </div>
