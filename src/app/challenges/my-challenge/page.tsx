@@ -68,7 +68,7 @@ function Page() {
           />
         </div>
       </div>
-      <FloatingButton href="/challenges/create_challenge">
+      <FloatingButton href="/challenges/create-challenge">
         <div className="flex items-center justify-center text-sm">
           <svg
             xmlns="http://www.w3.org/2000/svg"
