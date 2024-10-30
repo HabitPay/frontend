@@ -9,7 +9,6 @@ import { AxiosError } from "axios";
 import apiManager from "@/api/apiManager";
 import { OnIntersect, useObserver } from "@/hooks/useObserver";
 import { ChallengeListResponseDTO } from "@/types/challenge";
-import PostItem from "./postItem";
 import defaultProfileImage from "@/public/default-profile.jpg";
 
 export default function ChallengeList() {
@@ -29,27 +28,20 @@ export default function ChallengeList() {
   };
   getChallengeList({ pageParam: 0 });
 
-  const {
-    data,
-    error,
-    fetchNextPage,
-    hasNextPage,
-    isFetching,
-    isFetchingNextPage,
-    status,
-  } = useInfiniteQuery<ChallengeListResponseDTO, AxiosError>(
-    "challengeList",
-    getChallengeList,
-    {
-      getNextPageParam: (lastPage) => {
-        if (lastPage.hasNextPage === true) {
-          console.log("it is not last page");
-          return lastPage.page + 1;
-        }
-        return undefined;
-      },
-    }
-  );
+  const { data, error, fetchNextPage, isFetchingNextPage, status } =
+    useInfiniteQuery<ChallengeListResponseDTO, AxiosError>(
+      "challengeList",
+      getChallengeList,
+      {
+        getNextPageParam: (lastPage) => {
+          if (lastPage.hasNextPage === true) {
+            console.log("it is not last page");
+            return lastPage.page + 1;
+          }
+          return undefined;
+        },
+      }
+    );
 
   const onIntersect: OnIntersect = ([entry]) =>
     entry.isIntersecting && fetchNextPage();

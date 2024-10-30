@@ -34,17 +34,18 @@ const PostItem = ({
           width={12}
           height={12}
         />
+
         <div className="flex flex-col justify-center gap-1">
           <span className="text-sm font-semibold">{writer}</span>
           <span className="text-sm text-habit-gray">
             {formatToTimeAgo(createdAt.toString())}
           </span>
         </div>
-        {isAnnouncement ? (
+        {/* {isAnnouncement ? (
           <div className="px-2 py-1 ml-auto text-sm font-light text-white bg-red-600 rounded-2xl">
             공지
           </div>
-        ) : null}
+        ) : null} */}
       </div>
       <div className="flex flex-col gap-5 pt-4">
         <Slider {...slickSettings}>
@@ -53,7 +54,7 @@ const PostItem = ({
               <Image
                 src={item.imageUrl}
                 className="object-contain"
-                fill
+                layout="fill"
                 alt={`image ${index}`}
               />
             </div>
