@@ -39,3 +39,11 @@ export function formatToTimeAgo(date: string): string {
     return formatter.format(Math.round(diff / DAY), "days");
   }
 }
+
+export function arrayToFileList(filesArray: File[]) {
+  const dataTransfer = new DataTransfer();
+  filesArray.forEach((file) => {
+    dataTransfer.items.add(file);
+  });
+  return dataTransfer.files;
+}

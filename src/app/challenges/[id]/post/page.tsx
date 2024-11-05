@@ -2,7 +2,7 @@
 
 import Frame from "@/app/components/frame";
 import { MB, validImageExtensions } from "@/libs/constants";
-import { addClassNames } from "@/libs/utils";
+import { addClassNames, arrayToFileList } from "@/libs/utils";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -30,6 +30,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     register,
     handleSubmit,
     setError,
+    setValue,
     formState: { errors },
   } = useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
@@ -48,6 +49,9 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     getChallengeInfo();
   }, [id]);
 
+  useEffect(() => {
+    console.log(imageList);
+  }, [imageList]);
   const currentPath = usePathname();
 
   const uploadImageToS3 = async (
@@ -108,6 +112,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   };
 
   const onSubmitWithValidation = async (form: IForm) => {
+    console.log("onSubmit", form.photos);
     try {
       const data: ICreatePostDTO = {
         content: form.content,
@@ -139,34 +144,43 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     const files = event.target.files;
     if (!files || files.length <= 0) return;
 
-    const previewList: string[] = [];
     const fileList: File[] = Array.from(files);
-    const imageList: imageInfo[] = [];
+    const newImageList: imageInfo[] = [];
 
-    {
-      if (files.length > 5) {
-        setError("photos", {
-          message: "사진은 최대 5장까지 업로드 가능합니다.",
-        });
-        return;
-      }
-
-      if (!fileList.every((file) => validImageExtensions.includes(file.type))) {
-        setError("photos", {
-          message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
-        });
-        return;
-      }
-
-      if (!fileList.every((file) => file.size <= 5 * MB)) {
-        setError("photos", {
-          message: "사진 한 장의 크기는 최대 1MB 입니다.",
-        });
-        return;
-      }
+    if (imageList.length + fileList.length > 5) {
+      setToastPopup({
+        message: "사진은 최대 5장까지 업로드 가능합니다.",
+        top: false,
+        success: false,
+      });
+      setError("photos", {
+        message: "사진은 최대 5장까지 업로드 가능합니다.",
+      });
+      return;
+    }
+    if (!fileList.every((file) => validImageExtensions.includes(file.type))) {
+      setToastPopup({
+        message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
+        top: false,
+        success: false,
+      });
+      setError("photos", {
+        message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
+      });
+      return;
+    }
+    if (!fileList.every((file) => file.size <= 5 * MB)) {
+      setToastPopup({
+        message: "사진 한 장의 크기는 최대 1MB 입니다.",
+        top: false,
+        success: false,
+      });
+      setError("photos", {
+        message: "사진 한 장의 크기는 최대 1MB 입니다.",
+      });
+      return;
     }
 
-    // previewList
     const readFilePromises = fileList.map((file) => {
       return new Promise<string>((resolve) => {
         const reader = new FileReader();
@@ -178,10 +192,17 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     });
 
     const results = await Promise.all(readFilePromises);
-    for (let i = 0; i < files.length; ++i) {
-      imageList.push({ file: fileList[i], preview: results[i] });
+    for (let i = 0; i < fileList.length; i++) {
+      newImageList.push({ file: fileList[i], preview: results[i] });
     }
-    setImageList(imageList);
+
+    const updatedImageList = [...imageList, ...newImageList];
+    setImageList(updatedImageList);
+
+    const updatedFileList = arrayToFileList(
+      updatedImageList.map((item) => item.file)
+    );
+    setValue("photos", updatedFileList);
   };
 
   return (
