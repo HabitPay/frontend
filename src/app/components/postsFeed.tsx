@@ -68,7 +68,7 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
         <>
           <div className="mb-2 text-slate-500 font-medium">공지사항</div>
           {announcements.content.map((post) => (
-            <PostItem {...post} key={post.id} />
+            <PostItem contentDTO={post} challengeId={id} key={post.id} />
           ))}
         </>
       )}
@@ -79,7 +79,9 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
         data?.pages.map((posts, index) => (
           <div key={index} className="flex flex-col gap-3">
             {posts?.content?.length > 0 &&
-              posts.content.map((post) => <PostItem {...post} key={post.id} />)}
+              posts.content.map((post) => (
+                <PostItem contentDTO={post} challengeId={id} key={post.id} />
+              ))}
           </div>
         ))}
 
