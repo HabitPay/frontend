@@ -207,7 +207,11 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                     <div className="flex flex-col gap-3">
                       {announcements?.content?.length > 0 &&
                         announcements.content.map((announcement) => (
-                          <PostItem {...announcement} key={announcement.id} />
+                          <PostItem
+                            contentDTO={announcement}
+                            key={announcement.id}
+                            challengeId={id}
+                          />
                         ))}
                     </div>
                   ) : null}
