@@ -26,18 +26,13 @@ interface IForm {
 }
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
-  const {
-    register,
-    handleSubmit,
-    setError,
-    setValue,
-    formState: { errors },
-  } = useForm<IForm>();
+  const { register, handleSubmit, setError, setValue } = useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
   const [isAnnouncement, setIsAnnouncement] = useState(false);
   const [isManager, setIsManager] = useState(false);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
+  const currentPath = usePathname();
   useEffect(() => {
     document.title = "Challenge Post | HabitPay";
     const getChallengeInfo = async () => {
@@ -48,11 +43,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
 
     getChallengeInfo();
   }, [id]);
-
-  useEffect(() => {
-    console.log(imageList);
-  }, [imageList]);
-  const currentPath = usePathname();
 
   const uploadImageToS3 = async (
     preSignedUrl: string,

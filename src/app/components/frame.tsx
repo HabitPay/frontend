@@ -11,10 +11,6 @@ interface LayoutProps {
   canGoBack?: boolean;
   hasTabBar?: boolean;
   children: React.ReactNode;
-  // 사용자영역을 구분하기 위해 shadow를 줬는데,
-  // infinite-scroll이 들어간 챌린지 메인 페이지 같은 경우,
-  // 스크린의 높이에 따른 레이아웃 때문에 필요한 옵션.
-  autoHeight?: boolean;
 }
 
 const Frame = ({
@@ -24,7 +20,6 @@ const Frame = ({
   canGoBack,
   hasTabBar,
   children,
-  autoHeight,
 }: LayoutProps) => {
   const router = useRouter();
   const currentPath = usePathname();

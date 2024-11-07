@@ -3,6 +3,9 @@
 // 따라서 여기서는 무엇을 하는 것이냐면
 // ...는 rest파라미터라고하며 string인자들을 받는다 cls("hogkim", "jkwak") 라고해보자
 // 그러면 classnames는 ["hogkim", "jkwak"]가 되고
+
+import axios from "axios";
+
 // return은 "hogkim jkwak surlee"가 된다.
 export function addClassNames(...classnames: string[]) {
   return classnames.join(" ");
@@ -46,4 +49,13 @@ export function arrayToFileList(filesArray: File[]) {
     dataTransfer.items.add(file);
   });
   return dataTransfer.files;
+}
+
+export async function urlToFileWithAxios(
+  url: string,
+  filename: string
+): Promise<File> {
+  const response = await axios.get(url, { responseType: "blob" });
+  const data = response.data;
+  return new File([data], filename, { type: data.type });
 }
