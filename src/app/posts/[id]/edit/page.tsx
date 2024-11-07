@@ -2,18 +2,22 @@
 
 import Frame from "@/app/components/frame";
 import { MB, validImageExtensions } from "@/libs/constants";
-import { addClassNames, arrayToFileList } from "@/libs/utils";
+import {
+  addClassNames,
+  arrayToFileList,
+  urlToFileWithAxios,
+} from "@/libs/utils";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import PreviewList from "./components/previewList";
+import PreviewList from "../../../challenges/[id]/post/components/previewList";
 import apiManager from "@/api/apiManager";
 import { ICreatePostDTO, PhotoDTO } from "@/types/post";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { IChallengeDetailsDto } from "@/types/challenge";
+import { ContentDTO } from "@/types/challenge";
 
 export interface imageInfo {
   file: File;
@@ -26,22 +30,37 @@ interface IForm {
 }
 
 const Page = ({ params: { id } }: { params: { id: string } }) => {
-  const { register, handleSubmit, setError, setValue } = useForm<IForm>();
+  const { register, handleSubmit, setValue, setError } = useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
   const [isAnnouncement, setIsAnnouncement] = useState(false);
-  const [isManager, setIsManager] = useState(false);
+  const [challengeContent, setChallengeContent] = useState<ContentDTO>();
+  const [textAreaContent, setTextAreaContent] = useState(
+    challengeContent?.content || ""
+  );
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
   const currentPath = usePathname();
   useEffect(() => {
-    document.title = "Challenge Post | HabitPay";
-    const getChallengeInfo = async () => {
-      const res = await apiManager.get(`/challenges/${id}`);
-      const data: IChallengeDetailsDto = res.data.data;
-      setIsManager(data.isHost);
+    document.title = "Challenge Post Edit | HabitPay";
+    const getPostInfo = async () => {
+      const res = await apiManager.get(`/posts/${id}`);
+      const data: ContentDTO = res.data.data;
+      setChallengeContent(data);
+      setTextAreaContent(data.content);
+      const imageList: imageInfo[] = [];
+      for (let i = 0; i < data.photoViewList.length; ++i) {
+        let imageFile = await urlToFileWithAxios(
+          data.photoViewList[i].imageUrl,
+          `image${i}`
+        );
+        imageList.push({
+          file: imageFile,
+          preview: data.photoViewList[i].imageUrl,
+        });
+      }
+      setImageList(imageList);
     };
-
-    getChallengeInfo();
+    getPostInfo();
   }, [id]);
 
   const uploadImageToS3 = async (
@@ -102,7 +121,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   };
 
   const onSubmitWithValidation = async (form: IForm) => {
-    console.log("onSubmit", form.photos);
     try {
       const data: ICreatePostDTO = {
         content: form.content,
@@ -195,32 +213,41 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     setValue("photos", updatedFileList);
   };
 
+  const onTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTextAreaContent(event.target.value);
+  };
+
+  useEffect(() => {
+    setValue("content", textAreaContent); // Sync with form state
+  }, [setValue, textAreaContent]);
+
   return (
-    <Frame canGoBack title="게시물 작성" isWhiteTitle isBorder>
+    <Frame canGoBack title="게시물 수정" isWhiteTitle isBorder>
       <form
         onSubmit={handleSubmit(onSubmitWithValidation)}
-        className="flex flex-col h-full"
+        className="flex flex-col"
       >
-        <textarea
-          {...register("content", {
-            required: { value: true, message: "내용을 입력해주세요." },
-          })}
-          className="w-full h-screen px-4 pt-4 border-gray-300"
-          placeholder="오늘의 챌린지 내용에 대해서 작성해주세요."
-        />
-        {
-          // nav와 imageList의 높이 112px, 95px
-          imageList.length ? (
-            <>
-              <div className="h-[207px]"></div>
-              <PreviewList imageList={imageList} setImageList={setImageList} />
-            </>
-          ) : (
-            <div className="h-[95px]"></div>
-          )
-        }
+        <div className="flex-col">
+          <textarea
+            {...register("content", {
+              onChange: onTextAreaChange,
+              required: { value: true, message: "내용을 입력해주세요." },
+            })}
+            className="w-full h-screen px-4 pt-4 border-gray-300"
+            placeholder="오늘의 챌린지 내용에 대해서 작성해주세요."
+            value={textAreaContent}
+          />
+        </div>
+        {imageList.length ? (
+          <>
+            <div className="h-[207px]"></div>
+            <PreviewList imageList={imageList} setImageList={setImageList} />
+          </>
+        ) : (
+          <div className="h-[95px]"></div>
+        )}
         <nav className="fixed bottom-0 flex justify-between w-full max-w-xl px-6 py-4 space-x-12 text-xs text-gray-700 bg-white border-t">
-          <div className="flex items-center space-x-8 ">
+          <div className="flex items-center space-x-8">
             <div
               className={addClassNames(
                 "flex flex-col items-center space-y-2 p-3",
@@ -253,33 +280,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 />
               </label>
             </div>
-            {isManager ? (
-              <div
-                onClick={() => setIsAnnouncement((prev) => !prev)}
-                className="flex items-center space-x-1 w-24"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={1.5}
-                  stroke="currentColor"
-                  className={addClassNames(
-                    "size-7",
-                    isAnnouncement
-                      ? "text-habit-green"
-                      : "hover:text-gray-500 transition-colors"
-                  )}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-                  />
-                </svg>
-                <span className="text-sm">공지로 등록</span>
-              </div>
-            ) : null}
           </div>
           <button className="px-10 py-2 text-lg font-thin text-white border border-transparent shadow-sm bg-habit-green hover:bg-green-600 rounded-2xl focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:outline-none">
             저장
