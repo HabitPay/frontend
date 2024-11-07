@@ -98,7 +98,13 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     <Frame hasTabBar canGoBack>
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6 pb-5">
-          <Menu currentPage="참여 기록" challengeId={currentPath[2]} />
+          <Menu
+            currentPage="참여 기록"
+            challengeId={currentPath[2]}
+            isMemberEnrolledInChallenge={
+              challengeDetails.isMemberEnrolledInChallenge
+            }
+          />
           <ChallengeTitle
             title={title}
             startDate={startDate}

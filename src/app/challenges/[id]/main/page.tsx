@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { differenceInDays, isBefore } from "date-fns";
+import { isBefore } from "date-fns";
 
 import FloatingButton from "@/app/components/floatingButton";
 import Frame from "@/app/components/frame";
@@ -40,6 +40,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   const router = useRouter();
 
   useEffect(() => {
+    console.log(challengeDetail);
     document.title = "Challenge Main | HabitPay";
     const getAnnouncementsPosts = async () => {
       const res = await apiManager.get(`/challenges/${id}/posts/announcements`);
@@ -80,7 +81,13 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     <Frame canGoBack hasTabBar>
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6">
-          <Menu currentPage="챌린지 메인" challengeId={id} />
+          <Menu
+            currentPage="챌린지 메인"
+            challengeId={id}
+            isMemberEnrolledInChallenge={
+              challengeDetails.isMemberEnrolledInChallenge
+            }
+          />
           <ChallengeTitle
             title={title}
             startDate={startDate}
@@ -242,21 +249,24 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 </span>
                 모였습니다!
               </span>
-              <Link
-                href={`/challenges/${id}/fee-table`}
-                className="px-3 py-2 text-white rounded-xl font-extralight bg-habit-green"
-              >
-                벌금 현황 보기
-              </Link>
+              {challengeDetails.isMemberEnrolledInChallenge && (
+                <Link
+                  href={`/challenges/${id}/fee-table`}
+                  className="px-3 py-2 text-white rounded-xl font-extralight bg-habit-green"
+                >
+                  벌금 현황 보기
+                </Link>
+              )}
             </div>
-            {new Date() < new Date(endDate) && (
-              <ChallengeParticipationStatus
-                isParticipatedToday={challengeDetails.isParticipatedToday}
-                isTodayParticipatingDay={
-                  challengeDetails.isTodayParticipatingDay
-                }
-              />
-            )}
+            {new Date() < new Date(endDate) &&
+              challengeDetails.isMemberEnrolledInChallenge && (
+                <ChallengeParticipationStatus
+                  isParticipatedToday={challengeDetails.isParticipatedToday}
+                  isTodayParticipatingDay={
+                    challengeDetails.isTodayParticipatingDay
+                  }
+                />
+              )}
           </div>
         </div>
         <div className="flex flex-col px-6 pt-4">
