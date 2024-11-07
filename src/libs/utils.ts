@@ -5,6 +5,11 @@
 // 그러면 classnames는 ["hogkim", "jkwak"]가 되고
 
 import axios from "axios";
+import {
+  differenceInDays,
+  differenceInHours,
+  differenceInMinutes,
+} from "date-fns";
 
 // return은 "hogkim jkwak surlee"가 된다.
 export function addClassNames(...classnames: string[]) {
@@ -15,9 +20,56 @@ export function addClassNames(...classnames: string[]) {
 // usePathname으로 마지막세그먼트를 교체하고 싶을 때 사용. 특히 Link에서 href를 다룰 때.
 export function getParentPath(pathname: string) {
   const pathSegments = pathname.split("/");
-  pathSegments.pop(); // Remove the last segment
+  pathSegments.pop();
   return pathSegments.join("/");
 }
+
+export const calculateTimeRemaining = (startDate: string, endDate: string) => {
+  const currentDate = new Date();
+  const challengeStartDate = new Date(startDate);
+  const challengeEndDate = new Date(endDate);
+
+  if (currentDate < challengeStartDate) {
+    const daysRemaining = differenceInDays(challengeStartDate, currentDate);
+    const hoursRemaining = differenceInHours(challengeStartDate, currentDate);
+    const minutesRemaining = differenceInMinutes(
+      challengeStartDate,
+      currentDate
+    );
+
+    if (daysRemaining > 0) {
+      return `시작까지 ${daysRemaining}일 남았습니다`;
+    } else if (hoursRemaining > 0) {
+      return `시작까지 약 ${hoursRemaining}시간 남았습니다`;
+    } else if (minutesRemaining > 0) {
+      return `시작까지 약 ${minutesRemaining}분 남았습니다`;
+    } else {
+      return `시작까지 1분 미만 남았습니다`;
+    }
+  }
+
+  if (currentDate >= challengeStartDate && currentDate <= challengeEndDate) {
+    const daysRemaining = differenceInDays(challengeEndDate, currentDate);
+    const hoursRemaining = differenceInHours(challengeEndDate, currentDate);
+    const minutesRemaining = differenceInMinutes(challengeEndDate, currentDate);
+
+    if (daysRemaining > 0) {
+      return `종료까지 ${daysRemaining}일 남았습니다`;
+    } else if (hoursRemaining > 0) {
+      return `종료까지 약 ${hoursRemaining}시간 남았습니다`;
+    } else if (minutesRemaining > 0) {
+      return `종료까지 약 ${minutesRemaining}분 남았습니다`;
+    } else {
+      return `종료까지 1분 미만 남았습니다`;
+    }
+  }
+
+  if (currentDate > challengeEndDate) {
+    return "챌린지가 종료되었습니다.";
+  }
+
+  return "알 수 없는 상태";
+};
 
 // 게시물등에서 사용하는 시간 함수. (몇 일 전으로 표기 해줌.)
 export function formatToTimeAgo(date: string): string {

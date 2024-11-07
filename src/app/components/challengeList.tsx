@@ -60,13 +60,13 @@ export default function ChallengeList() {
                 <Link
                   href={`/challenges/${challenge.id}/main`}
                   key={index}
-                  className="flex flex-col bg-white rounded-xl py-3 px-3"
+                  className="flex flex-col px-3 py-3 bg-white rounded-xl"
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <div className=" text-xl font-semibold">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-xl font-semibold ">
                       {challenge.title}
                     </div>
-                    <div className="flex items-center gap-1 font-light text-sm">
+                    <div className="flex items-center gap-1 text-sm font-light">
                       <div>{challenge.hostNickname}</div>
                       <Image
                         src={challenge.hostProfileImage || defaultProfileImage}
@@ -81,7 +81,7 @@ export default function ChallengeList() {
                     {`챌린지 기간:${format(
                       new Date(challenge.startDate),
                       "yy.MM.dd"
-                    )} ~ ${format(new Date(challenge.endDate), "yy.MM.dd")}`}
+                    )} - ${format(new Date(challenge.endDate), "yy.MM.dd")}`}
                   </div>
 
                   <div className="text-sm">{`현재 참여인원: ${challenge.numberOfParticipants}`}</div>

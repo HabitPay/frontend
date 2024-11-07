@@ -84,8 +84,8 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           <ChallengeTitle
             title={title}
             startDate={startDate}
+            endDate={endDate}
             isBeforeStartDate={isBeforeStartDate}
-            remainingDays={differenceInDays(new Date(endDate), Date.now()) + 1}
             participants={numberOfParticipants}
             profileImages={enrolledMembersProfileImageList}
           />
