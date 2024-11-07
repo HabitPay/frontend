@@ -77,7 +77,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   const isBeforeStartDate = isBefore(new Date(), new Date(startDate));
 
   return (
-    <Frame canGoBack hasTabBar autoHeight>
+    <Frame canGoBack hasTabBar>
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6">
           <Menu currentPage="챌린지 메인" challengeId={id} />
@@ -183,7 +183,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 </div>
                 <div className="flex flex-col mb-2">
                   <Label id="" title="1회 실패 당 벌금" isRequired={false} />
-                  <div className="px-4 py-2 mt-2 text-sm text-red-500 font-light rounded-2xl bg-white">
+                  <div className="px-4 py-2 mt-2 text-sm font-light text-red-500 bg-white rounded-2xl">
                     {challengeDetails &&
                       `${new Intl.NumberFormat("ko-KR").format(
                         challengeDetails?.feePerAbsence
