@@ -249,10 +249,14 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 벌금 현황 보기
               </Link>
             </div>
-            <ChallengeParticipationStatus
-              isParticipatedToday={challengeDetails.isParticipatedToday}
-              isTodayParticipatingDay={challengeDetails.isTodayParticipatingDay}
-            />
+            {new Date() < new Date(endDate) && (
+              <ChallengeParticipationStatus
+                isParticipatedToday={challengeDetails.isParticipatedToday}
+                isTodayParticipatingDay={
+                  challengeDetails.isTodayParticipatingDay
+                }
+              />
+            )}
           </div>
         </div>
         <div className="flex flex-col px-6 pt-4">

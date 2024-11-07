@@ -102,24 +102,26 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
           <ChallengeTitle
             title={title}
             startDate={startDate}
+            endDate={endDate}
             isBeforeStartDate={isBeforeStartDate}
-            remainingDays={differenceInDays(new Date(endDate), Date.now()) + 1}
             participants={numberOfParticipants}
             profileImages={enrolledMembersProfileImageList}
           />
-          <ChallengeParticipationStatus
-            isParticipatedToday={challengeDetails.isParticipatedToday}
-            isTodayParticipatingDay={challengeDetails.isTodayParticipatingDay}
-          />
+          {new Date() < new Date(endDate) && (
+            <ChallengeParticipationStatus
+              isParticipatedToday={challengeDetails.isParticipatedToday}
+              isTodayParticipatingDay={challengeDetails.isTodayParticipatingDay}
+            />
+          )}
         </div>
         <div className="flex flex-col px-6 py-6 ">
           <Calendar
-            className="px-8 py-6 space-y-4 bg-white shadow-lg mx-auto"
+            className="px-8 py-6 mx-auto space-y-4 bg-white shadow-lg"
             formatDay={(locale, date) => date.getDate().toString()}
             tileContent={({ date }) => {
               const day = format(date, "yyyy-MM-dd");
               return (
-                <div className="flex justify-center items-center relative">
+                <div className="relative flex items-center justify-center">
                   {participationRecords.successDaysSet.has(day) && (
                     <div className="dot-success"></div>
                   )}
