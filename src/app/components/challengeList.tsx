@@ -77,15 +77,24 @@ export default function ChallengeList() {
                       />
                     </div>
                   </div>
-                  <div className="text-sm">
-                    {`챌린지 기간:${format(
+                  <div className="flex *:text-sm">
+                    <span className="font-bold">챌린지 기간: </span>
+                    <span>{`${format(
                       new Date(challenge.startDate),
                       "yy.MM.dd"
-                    )} - ${format(new Date(challenge.endDate), "yy.MM.dd")}`}
+                    )} - ${format(
+                      new Date(challenge.endDate),
+                      "yy.MM.dd"
+                    )}`}</span>
                   </div>
-
-                  <div className="text-sm">{`현재 참여인원: ${challenge.numberOfParticipants}`}</div>
-                  <div className="text-sm">{`총 기간(일): ${challenge.participatingDays}`}</div>
+                  <div className="flex  *:text-sm">
+                    <span className="font-bold">현재 참여인원: </span>
+                    <span>{challenge.numberOfParticipants}</span>
+                  </div>
+                  <div className="flex  *:text-sm">
+                    <span className="font-bold">총 기간(일): </span>
+                    <span>{challenge.participatingDays}</span>
+                  </div>
                 </Link>
               ))}
           </div>
