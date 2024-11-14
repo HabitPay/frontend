@@ -18,10 +18,8 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
   const OFFSET = 10;
 
   const getPosts = async ({
-    pageParam = 0,
-  }: {
-    pageParam?: number;
-  }): Promise<ChallengeContentResponseDTO> => {
+    pageParam = 1,
+  } = {}): Promise<ChallengeContentResponseDTO> => {
     const res = await apiManager.get(`/challenges/${id}/posts`, {
       params: {
         size: OFFSET,
@@ -30,7 +28,7 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
     });
     return res.data.data;
   };
-  getPosts({ pageParam: 0 });
+  getPosts();
 
   const { data, error, fetchNextPage, isFetchingNextPage, status } =
     useInfiniteQuery<ChallengeContentResponseDTO, AxiosError>(
