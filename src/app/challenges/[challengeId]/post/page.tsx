@@ -40,13 +40,13 @@ const Page = ({
   useEffect(() => {
     document.title = "Challenge Post | HabitPay";
     const getChallengeInfo = async () => {
-      const res = await apiManager.get(`/challenges/${id}`);
+      const res = await apiManager.get(`/challenges/${challengeId}`);
       const data: IChallengeDetailsDto = res.data.data;
       setIsManager(data.isHost);
     };
 
     getChallengeInfo();
-  }, [id]);
+  }, [challengeId]);
 
   const uploadImageToS3 = async (
     preSignedUrl: string,
@@ -113,7 +113,10 @@ const Page = ({
         isAnnouncement: isAnnouncement,
         photos: convertFilesToPhotoDTOs(form.photos),
       };
-      const res = await apiManager.post(`/challenges/${id}/posts`, data);
+      const res = await apiManager.post(
+        `/challenges/${challengeId}/posts`,
+        data
+      );
       setToastPopup({
         message: res.data.message,
         top: false,
@@ -121,7 +124,7 @@ const Page = ({
       });
       const preSignedUrls: string[] = res.data?.data;
       uploadImagesToS3(preSignedUrls, form.photos);
-      router.push(`/challenges/${id}/main`);
+      router.push(`/challenges/${challengeId}/main`);
     } catch (error) {
       setToastPopup({
         // @ts-ignore
