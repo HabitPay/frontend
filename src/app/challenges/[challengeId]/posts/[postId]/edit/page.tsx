@@ -12,7 +12,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import PreviewList from "../../../post/components/previewList";
 import apiManager from "@/api/apiManager";
-import { ICreatePostDTO, PhotoDTO } from "@/types/post";
+import { IPatchPostDTO, PhotoDTO } from "@/types/post";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
@@ -36,6 +36,7 @@ const Page = ({
 }) => {
   const { register, handleSubmit, setValue, setError } = useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
+  const [isPhotosUpdated, setIsPhotoUpdated] = useState<boolean>(false);
   const [isAnnouncement, setIsAnnouncement] = useState(false);
   const [challengeContent, setChallengeContent] = useState<ContentDTO>();
   const [textAreaContent, setTextAreaContent] = useState(
@@ -62,6 +63,7 @@ const Page = ({
           preview: data.photoViewList[i].imageUrl,
         });
       }
+      console.log(data);
       setImageList(imageList);
     };
     getPostInfo();
@@ -125,10 +127,11 @@ const Page = ({
 
   const onSubmitWithValidation = async (form: IForm) => {
     try {
-      const data: ICreatePostDTO = {
+      const data: IPatchPostDTO = {
         content: form.content,
         isAnnouncement: isAnnouncement,
         photos: convertFilesToPhotoDTOs(form.photos),
+        isPhotosUpdated: isPhotosUpdated,
       };
       console.log(data);
       const res = await apiManager.patch(
@@ -218,6 +221,7 @@ const Page = ({
       updatedImageList.map((item) => item.file)
     );
     setValue("photos", updatedFileList);
+    setIsPhotoUpdated(true);
   };
 
   const onTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
