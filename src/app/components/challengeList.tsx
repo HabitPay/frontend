@@ -50,7 +50,17 @@ export default function ChallengeList() {
 
   return (
     <div className="flex flex-col w-full pb-4">
-      {status === "loading" && <p>불러오는 중</p>}
+      {status === "loading" && (
+        <div className="flex flex-col px-6 animate-pulse bg-white p-3 rounded-xl">
+          <div className="flex gap-4 justify-between pb-4">
+            <div className="w-32 h-8 bg-gray-400 rounded-xl" />
+            <div className="w-28 bg-gray-400 h-5 rounded-xl" />
+          </div>
+          <div className="flex items-center">
+            <div className="w-56 h-16 bg-gray-400 rounded-xl" />
+          </div>
+        </div>
+      )}
       {status === "error" && <p>{error?.message}</p>}
       {status === "success" &&
         data?.pages.map((challenges, index) => (
@@ -100,7 +110,17 @@ export default function ChallengeList() {
           </div>
         ))}
       <div ref={bottom} />
-      {isFetchingNextPage && <p>계속 불러오는 중</p>}
+      {isFetchingNextPage && (
+        <div className="flex flex-col px-6 animate-pulse bg-white p-3 rounded-xl">
+          <div className="flex gap-4 justify-between pb-4">
+            <div className="w-32 h-8 bg-gray-400 rounded-xl" />
+            <div className="w-28 bg-gray-400 h-5 rounded-xl" />
+          </div>
+          <div className="flex items-center">
+            <div className="w-56 h-16 bg-gray-400 rounded-xl" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

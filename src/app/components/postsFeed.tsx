@@ -71,11 +71,21 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
         </>
       )}
       <div className="mb-2 text-slate-500 font-medium">일반 게시물</div>
-      {status === "loading" && <p>불러오는 중</p>}
+      {status === "loading" && (
+        <div className="flex flex-col px-6 divide-y-2 animate-pulse bg-white p-4 rounded-xl">
+          <div className="flex gap-4 pb-3">
+            <div className="size-14 bg-gray-400 rounded-xl" />
+            <div className="w-28 bg-gray-400 h-5 rounded-xl" />
+          </div>
+          <div className="flex items-center justify-center py-4">
+            <div className=" size-60 bg-gray-400 rounded-xl" />
+          </div>
+        </div>
+      )}
       {status === "error" && <p>{error?.message}</p>}
       {status === "success" &&
         data?.pages.map((posts, index) => (
-          <div key={index} className="flex flex-col gap-3">
+          <div key={index} className="flex flex-col gap-3 pb-3">
             {posts?.content?.length > 0 &&
               posts.content.map((post) => (
                 <PostItem contentDTO={post} challengeId={id} key={post.id} />
@@ -84,7 +94,17 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
         ))}
 
       <div ref={bottom} />
-      {isFetchingNextPage && <p>계속 불러오는 중</p>}
+      {isFetchingNextPage && (
+        <div className="flex flex-col px-6 divide-y-2 animate-pulse bg-white p-4 rounded-xl">
+          <div className="flex gap-4 pb-3">
+            <div className="size-14 bg-gray-400 rounded-xl" />
+            <div className="w-28 bg-gray-400 h-5 rounded-xl" />
+          </div>
+          <div className="flex items-center justify-center py-4">
+            <div className=" size-60 bg-gray-400 rounded-xl" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }
