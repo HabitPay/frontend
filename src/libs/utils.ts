@@ -38,13 +38,13 @@ export const calculateTimeRemaining = (startDate: string, endDate: string) => {
     );
 
     if (daysRemaining > 0) {
-      return `시작까지 ${daysRemaining}일 남았습니다`;
+      return `시작까지 ${daysRemaining}일 남음`;
     } else if (hoursRemaining > 0) {
-      return `시작까지 약 ${hoursRemaining}시간 남았습니다`;
+      return `시작까지 약 ${hoursRemaining}시간 남음`;
     } else if (minutesRemaining > 0) {
-      return `시작까지 약 ${minutesRemaining}분 남았습니다`;
+      return `시작까지 약 ${minutesRemaining}분 남음`;
     } else {
-      return `시작까지 1분 미만 남았습니다`;
+      return `시작까지 1분 미만 남음`;
     }
   }
 
@@ -54,18 +54,18 @@ export const calculateTimeRemaining = (startDate: string, endDate: string) => {
     const minutesRemaining = differenceInMinutes(challengeEndDate, currentDate);
 
     if (daysRemaining > 0) {
-      return `종료까지 ${daysRemaining}일 남았습니다`;
+      return `종료까지 ${daysRemaining}일 남음`;
     } else if (hoursRemaining > 0) {
-      return `종료까지 약 ${hoursRemaining}시간 남았습니다`;
+      return `종료까지 약 ${hoursRemaining}시간 남음`;
     } else if (minutesRemaining > 0) {
-      return `종료까지 약 ${minutesRemaining}분 남았습니다`;
+      return `종료까지 약 ${minutesRemaining}분 남음`;
     } else {
-      return `종료까지 1분 미만 남았습니다`;
+      return `종료까지 1분 미만 남음`;
     }
   }
 
   if (currentDate > challengeEndDate) {
-    return "챌린지가 종료되었습니다.";
+    return "챌린지가 종료됨.";
   }
 
   return "알 수 없는 상태";
