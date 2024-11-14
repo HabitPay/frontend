@@ -24,7 +24,6 @@ const PreviewImage = ({
   dragHandleProps,
   innerRef,
 }: IPreviewImage) => {
-  console.log(index, " rerenderd");
   return (
     <div
       ref={innerRef}

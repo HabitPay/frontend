@@ -30,9 +30,9 @@ interface IForm {
 }
 
 const Page = ({
-  params: { challengeId },
+  params: { challengeId, postId },
 }: {
-  params: { challengeId: string };
+  params: { challengeId: string; postId: string };
 }) => {
   const { register, handleSubmit, setValue, setError } = useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
@@ -47,7 +47,7 @@ const Page = ({
   useEffect(() => {
     document.title = "Challenge Post Edit | HabitPay";
     const getPostInfo = async () => {
-      const res = await apiManager.get(`/posts/${challengeId}`);
+      const res = await apiManager.get(`/posts/${postId}`);
       const data: ContentDTO = res.data.data;
       setChallengeContent(data);
       setTextAreaContent(data.content);
@@ -65,7 +65,7 @@ const Page = ({
       setImageList(imageList);
     };
     getPostInfo();
-  }, [challengeId]);
+  }, [postId]);
 
   const uploadImageToS3 = async (
     preSignedUrl: string,
@@ -78,7 +78,6 @@ const Page = ({
           "Content-Type": "image/" + imageExtension,
         },
       });
-      console.log(res);
     } catch (error) {
       setToastPopup({
         // @ts-ignore
@@ -131,8 +130,9 @@ const Page = ({
         isAnnouncement: isAnnouncement,
         photos: convertFilesToPhotoDTOs(form.photos),
       };
-      const res = await apiManager.post(
-        `/challenges/${challengeId}/posts`,
+      console.log(data);
+      const res = await apiManager.patch(
+        `/challenges/${challengeId}/posts/${postId}`,
         data
       );
       setToastPopup({
