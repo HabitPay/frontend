@@ -18,7 +18,11 @@ import { useEffect, useState } from "react";
 import ConfirmModal from "@/app/components/confirmModal";
 import Frame from "@/app/components/frame";
 
-const Page = ({ params: { id } }: { params: { id: string } }) => {
+const Page = ({
+  params: { challengeId },
+}: {
+  params: { challengeId: string };
+}) => {
   const { challengeDetails, selectedDays, isLoading, error } =
     useChallengeDetails(id);
   const { register, handleSubmit } = useForm<IChallengePatchDto>({});

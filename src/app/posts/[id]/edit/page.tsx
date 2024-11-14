@@ -10,7 +10,7 @@ import {
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import PreviewList from "../../../challenges/[id]/post/components/previewList";
+import PreviewList from "../../../challenges/[challengeId]/post/components/previewList";
 import apiManager from "@/api/apiManager";
 import { ICreatePostDTO, PhotoDTO } from "@/types/post";
 import { useSetRecoilState } from "recoil";
@@ -29,7 +29,11 @@ interface IForm {
   photos?: FileList;
 }
 
-const Page = ({ params: { id } }: { params: { id: string } }) => {
+const Page = ({
+  params: { challengeId },
+}: {
+  params: { challengeId: string };
+}) => {
   const { register, handleSubmit, setValue, setError } = useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
   const [isAnnouncement, setIsAnnouncement] = useState(false);

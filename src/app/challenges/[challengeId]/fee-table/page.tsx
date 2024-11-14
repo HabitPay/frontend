@@ -13,7 +13,11 @@ import { IProfileDTO } from "@/types/member";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 
-const Page = ({ params: { id } }: { params: { id: string } }) => {
+const Page = ({
+  params: { challengeId },
+}: {
+  params: { challengeId: string };
+}) => {
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const [feeData, setFeeData] = useState<IChallengeFeeListDto>({
     myFee: 0,

@@ -25,7 +25,11 @@ interface IForm {
   photos?: FileList;
 }
 
-const Page = ({ params: { id } }: { params: { id: string } }) => {
+const Page = ({
+  params: { challengeId },
+}: {
+  params: { challengeId: string };
+}) => {
   const { register, handleSubmit, setError, setValue } = useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
   const [isAnnouncement, setIsAnnouncement] = useState(false);

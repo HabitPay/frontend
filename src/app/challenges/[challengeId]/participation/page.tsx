@@ -24,7 +24,11 @@ import { getParentPath } from "@/libs/utils";
 import "@/styles/CustomCalendar.css";
 import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
 
-const Page = ({ params: { id } }: { params: { id: string } }) => {
+const Page = ({
+  params: { challengeId },
+}: {
+  params: { challengeId: string };
+}) => {
   const [participationRecords, setParticipationRecords] =
     useState<ChallengeParticipationRecords>({
       failureDaysSet: new Set(),
@@ -33,13 +37,14 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     });
   const pathname = usePathname();
   const currentPath = usePathname().split("/");
-  const { challengeDetails, isLoading, error } = useChallengeDetails(id);
+  const { challengeDetails, isLoading, error } =
+    useChallengeDetails(challengeId);
   const router = useRouter();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   useEffect(() => {
     const getMyPosts = async () => {
       try {
-        const res = await apiManager.get(`/challenges/${id}/posts/me`);
+        const res = await apiManager.get(`/challenges/${challengeId}/posts/me`);
         const data: ChallengeContentResponseDTO = res.data?.data;
         console.log(data);
       } catch (error) {
@@ -53,7 +58,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     };
     const getParticipationRecords = async () => {
       try {
-        const res = await apiManager.get(`/challenges/${id}/records`);
+        const res = await apiManager.get(`/challenges/${challengeId}/records`);
         const data: ChallengeParticipationDto = res.data?.data;
         setParticipationRecords({
           successDaysSet: new Set(data.successDayList),
@@ -72,7 +77,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     getParticipationRecords();
     getMyPosts();
     document.title = "My Participation | HabitPay";
-  }, [id, setToastPopup]);
+  }, [challengeId, setToastPopup]);
   if (isLoading) return <Loading />;
   if (error || challengeDetails === null) {
     setToastPopup({
