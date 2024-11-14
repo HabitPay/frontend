@@ -10,7 +10,7 @@ import {
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import PreviewList from "../../../challenges/[challengeId]/post/components/previewList";
+import PreviewList from "../../../post/components/previewList";
 import apiManager from "@/api/apiManager";
 import { ICreatePostDTO, PhotoDTO } from "@/types/post";
 import { useSetRecoilState } from "recoil";
@@ -47,7 +47,7 @@ const Page = ({
   useEffect(() => {
     document.title = "Challenge Post Edit | HabitPay";
     const getPostInfo = async () => {
-      const res = await apiManager.get(`/posts/${id}`);
+      const res = await apiManager.get(`/posts/${challengeId}`);
       const data: ContentDTO = res.data.data;
       setChallengeContent(data);
       setTextAreaContent(data.content);
@@ -65,7 +65,7 @@ const Page = ({
       setImageList(imageList);
     };
     getPostInfo();
-  }, [id]);
+  }, [challengeId]);
 
   const uploadImageToS3 = async (
     preSignedUrl: string,
@@ -131,7 +131,10 @@ const Page = ({
         isAnnouncement: isAnnouncement,
         photos: convertFilesToPhotoDTOs(form.photos),
       };
-      const res = await apiManager.post(`/challenges/${id}/posts`, data);
+      const res = await apiManager.post(
+        `/challenges/${challengeId}/posts`,
+        data
+      );
       setToastPopup({
         message: res.data.message,
         top: false,
@@ -139,7 +142,7 @@ const Page = ({
       });
       const preSignedUrls: string[] = res.data?.data;
       uploadImagesToS3(preSignedUrls, form.photos);
-      router.push(`/challenges/${id}/main`);
+      router.push(`/challenges/${challengeId}/main`);
     } catch (error) {
       setToastPopup({
         // @ts-ignore

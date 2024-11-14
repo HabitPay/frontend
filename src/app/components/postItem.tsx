@@ -79,7 +79,9 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
         </div>
         <div className="flex ml-auto gap-4">
           {
-            <Link href={`/posts/${contentDTO.id}/edit`}>
+            <Link
+              href={`/challenges/${challengeId}/posts/${contentDTO.id}/edit`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
