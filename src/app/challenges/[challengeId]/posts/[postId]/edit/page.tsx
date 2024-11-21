@@ -161,11 +161,6 @@ const Page = ({
 
     const updatedImageList = [...imageList, ...newImageList];
     setImageList(updatedImageList);
-
-    const updatedFileList = arrayToFileList(
-      updatedImageList.map((item) => item.file)
-    );
-    setValue("photos", updatedFileList);
     setIsPhotoUpdated(true);
   };
 
@@ -176,6 +171,12 @@ const Page = ({
   useEffect(() => {
     setValue("content", textAreaContent); // Sync with form state
   }, [setValue, textAreaContent]);
+
+  useEffect(() => {
+    // imageList가 변할 경우 setValue를 실행.
+    const updatedFileList = arrayToFileList(imageList.map((item) => item.file));
+    setValue("photos", updatedFileList);
+  }, [setValue, imageList]);
 
   return (
     <Frame canGoBack title="게시물 수정" isWhiteTitle isBorder>
