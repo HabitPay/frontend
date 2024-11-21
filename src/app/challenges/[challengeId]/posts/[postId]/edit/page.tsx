@@ -2,36 +2,33 @@
 
 import Frame from "@/app/components/frame";
 import { MB, validImageExtensions } from "@/libs/constants";
-import {
-  addClassNames,
-  arrayToFileList,
-  urlToFileWithAxios,
-} from "@/libs/utils";
+import { addClassNames, urlToFileWithAxios } from "@/libs/utils";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import PreviewList from "../../../challenges/[id]/post/components/previewList";
+import PreviewList from "../../../post/components/previewList";
 import apiManager from "@/api/apiManager";
-import { ICreatePostDTO, PhotoDTO } from "@/types/post";
+import { IPatchPostDTO } from "@/types/post";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { ContentDTO } from "@/types/challenge";
-
-export interface imageInfo {
-  file: File;
-  preview: string;
-}
+import { convertToPhotoDTO, uploadImagesToS3 } from "@/libs/imageUploadUtils";
+import { imageInfo } from "../../../post/page";
 
 interface IForm {
   content: string;
   photos?: FileList;
 }
 
-const Page = ({ params: { id } }: { params: { id: string } }) => {
+const Page = ({
+  params: { challengeId, postId },
+}: {
+  params: { challengeId: string; postId: string };
+}) => {
   const { register, handleSubmit, setValue, setError } = useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
+  const [deletedImageList, setDeletedImageList] = useState<number[]>([]);
   const [isAnnouncement, setIsAnnouncement] = useState(false);
   const [challengeContent, setChallengeContent] = useState<ContentDTO>();
   const [textAreaContent, setTextAreaContent] = useState(
@@ -40,102 +37,56 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
   const currentPath = usePathname();
+
   useEffect(() => {
     document.title = "Challenge Post Edit | HabitPay";
     const getPostInfo = async () => {
-      const res = await apiManager.get(`/posts/${id}`);
+      const res = await apiManager.get(`/posts/${postId}`);
       const data: ContentDTO = res.data.data;
       setChallengeContent(data);
       setTextAreaContent(data.content);
-      const imageList: imageInfo[] = [];
-      for (let i = 0; i < data.photoViewList.length; ++i) {
-        let imageFile = await urlToFileWithAxios(
-          data.photoViewList[i].imageUrl,
-          `image${i}`
-        );
-        imageList.push({
-          file: imageFile,
-          preview: data.photoViewList[i].imageUrl,
-        });
-      }
-      setImageList(imageList);
+
+      const imageFilePromises = data.photoViewList.map((data, index) =>
+        urlToFileWithAxios(data.imageUrl, `image${index}`)
+      );
+      const imageFileArray = await Promise.all(imageFilePromises);
+      const imageInfoList: imageInfo[] = imageFileArray.map((file, index) => ({
+        postPhotoId: data.photoViewList[index].postPhotoId,
+        preview: data.photoViewList[index].imageUrl,
+      }));
+      setImageList(imageInfoList);
     };
     getPostInfo();
-  }, [id]);
-
-  const uploadImageToS3 = async (
-    preSignedUrl: string,
-    image: File,
-    imageExtension: string
-  ) => {
-    try {
-      const res = await axios.put(preSignedUrl, image, {
-        headers: {
-          "Content-Type": "image/" + imageExtension,
-        },
-      });
-      console.log(res);
-    } catch (error) {
-      setToastPopup({
-        // @ts-ignore
-        message: error.data.message,
-        top: false,
-        success: false,
-      });
-    }
-  };
-
-  const uploadImagesToS3 = async (
-    preSignedUrls: string[],
-    imageFiles: FileList | undefined
-  ) => {
-    if (!imageFiles) return;
-    for (let i = 0; i < preSignedUrls.length; ++i) {
-      uploadImageToS3(
-        preSignedUrls[i],
-        imageFiles[i],
-        imageFiles[i].type.slice(imageFiles[i].type.indexOf("/") + 1)
-      );
-    }
-  };
-
-  const convertFilesToPhotoDTOs = (files: FileList | undefined) => {
-    if (!files || !files.length) {
-      return [];
-    }
-    let photosData: PhotoDTO[] = [];
-    for (let i = 0; i < files.length; ++i) {
-      let photoData: PhotoDTO = {
-        viewOrder: 0,
-        contentLength: 0,
-        imageExtension: "",
-      };
-      photoData.viewOrder = i + 1;
-      photoData.contentLength = files[i].size;
-      photoData.imageExtension = files[i].type.slice(
-        files[i].type.indexOf("/") + 1
-      );
-      photosData.push(photoData);
-    }
-    return photosData;
-  };
-
+  }, [postId]);
   const onSubmitWithValidation = async (form: IForm) => {
     try {
-      const data: ICreatePostDTO = {
+      const data: IPatchPostDTO = {
         content: form.content,
         isAnnouncement: isAnnouncement,
-        photos: convertFilesToPhotoDTOs(form.photos),
+        newPhotos: convertToPhotoDTO(imageList).filter(
+          (item) => item.photoId == undefined
+        ),
+        modifiedPhotos: convertToPhotoDTO(imageList).filter(
+          (item) => item.photoId !== undefined
+        ),
+        deletedPhotoIds: deletedImageList,
       };
-      const res = await apiManager.post(`/challenges/${id}/posts`, data);
+      console.log(data);
+      const res = await apiManager.patch(
+        `/challenges/${challengeId}/posts/${postId}`,
+        data
+      );
       setToastPopup({
         message: res.data.message,
         top: false,
         success: true,
       });
       const preSignedUrls: string[] = res.data?.data;
-      uploadImagesToS3(preSignedUrls, form.photos);
-      router.push(`/challenges/${id}/main`);
+      uploadImagesToS3(
+        preSignedUrls,
+        imageList.filter((item) => item.postPhotoId == undefined)
+      );
+      router.push(`/challenges/${challengeId}/main`);
     } catch (error) {
       setToastPopup({
         // @ts-ignore
@@ -153,8 +104,6 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     if (!files || files.length <= 0) return;
 
     const fileList: File[] = Array.from(files);
-    const newImageList: imageInfo[] = [];
-
     if (imageList.length + fileList.length > 5) {
       setToastPopup({
         message: "사진은 최대 5장까지 업로드 가능합니다.",
@@ -200,18 +149,24 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     });
 
     const results = await Promise.all(readFilePromises);
-    for (let i = 0; i < fileList.length; i++) {
-      newImageList.push({ file: fileList[i], preview: results[i] });
-    }
-
+    const newImageList: imageInfo[] = Array.from(fileList).map(
+      (file, index) => ({ file, preview: results[index] })
+    );
     const updatedImageList = [...imageList, ...newImageList];
     setImageList(updatedImageList);
-
-    const updatedFileList = arrayToFileList(
-      updatedImageList.map((item) => item.file)
-    );
-    setValue("photos", updatedFileList);
   };
+
+  useEffect(() => {
+    console.log(
+      "newImageList",
+      convertToPhotoDTO(imageList).filter((item) => item.photoId == undefined)
+    );
+    console.log("deletedImageList", deletedImageList);
+    console.log(
+      "modeifedList",
+      convertToPhotoDTO(imageList).filter((item) => item.photoId !== undefined)
+    );
+  }, [deletedImageList, imageList]);
 
   const onTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextAreaContent(event.target.value);
@@ -220,6 +175,8 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   useEffect(() => {
     setValue("content", textAreaContent); // Sync with form state
   }, [setValue, textAreaContent]);
+
+  useEffect(() => {}, [setValue, imageList]);
 
   return (
     <Frame canGoBack title="게시물 수정" isWhiteTitle isBorder>
@@ -241,7 +198,11 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
         {imageList.length ? (
           <>
             <div className="h-[207px]"></div>
-            <PreviewList imageList={imageList} setImageList={setImageList} />
+            <PreviewList
+              imageList={imageList}
+              setImageList={setImageList}
+              setDeletedImageList={setDeletedImageList}
+            />
           </>
         ) : (
           <div className="h-[95px]"></div>

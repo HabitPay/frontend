@@ -13,7 +13,11 @@ import { IProfileDTO } from "@/types/member";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
 
-const Page = ({ params: { id } }: { params: { id: string } }) => {
+const Page = ({
+  params: { challengeId },
+}: {
+  params: { challengeId: string };
+}) => {
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const [feeData, setFeeData] = useState<IChallengeFeeListDto>({
     myFee: 0,
@@ -27,7 +31,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
   useEffect(() => {
     const getFeeList = async () => {
       try {
-        const res = await apiManager.get(`/challenges/${id}/fee`);
+        const res = await apiManager.get(`/challenges/${challengeId}/fee`);
         const data: IChallengeFeeListDto = res.data?.data;
         setFeeData(data);
       } catch (error) {
@@ -41,7 +45,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     };
     const getChallengeInfo = async () => {
       try {
-        const res = await apiManager.get(`/challenges/${id}`);
+        const res = await apiManager.get(`/challenges/${challengeId}`);
         const data: IChallengeDetailsDto = res.data?.data;
         setIsEnrolled(data.isMemberEnrolledInChallenge);
       } catch (error) {
@@ -55,7 +59,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     };
     getFeeList();
     getChallengeInfo();
-  }, [id, setToastPopup]);
+  }, [challengeId, setToastPopup]);
 
   const [criteria, setCriteria] = useState<
     "rankByFee" | "rankByCompletionRate"

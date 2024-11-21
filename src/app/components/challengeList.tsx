@@ -50,7 +50,17 @@ export default function ChallengeList() {
 
   return (
     <div className="flex flex-col w-full pb-4">
-      {status === "loading" && <p>불러오는 중</p>}
+      {status === "loading" && (
+        <div className="flex flex-col px-6 animate-pulse bg-white p-3 rounded-xl">
+          <div className="flex gap-4 justify-between pb-4">
+            <div className="w-32 h-8 bg-gray-400 rounded-xl" />
+            <div className="w-28 bg-gray-400 h-5 rounded-xl" />
+          </div>
+          <div className="flex items-center">
+            <div className="w-56 h-16 bg-gray-400 rounded-xl" />
+          </div>
+        </div>
+      )}
       {status === "error" && <p>{error?.message}</p>}
       {status === "success" &&
         data?.pages.map((challenges, index) => (
@@ -60,13 +70,13 @@ export default function ChallengeList() {
                 <Link
                   href={`/challenges/${challenge.id}/main`}
                   key={index}
-                  className="flex flex-col bg-white rounded-xl py-3 px-3"
+                  className="flex flex-col px-3 py-3 bg-white rounded-xl"
                 >
-                  <div className="flex justify-between items-center mb-2">
-                    <div className=" text-xl font-semibold">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="text-xl font-semibold ">
                       {challenge.title}
                     </div>
-                    <div className="flex items-center gap-1 font-light text-sm">
+                    <div className="flex items-center gap-1 text-sm font-light">
                       <div>{challenge.hostNickname}</div>
                       <Image
                         src={challenge.hostProfileImage || defaultProfileImage}
@@ -77,21 +87,40 @@ export default function ChallengeList() {
                       />
                     </div>
                   </div>
-                  <div className="text-sm">
-                    {`챌린지 기간:${format(
+                  <div className="flex *:text-sm">
+                    <span className="font-bold">챌린지 기간: </span>
+                    <span>{`${format(
                       new Date(challenge.startDate),
                       "yy.MM.dd"
-                    )} ~ ${format(new Date(challenge.endDate), "yy.MM.dd")}`}
+                    )} - ${format(
+                      new Date(challenge.endDate),
+                      "yy.MM.dd"
+                    )}`}</span>
                   </div>
-
-                  <div className="text-sm">{`현재 참여인원: ${challenge.numberOfParticipants}`}</div>
-                  <div className="text-sm">{`총 기간(일): ${challenge.participatingDays}`}</div>
+                  <div className="flex  *:text-sm">
+                    <span className="font-bold">현재 참여인원: </span>
+                    <span>{challenge.numberOfParticipants}</span>
+                  </div>
+                  <div className="flex  *:text-sm">
+                    <span className="font-bold">총 기간(일): </span>
+                    <span>{challenge.participatingDays}</span>
+                  </div>
                 </Link>
               ))}
           </div>
         ))}
       <div ref={bottom} />
-      {isFetchingNextPage && <p>계속 불러오는 중</p>}
+      {isFetchingNextPage && (
+        <div className="flex flex-col px-6 animate-pulse bg-white p-3 rounded-xl">
+          <div className="flex gap-4 justify-between pb-4">
+            <div className="w-32 h-8 bg-gray-400 rounded-xl" />
+            <div className="w-28 bg-gray-400 h-5 rounded-xl" />
+          </div>
+          <div className="flex items-center">
+            <div className="w-56 h-16 bg-gray-400 rounded-xl" />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

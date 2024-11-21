@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { imageInfo } from "../page";
-import Image from "next/image";
 import PreviewImage from "./previewImage";
 import {
   DragDropContext,
@@ -12,19 +11,26 @@ import {
 interface IPreviewList {
   imageList: imageInfo[];
   setImageList: Dispatch<SetStateAction<imageInfo[]>>;
+  setDeletedImageList?: Dispatch<SetStateAction<number[]>>;
 }
 
-const PreviewList = ({ imageList, setImageList }: IPreviewList) => {
-  const onImageCancelClicked = (index: number) => {
+const PreviewList = ({
+  imageList,
+  setImageList,
+  setDeletedImageList,
+}: IPreviewList) => {
+  const onImageCancelClicked = (index: number, postPhotoId?: number) => {
     const newImageList = [...imageList];
 
     newImageList.splice(index, 1);
-    console.log(newImageList);
+    if (setDeletedImageList && postPhotoId) {
+      setDeletedImageList((prev) => [...prev, postPhotoId]);
+    }
     setImageList(newImageList);
   };
   const onDragEnd = useCallback(
     (result: DropResult) => {
-      const { destination, source, draggableId, type } = result;
+      const { destination, source } = result;
       console.log("source: ", source);
       console.log("destination: ", destination);
       if (!destination) return;
@@ -62,7 +68,9 @@ const PreviewList = ({ imageList, setImageList }: IPreviewList) => {
                     key={index}
                     item={item}
                     index={index}
-                    onImageCancelClicked={onImageCancelClicked}
+                    onImageCancelClicked={() =>
+                      onImageCancelClicked(index, item.postPhotoId)
+                    }
                   />
                 )}
               </Draggable>

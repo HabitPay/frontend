@@ -1,6 +1,9 @@
 import ChallengeCard from "./challengeCard";
 import { ChallengeStatesEnum } from "@/types/enums";
-import { IChallengeEnrolledList } from "@/types/challenge";
+import {
+  IChallengeEnrolledList,
+  IChallengeEnrolledListItemDto,
+} from "@/types/challenge";
 
 interface IChallengesProps {
   challenges: IChallengeEnrolledList;
@@ -8,6 +11,16 @@ interface IChallengesProps {
 }
 
 function Challenges({ challenges, challengeState }: IChallengesProps) {
+  const sortByStartDateAsc = (
+    a: IChallengeEnrolledListItemDto,
+    b: IChallengeEnrolledListItemDto
+  ) => new Date(a.startDate).getTime() - new Date(b.startDate).getTime();
+
+  const sortByStartDateDesc = (
+    a: IChallengeEnrolledListItemDto,
+    b: IChallengeEnrolledListItemDto
+  ) => new Date(b.startDate).getTime() - new Date(a.startDate).getTime();
+
   return (
     <>
       {challengeState == ChallengeStatesEnum.InProgress &&
@@ -21,7 +34,7 @@ function Challenges({ challenges, challengeState }: IChallengesProps) {
       {challengeState == ChallengeStatesEnum.InProgress &&
         challenges.inProgress.length > 0 && (
           <ChallengeCard
-            items={challenges.inProgress}
+            items={challenges.inProgress.sort(sortByStartDateDesc)}
             challengeState={challengeState}
           />
         )}
@@ -37,7 +50,7 @@ function Challenges({ challenges, challengeState }: IChallengesProps) {
       {challengeState == ChallengeStatesEnum.Scheduled &&
         challenges.scheduled.length > 0 && (
           <ChallengeCard
-            items={challenges.scheduled}
+            items={challenges.scheduled.sort(sortByStartDateDesc)}
             challengeState={challengeState}
           />
         )}
@@ -51,7 +64,7 @@ function Challenges({ challenges, challengeState }: IChallengesProps) {
 
       {challengeState == ChallengeStatesEnum.Completed && (
         <ChallengeCard
-          items={challenges.completed}
+          items={challenges.completed.sort(sortByStartDateDesc)}
           challengeState={challengeState}
         />
       )}

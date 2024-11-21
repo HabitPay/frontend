@@ -79,7 +79,9 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
         </div>
         <div className="flex ml-auto gap-4">
           {
-            <Link href={`/posts/${contentDTO.id}/edit`}>
+            <Link
+              href={`/challenges/${challengeId}/posts/${contentDTO.id}/edit`}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -124,12 +126,6 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
             </>
           )}
         </div>
-
-        {/* {isAnnouncement ? (
-          <div className="px-2 py-1 ml-auto text-sm font-light text-white bg-red-600 rounded-2xl">
-            공지
-          </div>
-        ) : null} */}
       </div>
       <div className="flex flex-col gap-5 pt-4">
         <Slider {...slickSettings}>

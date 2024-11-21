@@ -5,6 +5,7 @@ import { IChallengeEnrolledListItemDto } from "@/types/challenge";
 import { ChallengeStatesEnum } from "@/types/enums";
 import defaultProfileImage from "@/public/default-profile.jpg";
 import { differenceInCalendarDays, format } from "date-fns";
+import { calculateTimeRemaining } from "@/libs/utils";
 
 interface IChallengeCardProps {
   items: IChallengeEnrolledListItemDto[];
@@ -106,24 +107,25 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
                 </svg>
 
                 <span>
-                  {format(new Date(item.startDate), "yyyy.MM.dd")} ~{" "}
+                  {format(new Date(item.startDate), "yyyy.MM.dd")} -{" "}
                   {format(new Date(item.endDate), "yyyy.MM.dd")}
                 </span>
 
                 {challengeState === ChallengeStatesEnum.InProgress && (
                   <span>
-                    (종료까지{" "}
-                    {differenceInCalendarDays(new Date(item.endDate), now)}일
-                    남음)
+                    {`(${calculateTimeRemaining(
+                      item.startDate,
+                      item.endDate
+                    )})`}
                   </span>
                 )}
 
                 {challengeState === ChallengeStatesEnum.Scheduled && (
                   <span>
-                    (
-                    {differenceInCalendarDays(new Date(item.startDate), now) +
-                      1}
-                    일 후 시작)
+                    {`(${calculateTimeRemaining(
+                      item.startDate,
+                      item.endDate
+                    )})`}
                   </span>
                 )}
 

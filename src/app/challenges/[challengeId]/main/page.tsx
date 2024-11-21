@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useSetRecoilState } from "recoil";
-import { differenceInDays, isBefore } from "date-fns";
+import { isBefore } from "date-fns";
 
 import FloatingButton from "@/app/components/floatingButton";
 import Frame from "@/app/components/frame";
@@ -27,29 +27,36 @@ import Label from "../../components/label";
 import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
 import Loading from "./loading";
 
-const Page = ({ params: { id } }: { params: { id: string } }) => {
+const Page = ({
+  params: { challengeId },
+}: {
+  params: { challengeId: string };
+}) => {
   const [challengeDetail, setChallengeDetail] = useState(false);
   const [totalAbsenceFee, setTotalAbsenceFee] = useState<number | undefined>(0);
   const [isAnnouncements, setIsAnnouncements] = useState(false);
   const [announcements, setAnnouncements] =
     useState<ChallengeContentResponseDTO | null>(null);
   const { challengeDetails, selectedDays, isLoading, error } =
-    useChallengeDetails(id);
+    useChallengeDetails(challengeId);
   const pathname = usePathname();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
 
   useEffect(() => {
+    console.log(challengeDetail);
     document.title = "Challenge Main | HabitPay";
     const getAnnouncementsPosts = async () => {
-      const res = await apiManager.get(`/challenges/${id}/posts/announcements`);
+      const res = await apiManager.get(
+        `/challenges/${challengeId}/posts/announcements`
+      );
       if (res.data.content) {
         setAnnouncements(res.data);
       }
     };
     getAnnouncementsPosts();
     setTotalAbsenceFee(challengeDetails?.totalAbsenceFee);
-  }, [id, challengeDetails?.totalAbsenceFee]);
+  }, [challengeId, challengeDetails?.totalAbsenceFee, challengeDetail]);
 
   if (isLoading) return <Loading />;
   if (error || challengeDetails === null) {
@@ -80,12 +87,18 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     <Frame canGoBack hasTabBar>
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6">
-          <Menu currentPage="챌린지 메인" challengeId={id} />
+          <Menu
+            currentPage="챌린지 메인"
+            challengeId={challengeId}
+            isMemberEnrolledInChallenge={
+              challengeDetails.isMemberEnrolledInChallenge
+            }
+          />
           <ChallengeTitle
             title={title}
             startDate={startDate}
+            endDate={endDate}
             isBeforeStartDate={isBeforeStartDate}
-            remainingDays={differenceInDays(new Date(endDate), Date.now()) + 1}
             participants={numberOfParticipants}
             profileImages={enrolledMembersProfileImageList}
           />
@@ -96,7 +109,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
               <div className="flex space-x-2">
                 {isHost && (
                   <Link
-                    href={`/challenges/${id}/edit`}
+                    href={`/challenges/${challengeId}/edit`}
                     className="flex items-center space-x-1 bg-[#FFF9C4] pl-2 pr-3 py-1 rounded-2xl"
                   >
                     <svg
@@ -210,7 +223,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                           <PostItem
                             contentDTO={announcement}
                             key={announcement.id}
-                            challengeId={id}
+                            challengeId={challengeId}
                           />
                         ))}
                     </div>
@@ -242,29 +255,36 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
                 </span>
                 모였습니다!
               </span>
-              <Link
-                href={`/challenges/${id}/fee-table`}
-                className="px-3 py-2 text-white rounded-xl font-extralight bg-habit-green"
-              >
-                벌금 현황 보기
-              </Link>
+              {challengeDetails.isMemberEnrolledInChallenge && (
+                <Link
+                  href={`/challenges/${challengeId}/fee-table`}
+                  className="px-3 py-2 text-white rounded-xl font-extralight bg-habit-green"
+                >
+                  벌금 현황 보기
+                </Link>
+              )}
             </div>
-            <ChallengeParticipationStatus
-              isParticipatedToday={challengeDetails.isParticipatedToday}
-              isTodayParticipatingDay={challengeDetails.isTodayParticipatingDay}
-            />
+            {new Date() < new Date(endDate) &&
+              challengeDetails.isMemberEnrolledInChallenge && (
+                <ChallengeParticipationStatus
+                  isParticipatedToday={challengeDetails.isParticipatedToday}
+                  isTodayParticipatingDay={
+                    challengeDetails.isTodayParticipatingDay
+                  }
+                />
+              )}
           </div>
         </div>
         <div className="flex flex-col px-6 pt-4">
           <div className="flex flex-col items-center space-y-3">
             {isBeforeStartDate ? (
               <Enrollment
-                id={id as string}
+                id={challengeId as string}
                 isMemberEnrolledInChallenge={isMemberEnrolledInChallenge}
               />
             ) : (
               <>
-                <PostsFeed id={id} />
+                <PostsFeed id={challengeId} />
                 <FloatingButton href={`${getParentPath(pathname)}/post`}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

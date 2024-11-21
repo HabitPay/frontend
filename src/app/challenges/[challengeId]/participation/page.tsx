@@ -24,7 +24,11 @@ import { getParentPath } from "@/libs/utils";
 import "@/styles/CustomCalendar.css";
 import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
 
-const Page = ({ params: { id } }: { params: { id: string } }) => {
+const Page = ({
+  params: { challengeId },
+}: {
+  params: { challengeId: string };
+}) => {
   const [participationRecords, setParticipationRecords] =
     useState<ChallengeParticipationRecords>({
       failureDaysSet: new Set(),
@@ -33,13 +37,14 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     });
   const pathname = usePathname();
   const currentPath = usePathname().split("/");
-  const { challengeDetails, isLoading, error } = useChallengeDetails(id);
+  const { challengeDetails, isLoading, error } =
+    useChallengeDetails(challengeId);
   const router = useRouter();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   useEffect(() => {
     const getMyPosts = async () => {
       try {
-        const res = await apiManager.get(`/challenges/${id}/posts/me`);
+        const res = await apiManager.get(`/challenges/${challengeId}/posts/me`);
         const data: ChallengeContentResponseDTO = res.data?.data;
         console.log(data);
       } catch (error) {
@@ -53,7 +58,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     };
     const getParticipationRecords = async () => {
       try {
-        const res = await apiManager.get(`/challenges/${id}/records`);
+        const res = await apiManager.get(`/challenges/${challengeId}/records`);
         const data: ChallengeParticipationDto = res.data?.data;
         setParticipationRecords({
           successDaysSet: new Set(data.successDayList),
@@ -72,7 +77,7 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     getParticipationRecords();
     getMyPosts();
     document.title = "My Participation | HabitPay";
-  }, [id, setToastPopup]);
+  }, [challengeId, setToastPopup]);
   if (isLoading) return <Loading />;
   if (error || challengeDetails === null) {
     setToastPopup({
@@ -98,28 +103,36 @@ const Page = ({ params: { id } }: { params: { id: string } }) => {
     <Frame hasTabBar canGoBack>
       <div className="flex flex-col divide-y-2">
         <div className="flex flex-col px-6 pb-5">
-          <Menu currentPage="참여 기록" challengeId={currentPath[2]} />
+          <Menu
+            currentPage="참여 기록"
+            challengeId={currentPath[2]}
+            isMemberEnrolledInChallenge={
+              challengeDetails.isMemberEnrolledInChallenge
+            }
+          />
           <ChallengeTitle
             title={title}
             startDate={startDate}
+            endDate={endDate}
             isBeforeStartDate={isBeforeStartDate}
-            remainingDays={differenceInDays(new Date(endDate), Date.now()) + 1}
             participants={numberOfParticipants}
             profileImages={enrolledMembersProfileImageList}
           />
-          <ChallengeParticipationStatus
-            isParticipatedToday={challengeDetails.isParticipatedToday}
-            isTodayParticipatingDay={challengeDetails.isTodayParticipatingDay}
-          />
+          {new Date() < new Date(endDate) && (
+            <ChallengeParticipationStatus
+              isParticipatedToday={challengeDetails.isParticipatedToday}
+              isTodayParticipatingDay={challengeDetails.isTodayParticipatingDay}
+            />
+          )}
         </div>
         <div className="flex flex-col px-6 py-6 ">
           <Calendar
-            className="px-8 py-6 space-y-4 bg-white shadow-lg mx-auto"
+            className="px-8 py-6 mx-auto space-y-4 bg-white shadow-lg"
             formatDay={(locale, date) => date.getDate().toString()}
             tileContent={({ date }) => {
               const day = format(date, "yyyy-MM-dd");
               return (
-                <div className="flex justify-center items-center relative">
+                <div className="relative flex items-center justify-center">
                   {participationRecords.successDaysSet.has(day) && (
                     <div className="dot-success"></div>
                   )}

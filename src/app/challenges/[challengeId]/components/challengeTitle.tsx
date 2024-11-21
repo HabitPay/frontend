@@ -1,21 +1,22 @@
 import Image from "next/image";
 import defaultProfileImage from "@/public/default-profile.jpg";
-import { differenceInDays, isBefore } from "date-fns";
+import { differenceInDays, format, isBefore } from "date-fns";
+import { calculateTimeRemaining } from "@/libs/utils";
 
 interface IChallengeTitleProps {
   title: string;
-  remainingDays: number;
   participants: number;
   profileImages: string[];
   startDate: string;
+  endDate: string;
   isBeforeStartDate: boolean;
 }
 
 const ChallengeTitle = ({
   title,
-  remainingDays,
   participants,
   startDate,
+  endDate,
   isBeforeStartDate,
   profileImages,
 }: IChallengeTitleProps) => {
@@ -25,11 +26,14 @@ const ChallengeTitle = ({
     <div className="flex items-center justify-between mt-4">
       <div className="flex flex-col">
         <div className="text-2xl font-bold">{title}</div>
-        <div className="text-xl font-[250] text-habit-gray">
-          {isBeforeStartDate
-            ? `시작까지 ${daysLeftUntilStart}일 `
-            : `종료까지 ${remainingDays}일 `}
-          남았습니다.
+        <div className="text-xl font-[420] text-habit-gray">
+          {calculateTimeRemaining(startDate, endDate)}
+        </div>
+        <div className=" text-md font-light">
+          {`${format(new Date(startDate), "yyyy.MM.dd")} - ${format(
+            new Date(endDate),
+            "yyyy.MM.dd"
+          )}`}
         </div>
       </div>
       <div className="flex items-center px-3 space-x-2 border-2 h-11 rounded-2xl border-habit-gray">

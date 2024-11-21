@@ -14,6 +14,7 @@ interface IPreviewImage {
   dragHandleProps: DraggableProvidedDragHandleProps | null;
   innerRef: (element?: HTMLElement | null | undefined) => void;
   [key: string]: any;
+  postPhotoId?: number;
 }
 
 const PreviewImage = ({
@@ -24,7 +25,6 @@ const PreviewImage = ({
   dragHandleProps,
   innerRef,
 }: IPreviewImage) => {
-  console.log(index, " rerenderd");
   return (
     <div
       ref={innerRef}

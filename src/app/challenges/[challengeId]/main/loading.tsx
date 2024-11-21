@@ -1,4 +1,3 @@
-import Menu from "../components/menu";
 import Frame from "@/app/components/frame";
 
 export default function Loading() {
