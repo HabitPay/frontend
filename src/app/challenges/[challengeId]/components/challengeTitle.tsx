@@ -26,13 +26,13 @@ const ChallengeTitle = ({
     <div className="flex items-center justify-between mt-4">
       <div className="flex flex-col">
         <div className="text-2xl font-bold">{title}</div>
-        <div className="text-xl font-[250] text-habit-gray">
+        <div className="text-xl font-[420] text-habit-gray">
           {calculateTimeRemaining(startDate, endDate)}
         </div>
-        <div className="text-md">
-          {`${format(new Date(startDate), "yy.MM.dd")} - ${format(
+        <div className=" text-md font-light">
+          {`${format(new Date(startDate), "yyyy.MM.dd")} - ${format(
             new Date(endDate),
-            "yy.MM.dd"
+            "yyyy.MM.dd"
           )}`}
         </div>
       </div>

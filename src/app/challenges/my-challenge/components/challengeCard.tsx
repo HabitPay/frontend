@@ -107,7 +107,7 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
                 </svg>
 
                 <span>
-                  {format(new Date(item.startDate), "yyyy.MM.dd")} ~{" "}
+                  {format(new Date(item.startDate), "yyyy.MM.dd")} -{" "}
                   {format(new Date(item.endDate), "yyyy.MM.dd")}
                 </span>
 
