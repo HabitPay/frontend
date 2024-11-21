@@ -14,6 +14,10 @@ import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { IChallengeDetailsDto } from "@/types/challenge";
+import {
+  convertFilesToPhotoDTOs,
+  uploadImagesToS3,
+} from "@/libs/imageUploadUtils";
 
 export interface imageInfo {
   file: File;
@@ -47,63 +51,6 @@ const Page = ({
 
     getChallengeInfo();
   }, [challengeId]);
-
-  const uploadImageToS3 = async (
-    preSignedUrl: string,
-    image: File,
-    imageExtension: string
-  ) => {
-    try {
-      const res = await axios.put(preSignedUrl, image, {
-        headers: {
-          "Content-Type": "image/" + imageExtension,
-        },
-      });
-      console.log(res);
-    } catch (error) {
-      setToastPopup({
-        // @ts-ignore
-        message: error.data.message,
-        top: false,
-        success: false,
-      });
-    }
-  };
-
-  const uploadImagesToS3 = async (
-    preSignedUrls: string[],
-    imageFiles: FileList | undefined
-  ) => {
-    if (!imageFiles) return;
-    for (let i = 0; i < preSignedUrls.length; ++i) {
-      uploadImageToS3(
-        preSignedUrls[i],
-        imageFiles[i],
-        imageFiles[i].type.slice(imageFiles[i].type.indexOf("/") + 1)
-      );
-    }
-  };
-
-  const convertFilesToPhotoDTOs = (files: FileList | undefined) => {
-    if (!files || !files.length) {
-      return [];
-    }
-    let photosData: PhotoDTO[] = [];
-    for (let i = 0; i < files.length; ++i) {
-      let photoData: PhotoDTO = {
-        viewOrder: 0,
-        contentLength: 0,
-        imageExtension: "",
-      };
-      photoData.viewOrder = i + 1;
-      photoData.contentLength = files[i].size;
-      photoData.imageExtension = files[i].type.slice(
-        files[i].type.indexOf("/") + 1
-      );
-      photosData.push(photoData);
-    }
-    return photosData;
-  };
 
   const onSubmitWithValidation = async (form: IForm) => {
     console.log("onSubmit", form.photos);
@@ -142,8 +89,6 @@ const Page = ({
     if (!files || files.length <= 0) return;
 
     const fileList: File[] = Array.from(files);
-    const newImageList: imageInfo[] = [];
-
     if (imageList.length + fileList.length > 5) {
       setToastPopup({
         message: "사진은 최대 5장까지 업로드 가능합니다.",
@@ -189,9 +134,9 @@ const Page = ({
     });
 
     const results = await Promise.all(readFilePromises);
-    for (let i = 0; i < fileList.length; i++) {
-      newImageList.push({ file: fileList[i], preview: results[i] });
-    }
+    const newImageList: imageInfo[] = Array.from(fileList).map(
+      (file, index) => ({ file, preview: results[index] })
+    );
 
     const updatedImageList = [...imageList, ...newImageList];
     setImageList(updatedImageList);
