@@ -4,6 +4,7 @@
 // ...는 rest파라미터라고하며 string인자들을 받는다 cls("hogkim", "jkwak") 라고해보자
 // 그러면 classnames는 ["hogkim", "jkwak"]가 되고
 
+import { imageInfo } from "@/app/challenges/[challengeId]/post/page";
 import axios from "axios";
 import {
   differenceInDays,

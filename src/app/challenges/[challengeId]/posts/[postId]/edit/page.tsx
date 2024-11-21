@@ -2,31 +2,19 @@
 
 import Frame from "@/app/components/frame";
 import { MB, validImageExtensions } from "@/libs/constants";
-import {
-  addClassNames,
-  arrayToFileList,
-  urlToFileWithAxios,
-} from "@/libs/utils";
+import { addClassNames, urlToFileWithAxios } from "@/libs/utils";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import PreviewList from "../../../post/components/previewList";
 import apiManager from "@/api/apiManager";
-import { IPatchPostDTO, PhotoDTO } from "@/types/post";
+import { IPatchPostDTO } from "@/types/post";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { ContentDTO } from "@/types/challenge";
-import {
-  convertFilesToPhotoDTOs,
-  uploadImagesToS3,
-} from "@/libs/imageUploadUtils";
-
-export interface imageInfo {
-  file: File;
-  preview: string;
-}
+import { convertToPhotoDTO, uploadImagesToS3 } from "@/libs/imageUploadUtils";
+import { imageInfo } from "../../../post/page";
 
 interface IForm {
   content: string;
@@ -40,7 +28,7 @@ const Page = ({
 }) => {
   const { register, handleSubmit, setValue, setError } = useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
-  const [isPhotosUpdated, setIsPhotoUpdated] = useState<boolean>(false);
+  const [deletedImageList, setDeletedImageList] = useState<number[]>([]);
   const [isAnnouncement, setIsAnnouncement] = useState(false);
   const [challengeContent, setChallengeContent] = useState<ContentDTO>();
   const [textAreaContent, setTextAreaContent] = useState(
@@ -49,6 +37,7 @@ const Page = ({
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
   const currentPath = usePathname();
+
   useEffect(() => {
     document.title = "Challenge Post Edit | HabitPay";
     const getPostInfo = async () => {
@@ -62,23 +51,26 @@ const Page = ({
       );
       const imageFileArray = await Promise.all(imageFilePromises);
       const imageInfoList: imageInfo[] = imageFileArray.map((file, index) => ({
-        file,
+        postPhotoId: data.photoViewList[index].postPhotoId,
         preview: data.photoViewList[index].imageUrl,
+        isNew: false,
       }));
-
-      console.log(data);
       setImageList(imageInfoList);
     };
     getPostInfo();
   }, [postId]);
-
   const onSubmitWithValidation = async (form: IForm) => {
     try {
       const data: IPatchPostDTO = {
         content: form.content,
         isAnnouncement: isAnnouncement,
-        photos: convertFilesToPhotoDTOs(form.photos),
-        isPhotosUpdated: isPhotosUpdated,
+        newPhotos: convertToPhotoDTO(imageList).filter(
+          (item) => item.photoId == undefined
+        ),
+        modifiedPhotos: convertToPhotoDTO(imageList).filter(
+          (item) => item.photoId !== undefined
+        ),
+        deletedPhotoIds: deletedImageList,
       };
       console.log(data);
       const res = await apiManager.patch(
@@ -91,7 +83,10 @@ const Page = ({
         success: true,
       });
       const preSignedUrls: string[] = res.data?.data;
-      uploadImagesToS3(preSignedUrls, form.photos);
+      uploadImagesToS3(
+        preSignedUrls,
+        imageList.filter((item) => item.postPhotoId == undefined)
+      );
       router.push(`/challenges/${challengeId}/main`);
     } catch (error) {
       setToastPopup({
@@ -156,13 +151,23 @@ const Page = ({
 
     const results = await Promise.all(readFilePromises);
     const newImageList: imageInfo[] = Array.from(fileList).map(
-      (file, index) => ({ file, preview: results[index] })
+      (file, index) => ({ file, preview: results[index], isNew: true })
     );
-
     const updatedImageList = [...imageList, ...newImageList];
     setImageList(updatedImageList);
-    setIsPhotoUpdated(true);
   };
+
+  useEffect(() => {
+    console.log(
+      "newImageList",
+      convertToPhotoDTO(imageList).filter((item) => item.photoId == undefined)
+    );
+    console.log("deletedImageList", deletedImageList);
+    console.log(
+      "modeifedList",
+      convertToPhotoDTO(imageList).filter((item) => item.photoId !== undefined)
+    );
+  }, [deletedImageList, imageList]);
 
   const onTextAreaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextAreaContent(event.target.value);
@@ -172,11 +177,7 @@ const Page = ({
     setValue("content", textAreaContent); // Sync with form state
   }, [setValue, textAreaContent]);
 
-  useEffect(() => {
-    // imageList가 변할 경우 setValue를 실행.
-    const updatedFileList = arrayToFileList(imageList.map((item) => item.file));
-    setValue("photos", updatedFileList);
-  }, [setValue, imageList]);
+  useEffect(() => {}, [setValue, imageList]);
 
   return (
     <Frame canGoBack title="게시물 수정" isWhiteTitle isBorder>
@@ -198,7 +199,11 @@ const Page = ({
         {imageList.length ? (
           <>
             <div className="h-[207px]"></div>
-            <PreviewList imageList={imageList} setImageList={setImageList} />
+            <PreviewList
+              imageList={imageList}
+              setImageList={setImageList}
+              setDeletedImageList={setDeletedImageList}
+            />
           </>
         ) : (
           <div className="h-[95px]"></div>

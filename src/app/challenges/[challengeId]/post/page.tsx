@@ -2,26 +2,24 @@
 
 import Frame from "@/app/components/frame";
 import { MB, validImageExtensions } from "@/libs/constants";
-import { addClassNames, arrayToFileList } from "@/libs/utils";
+import { addClassNames } from "@/libs/utils";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import PreviewList from "./components/previewList";
 import apiManager from "@/api/apiManager";
-import { ICreatePostDTO, PhotoDTO } from "@/types/post";
+import { ICreatePostDTO } from "@/types/post";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { IChallengeDetailsDto } from "@/types/challenge";
-import {
-  convertFilesToPhotoDTOs,
-  uploadImagesToS3,
-} from "@/libs/imageUploadUtils";
+import { convertToPhotoDTO, uploadImagesToS3 } from "@/libs/imageUploadUtils";
 
 export interface imageInfo {
-  file: File;
+  file?: File;
+  postPhotoId?: number;
   preview: string;
+  isNew: boolean;
 }
 
 interface IForm {
@@ -58,7 +56,7 @@ const Page = ({
       const data: ICreatePostDTO = {
         content: form.content,
         isAnnouncement: isAnnouncement,
-        photos: convertFilesToPhotoDTOs(form.photos),
+        photos: convertToPhotoDTO(imageList),
       };
       const res = await apiManager.post(
         `/challenges/${challengeId}/posts`,
@@ -70,7 +68,7 @@ const Page = ({
         success: true,
       });
       const preSignedUrls: string[] = res.data?.data;
-      uploadImagesToS3(preSignedUrls, form.photos);
+      uploadImagesToS3(preSignedUrls, imageList);
       router.push(`/challenges/${challengeId}/main`);
     } catch (error) {
       setToastPopup({
@@ -135,18 +133,12 @@ const Page = ({
 
     const results = await Promise.all(readFilePromises);
     const newImageList: imageInfo[] = Array.from(fileList).map(
-      (file, index) => ({ file, preview: results[index] })
+      (file, index) => ({ file, preview: results[index], isNew: true })
     );
 
     const updatedImageList = [...imageList, ...newImageList];
     setImageList(updatedImageList);
   };
-
-  useEffect(() => {
-    // imageList가 변할 경우 setValue를 실행.
-    const updatedFileList = arrayToFileList(imageList.map((item) => item.file));
-    setValue("photos", updatedFileList);
-  }, [setValue, imageList]);
 
   return (
     <Frame canGoBack title="게시물 작성" isWhiteTitle isBorder>

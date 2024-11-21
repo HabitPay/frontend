@@ -1,7 +1,8 @@
 export interface PhotoDTO {
+  photoId?: number;
   viewOrder: number;
-  imageExtension: string;
-  contentLength: number;
+  imageExtension?: string;
+  contentLength?: number;
 }
 
 export interface ICreatePostDTO {
