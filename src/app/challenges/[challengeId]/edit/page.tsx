@@ -24,7 +24,7 @@ const Page = ({
   params: { challengeId: string };
 }) => {
   const { challengeDetails, selectedDays, isLoading, error } =
-    useChallengeDetails(id);
+    useChallengeDetails(challengeId);
   const { register, handleSubmit } = useForm<IChallengePatchDto>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
@@ -34,13 +34,13 @@ const Page = ({
   }, []);
   const onSubmitWithValidation = async (form: IChallengePatchDto) => {
     try {
-      const res = await apiManager.patch(`/challenges/${id}`, form);
+      const res = await apiManager.patch(`/challenges/${challengeId}`, form);
       setToastPopup({
         message: res.data.message,
         top: false,
         success: true,
       });
-      router.push(`/challenges/${id}/main`);
+      router.push(`/challenges/${challengeId}/main`);
     } catch (error) {
       setToastPopup({
         // @ts-ignore
@@ -53,7 +53,7 @@ const Page = ({
 
   const handleChallengeDelete = async () => {
     try {
-      const res = await apiManager.delete(`/challenges/${id}`);
+      const res = await apiManager.delete(`/challenges/${challengeId}`);
       setToastPopup({
         message: res.data.message,
         top: false,
