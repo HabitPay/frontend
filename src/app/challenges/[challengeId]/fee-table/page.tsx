@@ -31,7 +31,7 @@ const Page = ({
   useEffect(() => {
     const getFeeList = async () => {
       try {
-        const res = await apiManager.get(`/challenges/${id}/fee`);
+        const res = await apiManager.get(`/challenges/${challengeId}/fee`);
         const data: IChallengeFeeListDto = res.data?.data;
         setFeeData(data);
       } catch (error) {
@@ -45,7 +45,7 @@ const Page = ({
     };
     const getChallengeInfo = async () => {
       try {
-        const res = await apiManager.get(`/challenges/${id}`);
+        const res = await apiManager.get(`/challenges/${challengeId}`);
         const data: IChallengeDetailsDto = res.data?.data;
         setIsEnrolled(data.isMemberEnrolledInChallenge);
       } catch (error) {
@@ -59,7 +59,7 @@ const Page = ({
     };
     getFeeList();
     getChallengeInfo();
-  }, [id, setToastPopup]);
+  }, [challengeId, setToastPopup]);
 
   const [criteria, setCriteria] = useState<
     "rankByFee" | "rankByCompletionRate"
