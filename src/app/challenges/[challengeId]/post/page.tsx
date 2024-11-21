@@ -19,7 +19,6 @@ export interface imageInfo {
   file?: File;
   postPhotoId?: number;
   preview: string;
-  isNew: boolean;
 }
 
 interface IForm {
@@ -133,7 +132,7 @@ const Page = ({
 
     const results = await Promise.all(readFilePromises);
     const newImageList: imageInfo[] = Array.from(fileList).map(
-      (file, index) => ({ file, preview: results[index], isNew: true })
+      (file, index) => ({ file, preview: results[index] })
     );
 
     const updatedImageList = [...imageList, ...newImageList];

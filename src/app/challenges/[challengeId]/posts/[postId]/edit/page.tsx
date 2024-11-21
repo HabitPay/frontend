@@ -53,7 +53,6 @@ const Page = ({
       const imageInfoList: imageInfo[] = imageFileArray.map((file, index) => ({
         postPhotoId: data.photoViewList[index].postPhotoId,
         preview: data.photoViewList[index].imageUrl,
-        isNew: false,
       }));
       setImageList(imageInfoList);
     };
@@ -151,7 +150,7 @@ const Page = ({
 
     const results = await Promise.all(readFilePromises);
     const newImageList: imageInfo[] = Array.from(fileList).map(
-      (file, index) => ({ file, preview: results[index], isNew: true })
+      (file, index) => ({ file, preview: results[index] })
     );
     const updatedImageList = [...imageList, ...newImageList];
     setImageList(updatedImageList);
