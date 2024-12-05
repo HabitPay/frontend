@@ -37,12 +37,11 @@ export interface PageableDTO {
 // ChallengeContentResponseDTO
 export interface ChallengeContentResponseDTO {
   content: ContentDTO[];
-  pageable: PageableDTO;
+  pageNumber: number;
   size: number;
-  number: number;
-  sort: SortDTO;
-  numberOfElements: number;
-  first: boolean;
-  last: boolean;
-  empty: boolean;
+  isLast: boolean;
+  isFirst: boolean;
+  isEmpty: boolean;
+  hasNextPage: boolean;
+  pageable: PageableDTO;
 }

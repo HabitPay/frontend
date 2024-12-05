@@ -36,8 +36,8 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
       getPosts,
       {
         getNextPageParam: (lastPage) => {
-          if (lastPage.last === false) {
-            return lastPage.pageable.pageNumber + 1;
+          if (lastPage.isLast === false) {
+            return lastPage.pageNumber + 1;
           }
           return undefined;
         },
