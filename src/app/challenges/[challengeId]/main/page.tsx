@@ -281,6 +281,7 @@ const Page = ({
               <Enrollment
                 id={challengeId as string}
                 isMemberEnrolledInChallenge={isMemberEnrolledInChallenge}
+                isHost={isHost}
               />
             ) : (
               <>
