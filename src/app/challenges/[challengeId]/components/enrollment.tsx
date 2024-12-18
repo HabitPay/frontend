@@ -10,9 +10,14 @@ import { toastPopupAtom } from "@/hooks/atoms";
 interface IEnrollmentProps {
   id: string;
   isMemberEnrolledInChallenge: boolean;
+  isHost: boolean;
 }
 
-const Enrollment = ({ id, isMemberEnrolledInChallenge }: IEnrollmentProps) => {
+const Enrollment = ({
+  id,
+  isMemberEnrolledInChallenge,
+  isHost,
+}: IEnrollmentProps) => {
   const [
     isMemberEnrolledInChallengeState,
     setIsMemberEnrolledInChallengeState,
@@ -58,10 +63,13 @@ const Enrollment = ({ id, isMemberEnrolledInChallenge }: IEnrollmentProps) => {
     }
   };
 
+  if (isHost) {
+    return <></>;
+  }
+
   return (
     <>
       {isMemberEnrolledInChallengeState ? (
-        // TODO: 빨간색으로 변경하기
         <Button
           color="red"
           onClick={cancelChallengeEnrollment}
