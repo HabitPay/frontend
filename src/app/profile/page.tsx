@@ -243,7 +243,7 @@ const Page = () => {
         >
           <div className="relative">
             <Image
-              className="rounded-full size-32"
+              className="rounded-full size-32 object-contain bg-white"
               src={previewImage || profileImageUrl || defaultProfileImage}
               alt="Picture of me"
               width={300}
