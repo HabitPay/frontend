@@ -1,6 +1,8 @@
+import axios from "axios";
+
 import { imageInfo } from "@/app/challenges/[challengeId]/post/page";
 import { PhotoDTO } from "@/types/post";
-import axios from "axios";
+import { MAX_FILE_SIZE, SUPPORTED_IMAGE_EXTENSIONS } from "./constants";
 
 const uploadImageToS3 = async (
   preSignedUrl: string,
@@ -76,3 +78,11 @@ export function convertToPhotoDTO(imageInfoList: imageInfo[]): PhotoDTO[] {
     return photoDTO;
   });
 }
+
+export const isValidImageSize = (image: File): boolean => {
+  return 0 < image.size && image.size <= MAX_FILE_SIZE;
+};
+
+export const isValidImageExtension = (image: File): boolean => {
+  return SUPPORTED_IMAGE_EXTENSIONS.includes(image.type);
+};
