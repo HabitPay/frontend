@@ -114,7 +114,6 @@ const Page = ({
             title={title}
             startDate={startDate}
             endDate={endDate}
-            isBeforeStartDate={isBeforeStartDate}
             participants={numberOfParticipants}
             profileImages={enrolledMembersProfileImageList}
           />

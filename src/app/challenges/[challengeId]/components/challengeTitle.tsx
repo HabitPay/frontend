@@ -2,6 +2,7 @@ import Image from "next/image";
 import defaultProfileImage from "@/public/default-profile.jpg";
 import { differenceInDays, format, isBefore } from "date-fns";
 import { calculateTimeRemaining } from "@/libs/utils";
+import Link from "next/link";
 
 interface IChallengeTitleProps {
   title: string;
@@ -9,7 +10,6 @@ interface IChallengeTitleProps {
   profileImages: string[];
   startDate: string;
   endDate: string;
-  isBeforeStartDate: boolean;
 }
 
 const ChallengeTitle = ({
@@ -17,11 +17,8 @@ const ChallengeTitle = ({
   participants,
   startDate,
   endDate,
-  isBeforeStartDate,
   profileImages,
 }: IChallengeTitleProps) => {
-  const daysLeftUntilStart = differenceInDays(new Date(startDate), new Date());
-
   return (
     <div>
       <div className="flex items-center justify-between mt-4">
@@ -31,7 +28,10 @@ const ChallengeTitle = ({
             {calculateTimeRemaining(startDate, endDate)}
           </div>
         </div>
-        <div className="flex items-center px-3 space-x-2 border-2 h-11 rounded-2xl border-habit-gray">
+        <Link
+          href={`participants`}
+          className="flex items-center px-3 space-x-2 border-2 h-11 rounded-2xl border-habit-gray"
+        >
           <div className="flex -space-x-2">
             {profileImages.map((profileImage, index) => {
               return (
@@ -49,7 +49,7 @@ const ChallengeTitle = ({
             })}
           </div>
           <div>{participants}</div>
-        </div>
+        </Link>
       </div>
       <div className=" text-md font-light">
         {`${format(new Date(startDate), "yyyy.MM.dd HH:mm")} - ${format(
