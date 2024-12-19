@@ -1,20 +1,27 @@
 "use client";
 
-import Frame from "@/app/components/frame";
-import { MB, validImageExtensions } from "@/libs/constants";
-import { addClassNames, urlToFileWithAxios } from "@/libs/utils";
-import { usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+
 import { useForm } from "react-hook-form";
-import PreviewList from "../../../post/components/previewList";
-import apiManager from "@/api/apiManager";
-import { IPatchPostDTO } from "@/types/post";
 import { useSetRecoilState } from "recoil";
+
+import apiManager from "@/api/apiManager";
+import Frame from "@/app/components/frame";
+import { SUPPORTED_IMAGE_EXTENSIONS } from "@/libs/constants";
 import { toastPopupAtom } from "@/hooks/atoms";
-import { useRouter } from "next/navigation";
+import { IPatchPostDTO } from "@/types/post";
 import { ContentDTO } from "@/types/challenge";
-import { convertToPhotoDTO, uploadImagesToS3 } from "@/libs/imageUploadUtils";
+import { addClassNames, urlToFileWithAxios } from "@/libs/utils";
+import {
+  convertToPhotoDTO,
+  isValidImageSize,
+  isValidImageExtension,
+  uploadImagesToS3,
+} from "@/libs/imageUploadUtils";
+import PreviewList from "../../../post/components/previewList";
 import { imageInfo } from "../../../post/page";
+import { PopupErrorMessage } from "@/types/enums";
 
 interface IForm {
   content: string;
@@ -115,25 +122,27 @@ const Page = ({
       });
       return;
     }
-    if (!fileList.every((file) => validImageExtensions.includes(file.type))) {
+
+    if (!fileList.every(isValidImageExtension)) {
       setToastPopup({
-        message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
+        message: PopupErrorMessage.UnsupportedFileType,
         top: false,
         success: false,
       });
       setError("photos", {
-        message: "지원되는 파일 형식은 JPEG, JPG, PNG, GIF입니다.",
+        message: PopupErrorMessage.UnsupportedFileType,
       });
       return;
     }
-    if (!fileList.every((file) => file.size <= 5 * MB)) {
+
+    if (!fileList.every(isValidImageSize)) {
       setToastPopup({
-        message: "사진 한 장의 크기는 최대 1MB 입니다.",
+        message: PopupErrorMessage.FileSizeExceeded,
         top: false,
         success: false,
       });
       setError("photos", {
-        message: "사진 한 장의 크기는 최대 1MB 입니다.",
+        message: PopupErrorMessage.FileSizeExceeded,
       });
       return;
     }
@@ -235,7 +244,7 @@ const Page = ({
                 <input
                   className="hidden"
                   type="file"
-                  accept={validImageExtensions.join(",")}
+                  accept={SUPPORTED_IMAGE_EXTENSIONS.join(",")}
                   multiple
                   {...register("photos", { onChange: onImageFilesChange })}
                 />

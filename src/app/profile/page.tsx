@@ -2,25 +2,29 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-
 import axios, { HttpStatusCode } from "axios";
-import Button from "@/app/components/button";
-import defaultProfileImage from "@/public/default-profile.jpg";
-import apiManager from "@/api/apiManager";
-import { removeJwtFromSessionStorage } from "@/libs/jwt";
-import { MB, validImageExtensions } from "@/libs/constants";
-import { IApiResponseDto } from "@/types/api/apiResponse.interface";
 import { useSetRecoilState } from "recoil";
+
+import apiManager from "@/api/apiManager";
+import Button from "@/app/components/button";
 import { toastPopupAtom } from "@/hooks/atoms";
+import { IApiResponseDto } from "@/types/api/apiResponse.interface";
 import { PopupErrorMessage } from "@/types/enums";
+import { IProfileDTO } from "@/types/member";
+import { removeJwtFromSessionStorage } from "@/libs/jwt";
+import { SUPPORTED_IMAGE_EXTENSIONS } from "@/libs/constants";
+import {
+  isValidImageSize,
+  isValidImageExtension,
+} from "@/libs/imageUploadUtils";
+import defaultProfileImage from "@/public/default-profile.jpg";
 import withAuth from "../components/withAuth";
 import ConfirmModal from "../components/confirmModal";
 import Frame from "../components/frame";
-import { IProfileDTO } from "@/types/member";
-import Link from "next/link";
 
 interface IForm {
   nickname: string;
@@ -148,9 +152,8 @@ const Page = () => {
     if (!files || files.length <= 0) return;
 
     const file = files[0];
-    const fileType = file.type;
 
-    if (!validImageExtensions.includes(fileType)) {
+    if (!isValidImageExtension(file)) {
       setToastPopup({
         // @ts-ignore
         message: PopupErrorMessage.UnsupportedFileType,
@@ -160,7 +163,7 @@ const Page = () => {
       return;
     }
 
-    if (file.size > 1 * MB) {
+    if (!isValidImageSize(file)) {
       setToastPopup({
         // @ts-ignore
         message: PopupErrorMessage.FileSizeExceeded,
@@ -269,7 +272,7 @@ const Page = () => {
               <input
                 className="hidden"
                 type="file"
-                accept={validImageExtensions.join(",")}
+                accept={SUPPORTED_IMAGE_EXTENSIONS.join(",")}
                 {...register("profileImage", {
                   onChange: onProfileImageChange,
                 })}
