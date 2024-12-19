@@ -242,13 +242,16 @@ const Page = () => {
           onSubmit={handleSubmit(onSubmitWithValid)}
         >
           <div className="relative">
-            <Image
-              className="rounded-full size-32"
-              src={previewImage || profileImageUrl || defaultProfileImage}
-              alt="Picture of me"
-              width={300}
-              height={300}
-            />
+            <Link href={`${profileImageUrl}`}>
+              <Image
+                className="rounded-full size-32 object-contain bg-white"
+                src={previewImage || profileImageUrl || defaultProfileImage}
+                alt="Picture of me"
+                width={300}
+                height={300}
+              />
+            </Link>
+
             <label className="absolute bottom-0 right-0 inline-flex items-center justify-center w-6 h-6 text-sm font-semibold text-gray-600 bg-gray-100 rounded-full">
               <svg
                 xmlns="http://www.w3.org/2000/svg"

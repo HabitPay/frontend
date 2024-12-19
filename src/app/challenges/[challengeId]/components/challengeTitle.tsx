@@ -2,6 +2,7 @@ import Image from "next/image";
 import defaultProfileImage from "@/public/default-profile.jpg";
 import { differenceInDays, format, isBefore } from "date-fns";
 import { calculateTimeRemaining } from "@/libs/utils";
+import Link from "next/link";
 
 interface IChallengeTitleProps {
   title: string;
@@ -9,7 +10,6 @@ interface IChallengeTitleProps {
   profileImages: string[];
   startDate: string;
   endDate: string;
-  isBeforeStartDate: boolean;
 }
 
 const ChallengeTitle = ({
@@ -17,41 +17,45 @@ const ChallengeTitle = ({
   participants,
   startDate,
   endDate,
-  isBeforeStartDate,
   profileImages,
 }: IChallengeTitleProps) => {
-  const daysLeftUntilStart = differenceInDays(new Date(startDate), new Date());
-
   return (
-    <div className="flex items-center justify-between mt-4">
-      <div className="flex flex-col">
-        <div className="text-2xl font-bold">{title}</div>
-        <div className="text-xl font-[420] text-habit-gray">
-          {calculateTimeRemaining(startDate, endDate)}
+    <div>
+      <div className="flex items-center justify-between mt-4">
+        <div className="flex flex-col">
+          <div className="text-2xl font-bold">{title}</div>
+          <div className="text-xl font-[420] text-habit-gray">
+            {calculateTimeRemaining(startDate, endDate)}
+          </div>
         </div>
-        <div className=" text-md font-light">
-          {`${format(new Date(startDate), "yyyy.MM.dd")} - ${format(
-            new Date(endDate),
-            "yyyy.MM.dd"
-          )}`}
-        </div>
+        <Link
+          href={`participants`}
+          className="flex items-center px-3 space-x-2 border-2 h-11 rounded-2xl border-habit-gray"
+        >
+          <div className="flex -space-x-2">
+            {profileImages.map((profileImage, index) => {
+              return (
+                <Image
+                  key={index}
+                  src={profileImage || defaultProfileImage}
+                  className={`z-${
+                    50 - 10 * (index + 1)
+                  }  rounded-full size-9 object-contain bg-white`}
+                  alt="profile image"
+                  width={36}
+                  height={36}
+                />
+              );
+            })}
+          </div>
+          <div>{participants}</div>
+        </Link>
       </div>
-      <div className="flex items-center px-3 space-x-2 border-2 h-11 rounded-2xl border-habit-gray">
-        <div className="flex -space-x-2">
-          {profileImages.map((profileImage, index) => {
-            return (
-              <Image
-                key={index}
-                src={profileImage || defaultProfileImage}
-                className={`z-${30 - index * 10} rounded-full size-9`}
-                alt="profile image"
-                width={36}
-                height={36}
-              />
-            );
-          })}
-        </div>
-        <div>{participants}</div>
+      <div className=" text-md font-light">
+        {`${format(new Date(startDate), "yyyy.MM.dd HH:mm")} - ${format(
+          new Date(endDate),
+          "yyyy.MM.dd HH:mm"
+        )}`}
       </div>
     </div>
   );

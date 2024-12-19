@@ -63,13 +63,15 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
   return (
     <div className="flex flex-col px-5 py-5 bg-white rounded-2xl">
       <div className="flex items-center gap-2 pb-4 border-b-2">
-        <Image
-          src={contentDTO.profileUrl || defaultProfileImage}
-          className="z-30 rounded-full size-12"
-          alt="profileImage of writer"
-          width={12}
-          height={12}
-        />
+        <Link href={`${contentDTO.profileUrl}`}>
+          <Image
+            src={contentDTO.profileUrl || defaultProfileImage}
+            className="z-30 rounded-full size-12 object-contain  bg-habit-gray"
+            alt="profileImage of writer"
+            width={12}
+            height={12}
+          />
+        </Link>
 
         <div className="flex flex-col justify-center gap-1">
           <span className="text-sm font-semibold">{contentDTO.writer}</span>
