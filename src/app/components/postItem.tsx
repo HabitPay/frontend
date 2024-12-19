@@ -18,6 +18,7 @@ import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
 import { IPostDetailsDto } from "@/types/post";
+import Markdown from "react-markdown";
 
 interface PostsFeedProps {
   challengeId: string;
@@ -29,6 +30,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
   const [isPostAuthor, setIsPostAuthor] = useState(false);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
+
   useEffect(() => {
     const getPostInfo = async () => {
       const res = await apiManager.get(`/posts/${contentDTO.id}`);
@@ -153,7 +155,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
             </div>
           ))}
         </Slider>
-        <div>{contentDTO.content}</div>
+        <Markdown>{contentDTO.content}</Markdown>
       </div>
     </div>
   );
