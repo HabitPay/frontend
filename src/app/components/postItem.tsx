@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -17,6 +17,7 @@ import { HttpStatusCode } from "axios";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
+import { IPostDetailsDto } from "@/types/post";
 
 interface PostsFeedProps {
   challengeId: string;
@@ -25,8 +26,18 @@ interface PostsFeedProps {
 
 const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isPostAuthor, setIsPostAuthor] = useState(false);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
+  useEffect(() => {
+    const getPostInfo = async () => {
+      const res = await apiManager.get(`/posts/${contentDTO.id}`);
+      const data: IPostDetailsDto = res.data.data;
+      console.log(data);
+      setIsPostAuthor(data.isPostAuthor);
+    };
+    getPostInfo();
+  }, [contentDTO]);
 
   const handleDeletePost = async () => {
     try {
@@ -80,7 +91,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
           </span>
         </div>
         <div className="flex ml-auto gap-4">
-          {
+          {isPostAuthor && (
             <Link
               href={`/challenges/${challengeId}/posts/${contentDTO.id}/edit`}
             >
@@ -99,8 +110,8 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
                 />
               </svg>
             </Link>
-          }
-          {contentDTO.isAnnouncement === false && (
+          )}
+          {contentDTO.isAnnouncement === true && (
             <>
               <ConfirmModal
                 onClick={handleDeletePost}
