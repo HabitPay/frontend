@@ -43,7 +43,9 @@ const ChallengeTitle = ({
               <Image
                 key={index}
                 src={profileImage || defaultProfileImage}
-                className={`z-${30 - index * 10} rounded-full size-9`}
+                className={`z-${
+                  50 - 10 * (index + 1)
+                }  rounded-full size-9 object-contain bg-white`}
                 alt="profile image"
                 width={36}
                 height={36}
