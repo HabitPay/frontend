@@ -37,7 +37,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
       setIsPostAuthor(data.isPostAuthor);
     };
     getPostInfo();
-  }, []);
+  }, [contentDTO]);
 
   const handleDeletePost = async () => {
     try {
