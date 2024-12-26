@@ -81,7 +81,7 @@ export default function ChallengeList() {
                       <Image
                         src={challenge.hostProfileImage || defaultProfileImage}
                         alt="ProfileImage of host"
-                        className="rounded-full size-7 object-contain  bg-habit-gray"
+                        className="rounded-full size-7 object-cover shadow-md shadow-slate-400 bg-habit-gray"
                         width={7}
                         height={7}
                       />

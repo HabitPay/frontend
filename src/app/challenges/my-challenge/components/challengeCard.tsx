@@ -34,7 +34,7 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center -space-x-2">
                       <Image
-                        className="z-10 rounded-full size-12 object-contain bg-habit-gray"
+                        className="z-10 rounded-full size-12 object-cover shadow-md shadow-slate-400  bg-habit-gray"
                         src={item.hostProfileImage || defaultProfileImage}
                         width={48}
                         height={48}

@@ -37,7 +37,7 @@ function Page() {
             <h2 className="text-lg font-semibold">{memberProfile.nickname}</h2>
           </div>
           <Image
-            className="rounded-full size-16 object-contain bg-white"
+            className="rounded-full size-16 object-cover shadow-md shadow-slate-400 bg-white"
             src={memberProfile.imageUrl || defaultProfileImage}
             width={64}
             height={64}
