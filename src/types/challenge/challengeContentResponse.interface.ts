@@ -8,9 +8,10 @@ export interface PhotoViewDTO {
 // ContentDTO
 export interface ContentDTO {
   id: number;
-  challengeEnrollmentId: number;
+  challengeId: number;
   content: string;
   writer: string;
+  isPostAuthor: boolean;
   profileUrl: string;
   isAnnouncement: boolean;
   createdAt: string;

@@ -17,7 +17,6 @@ import { HttpStatusCode } from "axios";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
-import { IPostDetailsDto } from "@/types/post";
 import Markdown from "react-markdown";
 
 import ReactMarkdown from "react-markdown";
@@ -38,7 +37,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
   useEffect(() => {
     const getPostInfo = async () => {
       const res = await apiManager.get(`/posts/${contentDTO.id}`);
-      const data: IPostDetailsDto = res.data.data;
+      const data: ContentDTO = res.data.data;
       console.log(data);
       setIsPostAuthor(data.isPostAuthor);
     };
