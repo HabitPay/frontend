@@ -25,7 +25,7 @@ const Page = ({
               className="bg-white rounded-lg px-3 py-2"
             >
               <Image
-                className="rounded-full size-16 object-contain bg-habit-gray"
+                className="rounded-full size-16 object-cover shadow-md shadow-slate-400 bg-habit-gray"
                 src={item || defaultProfileImage}
                 width={64}
                 height={64}

@@ -244,7 +244,7 @@ const Page = () => {
           <div className="relative">
             <Link href={`${profileImageUrl}`}>
               <Image
-                className="rounded-full size-32 object-contain bg-white"
+                className="rounded-full size-32 object-cover shadow-lg shadow-slate-800 bg-white"
                 src={previewImage || profileImageUrl || defaultProfileImage}
                 alt="Picture of me"
                 width={300}

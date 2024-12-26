@@ -82,7 +82,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
         <Link href={`${contentDTO.profileUrl}`}>
           <Image
             src={contentDTO.profileUrl || defaultProfileImage}
-            className="z-30 rounded-full size-12 object-contain  bg-habit-gray"
+            className="z-30 rounded-full size-12 object-cover shadow-md shadow-slate-400 bg-habit-gray"
             alt="profileImage of writer"
             width={12}
             height={12}
