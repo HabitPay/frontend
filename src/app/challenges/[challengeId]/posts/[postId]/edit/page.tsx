@@ -2,13 +2,15 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 
 import apiManager from "@/api/apiManager";
 import Frame from "@/app/components/frame";
 import { SUPPORTED_IMAGE_EXTENSIONS } from "@/libs/constants";
+import PreviewList from "../../../post/components/previewList";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { IPatchPostDTO } from "@/types/post";
 import { ContentDTO } from "@/types/challenge";
@@ -19,9 +21,12 @@ import {
   isValidImageExtension,
   uploadImagesToS3,
 } from "@/libs/imageUploadUtils";
-import PreviewList from "../../../post/components/previewList";
-import { imageInfo } from "../../../post/page";
 import { PopupErrorMessage } from "@/types/enums";
+import { imageInfo } from "../../../post/page";
+
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import "@/styles/CustomMdEditor.css";
 
 interface IForm {
   content: string;
@@ -33,17 +38,22 @@ const Page = ({
 }: {
   params: { challengeId: string; postId: string };
 }) => {
-  const { register, handleSubmit, setValue, setError } = useForm<IForm>();
-  const [imageList, setImageList] = useState<imageInfo[]>([]);
-  const [deletedImageList, setDeletedImageList] = useState<number[]>([]);
-  const [isAnnouncement, setIsAnnouncement] = useState(false);
   const [challengeContent, setChallengeContent] = useState<ContentDTO>();
   const [textAreaContent, setTextAreaContent] = useState(
     challengeContent?.content || ""
   );
+  const { register, handleSubmit, setValue, setError, control } =
+    useForm<IForm>({ defaultValues: { content: textAreaContent } });
+  const [imageList, setImageList] = useState<imageInfo[]>([]);
+  const [deletedImageList, setDeletedImageList] = useState<number[]>([]);
+  const [isAnnouncement] = useState(false);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
   const currentPath = usePathname();
+  const MDEditor = dynamic(
+    () => import("@uiw/react-md-editor").then((mod) => mod.default),
+    { ssr: false }
+  );
 
   useEffect(() => {
     document.title = "Challenge Post Edit | HabitPay";
@@ -185,25 +195,44 @@ const Page = ({
     setValue("content", textAreaContent); // Sync with form state
   }, [setValue, textAreaContent]);
 
-  useEffect(() => {}, [setValue, imageList]);
-
   return (
     <Frame canGoBack title="게시물 수정" isWhiteTitle isBorder>
       <form
         onSubmit={handleSubmit(onSubmitWithValidation)}
         className="flex flex-col"
       >
-        <div className="flex-col">
-          <textarea
-            {...register("content", {
-              onChange: onTextAreaChange,
-              required: { value: true, message: "내용을 입력해주세요." },
-            })}
-            className="w-full h-screen px-4 pt-4 border-gray-300"
-            placeholder="오늘의 챌린지 내용에 대해서 작성해주세요."
-            value={textAreaContent}
-          />
-        </div>
+        <Controller
+          name="content"
+          control={control}
+          rules={{
+            required: { value: true, message: "내용을 입력해주세요." },
+          }}
+          render={({ field, fieldState }) => (
+            <div className=" relative">
+              <MDEditor
+                value={field.value}
+                onChange={field.onChange}
+                preview="edit"
+                enableScroll={false}
+                height={window.innerHeight - 100}
+                textareaProps={{
+                  placeholder: "내용을 입력해주세요",
+                }}
+                autoFocus
+                style={{
+                  whiteSpace: "normal",
+                  wordWrap: "break-word",
+                  wordBreak: "break-word",
+                }}
+              />
+              {fieldState.error && (
+                <p className="text-red-500 text-sm mt-1 absolute top-20 left-4">
+                  {fieldState.error.message}
+                </p>
+              )}
+            </div>
+          )}
+        />
         {imageList.length ? (
           <>
             <div className="h-[207px]"></div>
