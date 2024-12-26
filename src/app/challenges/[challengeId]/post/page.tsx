@@ -2,17 +2,14 @@
 
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useSetRecoilState } from "recoil";
 
 import apiManager from "@/api/apiManager";
 import Frame from "@/app/components/frame";
-import {
-  MAX_FILE_SIZE,
-  MB,
-  SUPPORTED_IMAGE_EXTENSIONS,
-} from "@/libs/constants";
+import { SUPPORTED_IMAGE_EXTENSIONS } from "@/libs/constants";
 import PreviewList from "./components/previewList";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { ICreatePostDTO } from "@/types/post";
@@ -25,6 +22,10 @@ import {
   isValidImageExtension,
 } from "@/libs/imageUploadUtils";
 import { PopupErrorMessage } from "@/types/enums";
+
+import "@uiw/react-md-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
+import "@/styles/CustomMdEditor.css";
 
 export interface imageInfo {
   file?: File;
@@ -42,13 +43,18 @@ const Page = ({
 }: {
   params: { challengeId: string };
 }) => {
-  const { register, handleSubmit, setError, setValue } = useForm<IForm>();
+  const { register, handleSubmit, setError, setValue, control } =
+    useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
   const [isAnnouncement, setIsAnnouncement] = useState(false);
   const [isManager, setIsManager] = useState(false);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
   const currentPath = usePathname();
+  const MDEditor = dynamic(
+    () => import("@uiw/react-md-editor").then((mod) => mod.default),
+    { ssr: false }
+  );
   useEffect(() => {
     document.title = "Challenge Post | HabitPay";
     const getChallengeInfo = async () => {
@@ -158,24 +164,46 @@ const Page = ({
         onSubmit={handleSubmit(onSubmitWithValidation)}
         className="flex flex-col h-full"
       >
-        <textarea
-          {...register("content", {
+        <Controller
+          name="content"
+          control={control}
+          rules={{
             required: { value: true, message: "내용을 입력해주세요." },
-          })}
-          className="w-full h-screen px-4 pt-4 border-gray-300"
-          placeholder="오늘의 챌린지 내용에 대해서 작성해주세요."
+          }}
+          render={({ field, fieldState }) => (
+            <div className=" relative">
+              <MDEditor
+                value={field.value}
+                onChange={field.onChange}
+                preview="edit"
+                enableScroll={false}
+                height={window.innerHeight - 100}
+                textareaProps={{
+                  placeholder: "내용을 입력해주세요",
+                }}
+                autoFocus
+                style={{
+                  whiteSpace: "normal",
+                  wordWrap: "break-word",
+                  wordBreak: "break-word",
+                }}
+              />
+              {fieldState.error && (
+                <p className="text-red-500 text-sm mt-1 absolute top-20 left-4">
+                  {fieldState.error.message}
+                </p>
+              )}
+            </div>
+          )}
         />
-        {
-          // nav와 imageList의 높이 112px, 95px
-          imageList.length ? (
-            <>
-              <div className="h-[207px]"></div>
-              <PreviewList imageList={imageList} setImageList={setImageList} />
-            </>
-          ) : (
-            <div className="h-[95px]"></div>
-          )
-        }
+        {imageList.length ? (
+          <>
+            <div className="h-[207px]"></div>
+            <PreviewList imageList={imageList} setImageList={setImageList} />
+          </>
+        ) : (
+          <div className="h-[95px]"></div>
+        )}
         <nav className="fixed bottom-0 flex justify-between w-full max-w-xl px-6 py-4 space-x-12 text-xs text-gray-700 bg-white border-t">
           <div className="flex items-center space-x-8 ">
             <div

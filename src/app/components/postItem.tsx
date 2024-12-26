@@ -20,6 +20,10 @@ import { useRouter } from "next/navigation";
 import { IPostDetailsDto } from "@/types/post";
 import Markdown from "react-markdown";
 
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import MarkdownRenderer from "./markdwonRenderer";
+
 interface PostsFeedProps {
   challengeId: string;
   contentDTO: ContentDTO;
@@ -155,7 +159,9 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
             </div>
           ))}
         </Slider>
-        <Markdown>{contentDTO.content}</Markdown>
+        <div className=" overflow-auto">
+          <MarkdownRenderer content={contentDTO.content} />
+        </div>
       </div>
     </div>
   );
