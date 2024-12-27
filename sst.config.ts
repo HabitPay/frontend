@@ -9,7 +9,6 @@ export default $config({
       providers: {
         aws: {
           region: "ap-northeast-2",
-          version: "6.52.0",
         },
       },
     };
