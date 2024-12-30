@@ -2,7 +2,7 @@ export interface MemberFeeView {
   nickname: string;
   totalFee: number;
   completionRate: number;
-  isMe: boolean;
+  isCurrentUser: boolean;
 }
 
 export interface IChallengeFeeListDto {

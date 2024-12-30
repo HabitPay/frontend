@@ -174,7 +174,7 @@ const Page = ({
                   key={index}
                   className={addClassNames(
                     "",
-                    participant.isMe ? "bg-habit-green" : "bg-white"
+                    participant.isCurrentUser ? "bg-habit-green" : "bg-white"
                   )}
                 >
                   <td className="px-4 py-4 whitespace-nowrap">{index + 1}</td>
