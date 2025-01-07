@@ -21,7 +21,7 @@ const categorizeChallenge = (
   return ChallengeStatesEnum.InProgress;
 };
 
-export const useChallengeEnrolledList = () => {
+export const useChallengeEnrolledList = (userId?: string) => {
   const [challengeEnrolledList, setChallengeEnrolledList] =
     useState<IChallengeEnrolledList | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -30,7 +30,7 @@ export const useChallengeEnrolledList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchEnrolledChallenges();
+        const data = await fetchEnrolledChallenges(userId);
         if (data) {
           const categorizedData: IChallengeEnrolledList = {
             inProgress: [],

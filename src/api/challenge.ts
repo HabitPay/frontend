@@ -13,10 +13,11 @@ export const fetchChallengeDetails = async (
   return data;
 };
 
-export const fetchEnrolledChallenges = async (): Promise<
-  IChallengeEnrolledListItemDto[]
-> => {
-  const res = await apiManager.get(`/challenges/me`);
+export const fetchEnrolledChallenges = async (
+  userId?: string
+): Promise<IChallengeEnrolledListItemDto[]> => {
+  const endpoint = userId ? `/challenges/members/${userId}` : `/challenges/me`;
+  const res = await apiManager.get(endpoint);
   const { data }: { data: IChallengeEnrolledListItemDto[] } = res.data;
   console.log(data);
   return data;
