@@ -41,7 +41,7 @@ function Page() {
             <h2 className="text-lg font-semibold">{memberProfile.nickname}</h2>
           </div>
           <Image
-            className="rounded-full size-16 object-cover shadow-md shadow-slate-400 bg-white"
+            className="object-cover bg-white rounded-full shadow-md size-16 shadow-slate-400"
             src={memberProfile.imageUrl || defaultProfileImage}
             width={64}
             height={64}
@@ -65,6 +65,7 @@ function Page() {
           <Challenges
             challenges={challengeEnrolledList}
             challengeState={challengeStateSelection}
+            isCurrentUser={memberProfile.isCurrentUser}
           />
         </div>
       </div>

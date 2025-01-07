@@ -1,9 +1,12 @@
 import apiManager from "@/api/apiManager";
 import { IProfileDTO } from "@/types/member";
 
-export const fetchMemberProfile = async (): Promise<IProfileDTO | null> => {
+export const fetchMemberProfile = async (
+  userId?: string
+): Promise<IProfileDTO | null> => {
   try {
-    const res = await apiManager.get(`/member`);
+    const endpoint = userId ? `/member/${userId}` : `/member`;
+    const res = await apiManager.get(endpoint);
     const { data }: { data: IProfileDTO } = res.data;
     console.log(data);
     return data;

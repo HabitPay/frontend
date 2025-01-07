@@ -18,10 +18,7 @@ import ChallengeStateSelector from "@/app/challenges/my-challenge/components/cha
 import Challenges from "@/app/challenges/my-challenge/components/challenges";
 
 const Page = ({ params: { userId } }: { params: { userId: string } }) => {
-  // 내 닉네임과 프로필url을 불러오는 단순한 api
-  // userId를 통한 정보를 불러오는 api필요.
-  const { memberProfile, isLoading, error } = useMemberProfile();
-  // 내 챌린지 목록을 불러오는 핵심 api
+  const { memberProfile, isLoading, error } = useMemberProfile(userId);
   const { challengeEnrolledList } = useChallengeEnrolledList(userId);
   const [challengeStateSelection, setChallengeStateSelection] =
     useState<ChallengeStatesEnum>(ChallengeStatesEnum.InProgress);
@@ -37,7 +34,6 @@ const Page = ({ params: { userId } }: { params: { userId: string } }) => {
       <div className="flex flex-col max-w-xl px-5 mx-auto">
         <div className="flex items-center justify-between mb-3">
           <div className="flex flex-col">
-            <span className="text-gray-400">안녕하세요</span>
             <h2 className="text-lg font-semibold">{memberProfile.nickname}</h2>
           </div>
           <Image
@@ -53,7 +49,7 @@ const Page = ({ params: { userId } }: { params: { userId: string } }) => {
             {format(new Date(), "yyyy년 MM월 dd일")}
           </span>
 
-          <h3 className="mb-5 text-lg font-semibold">나의 챌린지</h3>
+          <h3 className="mb-5 text-lg font-semibold">{`${memberProfile.nickname}의 챌린지`}</h3>
 
           <div className="flex items-center mb-2 space-x-2">
             <ChallengeStateSelector
@@ -65,6 +61,7 @@ const Page = ({ params: { userId } }: { params: { userId: string } }) => {
           <Challenges
             challenges={challengeEnrolledList}
             challengeState={challengeStateSelection}
+            isCurrentUser={memberProfile.isCurrentUser}
           />
         </div>
       </div>

@@ -10,9 +10,14 @@ import { calculateTimeRemaining } from "@/libs/utils";
 interface IChallengeCardProps {
   items: IChallengeEnrolledListItemDto[];
   challengeState: ChallengeStatesEnum;
+  isCurrentUser: boolean;
 }
 
-function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
+function ChallengeCard({
+  items,
+  challengeState,
+  isCurrentUser,
+}: IChallengeCardProps) {
   const now = new Date();
   return (
     <>
@@ -34,7 +39,7 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center -space-x-2">
                       <Image
-                        className="z-10 rounded-full size-12 object-cover shadow-md shadow-slate-400  bg-habit-gray"
+                        className="z-10 object-cover rounded-full shadow-md size-12 shadow-slate-400 bg-habit-gray"
                         src={item.hostProfileImage || defaultProfileImage}
                         width={48}
                         height={48}
@@ -54,7 +59,8 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
                     <div className="flex flex-col">
                       <h3 className="text-lg font-bold">{item.title}</h3>
                       {challengeState == ChallengeStatesEnum.InProgress &&
-                        item.isParticipatedToday && (
+                        item.isParticipatedToday &&
+                        isCurrentUser && (
                           <span className="text-sm text-habit-green">
                             참여 완료
                           </span>
@@ -62,7 +68,8 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
 
                       {challengeState == ChallengeStatesEnum.InProgress &&
                         item.isTodayParticipatingDay &&
-                        !item.isParticipatedToday && (
+                        !item.isParticipatedToday &&
+                        isCurrentUser && (
                           <span className="text-sm text-habit-gray">
                             아직 참여하지 않으셨습니다.
                           </span>
@@ -178,7 +185,8 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
 
             {challengeState == ChallengeStatesEnum.InProgress &&
               item.isTodayParticipatingDay &&
-              item.isParticipatedToday && (
+              item.isParticipatedToday &&
+              isCurrentUser && (
                 <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-gray  rounded-xl">
                   이미 참여했습니다.
                 </button>
@@ -186,7 +194,8 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
 
             {challengeState == ChallengeStatesEnum.InProgress &&
               item.isTodayParticipatingDay &&
-              !item.isParticipatedToday && (
+              !item.isParticipatedToday &&
+              isCurrentUser && (
                 <Link
                   href={`/challenges/${item.challengeId}/post`}
                   className="w-full py-[6px] text-sm font-thin text-center text-white bg-habit-green rounded-xl"
@@ -196,23 +205,26 @@ function ChallengeCard({ items, challengeState }: IChallengeCardProps) {
               )}
 
             {challengeState == ChallengeStatesEnum.InProgress &&
-              !item.isTodayParticipatingDay && (
+              !item.isTodayParticipatingDay &&
+              isCurrentUser && (
                 <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-gray rounded-xl">
                   오늘은 참여하는 날이 아닙니다.
                 </button>
               )}
 
-            {challengeState === ChallengeStatesEnum.Scheduled && (
-              <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-gray rounded-xl">
-                아직 시작하지 않은 챌린지입니다
-              </button>
-            )}
+            {challengeState === ChallengeStatesEnum.Scheduled &&
+              isCurrentUser && (
+                <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-gray rounded-xl">
+                  아직 시작하지 않은 챌린지입니다
+                </button>
+              )}
 
-            {challengeState === ChallengeStatesEnum.Completed && (
-              <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-gray rounded-xl">
-                종료된 챌린지입니다
-              </button>
-            )}
+            {challengeState === ChallengeStatesEnum.Completed &&
+              isCurrentUser && (
+                <button className="w-full py-[6px] text-sm font-thin text-white bg-habit-gray rounded-xl">
+                  종료된 챌린지입니다
+                </button>
+              )}
           </div>
         );
       })}
