@@ -7,6 +7,7 @@ export interface ChallengeListContentDTO {
   stopDate: string | null;
   numberOfParticipants: number;
   participatingDays: number;
+  totalParticipatingDaysCount: number;
   isStarted: boolean;
   isEnded: boolean;
   hostNickname: string;

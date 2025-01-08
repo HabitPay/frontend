@@ -103,7 +103,7 @@ export default function ChallengeList() {
                   </div>
                   <div className="flex  *:text-sm">
                     <span className="font-bold">총 기간(일): </span>
-                    <span>{challenge.participatingDays}</span>
+                    <span>{challenge.totalParticipatingDaysCount}</span>
                   </div>
                 </Link>
               ))}
