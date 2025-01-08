@@ -23,12 +23,14 @@ import { getParentPath } from "@/libs/utils";
 
 import "@/styles/CustomCalendar.css";
 import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
+import { getId } from "@/libs/jwt";
 
 const Page = ({
   params: { challengeId },
 }: {
   params: { challengeId: string };
 }) => {
+  const myId = getId();
   const [participationRecords, setParticipationRecords] =
     useState<ChallengeParticipationRecords>({
       failureDaysSet: new Set(),
@@ -86,7 +88,7 @@ const Page = ({
       top: false,
       success: false,
     });
-    router.push("/challenges/my-challenge");
+    router.push(`/${myId}/challenge`);
     return <></>;
   }
   const {

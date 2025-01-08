@@ -2,10 +2,12 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { getId } from "@/libs/jwt";
 
 function Page() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const myId = getId();
 
   useEffect(() => {
     const accessToken: string | null = searchParams.get("accessToken");
@@ -14,9 +16,9 @@ function Page() {
       router.push("/");
     } else {
       localStorage.setItem("accessToken", accessToken);
-      router.push("/challenges/my-challenge");
+      router.push(`/${myId}/challenge`);
     }
-  }, [router, searchParams]);
+  }, [router, searchParams, myId]);
 
   return <></>;
 }

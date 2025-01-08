@@ -17,12 +17,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import ConfirmModal from "@/app/components/confirmModal";
 import Frame from "@/app/components/frame";
+import { getId } from "@/libs/jwt";
 
 const Page = ({
   params: { challengeId },
 }: {
   params: { challengeId: string };
 }) => {
+  const myId = getId();
   const { challengeDetails, selectedDays, isLoading, error } =
     useChallengeDetails(challengeId);
   const { register, handleSubmit } = useForm<IChallengePatchDto>({});
@@ -59,7 +61,7 @@ const Page = ({
         top: false,
         success: true,
       });
-      router.push(`/challenges/my-challenge`);
+      router.push(`/${myId}/challenge`);
     } catch (error) {
       setToastPopup({
         // @ts-ignore

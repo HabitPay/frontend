@@ -26,6 +26,7 @@ import { PopupErrorMessage } from "@/types/enums";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import "@/styles/CustomMdEditor.css";
+import { getId } from "@/libs/jwt";
 
 export interface imageInfo {
   file?: File;
@@ -43,6 +44,7 @@ const Page = ({
 }: {
   params: { challengeId: string };
 }) => {
+  const myId = getId();
   const { register, handleSubmit, setError, setValue, control } =
     useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
@@ -209,7 +211,7 @@ const Page = ({
             <div
               className={addClassNames(
                 "flex flex-col items-center space-y-2 p-3",
-                currentPath === "/challenges/my-challenge"
+                currentPath === `/${myId}/challenge`
                   ? "bg-[#EFF8F0] rounded-2xl text-habit-green"
                   : "hover:text-gray-500 transition-colors"
               )}
