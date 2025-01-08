@@ -33,7 +33,7 @@ const Page = ({
 }: {
   params: { challengeId: string };
 }) => {
-  const myId = getId();
+  const [myId, setMyId] = useState<string | null | undefined>();
   const [challengeDetail, setChallengeDetail] = useState(false);
   const [totalAbsenceFee, setTotalAbsenceFee] = useState<number | undefined>(0);
   const [isAnnouncements, setIsAnnouncements] = useState(false);
@@ -48,6 +48,7 @@ const Page = ({
   useEffect(() => {
     console.log(challengeDetail);
     document.title = "Challenge Main | HabitPay";
+    setMyId(getId());
     const getAnnouncementsPosts = async () => {
       const res = await apiManager.get(
         `/challenges/${challengeId}/posts/announcements`

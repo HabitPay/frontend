@@ -24,7 +24,7 @@ const Page = ({
 }: {
   params: { challengeId: string };
 }) => {
-  const myId = getId();
+  const [myId, setMyId] = useState<string | null | undefined>();
   const { challengeDetails, selectedDays, isLoading, error } =
     useChallengeDetails(challengeId);
   const { register, handleSubmit } = useForm<IChallengePatchDto>({});
@@ -33,6 +33,7 @@ const Page = ({
   const router = useRouter();
   useEffect(() => {
     document.title = "Challenge Edit | HabitPay";
+    setMyId(getId());
   }, []);
   const onSubmitWithValidation = async (form: IChallengePatchDto) => {
     try {

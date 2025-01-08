@@ -4,6 +4,7 @@ import { getId } from "@/libs/jwt";
 import { addClassNames } from "@/libs/utils";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface LayoutProps {
   title?: string;
@@ -24,7 +25,7 @@ const Frame = ({
 }: LayoutProps) => {
   const router = useRouter();
   const currentPath = usePathname();
-  const myId = getId();
+  const [myId, setMyId] = useState<string | null | undefined>();
   const onClick = () => {
     if (currentPath === "/onboarding") {
       router.push("/");
@@ -32,6 +33,9 @@ const Frame = ({
       router.back();
     }
   };
+  useEffect(() => {
+    setMyId(getId());
+  }, []);
   return (
     <div className={`min-h-screen max-w-xl mx-auto shadow-xl h-auto`}>
       <div

@@ -44,7 +44,7 @@ const Page = ({
 }: {
   params: { challengeId: string };
 }) => {
-  const myId = getId();
+  const [myId, setMyId] = useState<string | null | undefined>();
   const { register, handleSubmit, setError, setValue, control } =
     useForm<IForm>();
   const [imageList, setImageList] = useState<imageInfo[]>([]);
@@ -59,6 +59,7 @@ const Page = ({
   );
   useEffect(() => {
     document.title = "Challenge Post | HabitPay";
+    setMyId(getId());
     const getChallengeInfo = async () => {
       const res = await apiManager.get(`/challenges/${challengeId}`);
       const data: IChallengeDetailsDto = res.data.data;

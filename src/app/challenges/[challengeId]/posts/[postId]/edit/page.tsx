@@ -39,7 +39,7 @@ const Page = ({
 }: {
   params: { challengeId: string; postId: string };
 }) => {
-  const myId = getId();
+  const [myId, setMyId] = useState<string | null | undefined>();
   const [challengeContent, setChallengeContent] = useState<ContentDTO>();
   const [textAreaContent, setTextAreaContent] = useState(
     challengeContent?.content || ""
@@ -59,6 +59,7 @@ const Page = ({
 
   useEffect(() => {
     document.title = "Challenge Post Edit | HabitPay";
+    setMyId(getId());
     const getPostInfo = async () => {
       const res = await apiManager.get(`/posts/${postId}`);
       const data: ContentDTO = res.data.data;

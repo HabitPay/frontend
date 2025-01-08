@@ -30,7 +30,7 @@ const Page = ({
 }: {
   params: { challengeId: string };
 }) => {
-  const myId = getId();
+  const [myId, setMyId] = useState<string | null | undefined>();
   const [participationRecords, setParticipationRecords] =
     useState<ChallengeParticipationRecords>({
       failureDaysSet: new Set(),
@@ -44,6 +44,7 @@ const Page = ({
   const router = useRouter();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   useEffect(() => {
+    setMyId(getId());
     const getMyPosts = async () => {
       try {
         const res = await apiManager.get(`/challenges/${challengeId}/posts/me`);
