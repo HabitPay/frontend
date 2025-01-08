@@ -5,35 +5,46 @@ import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import Image from "next/image";
 import defaultProfileImage from "@/public/default-profile.jpg";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import apiManager from "@/api/apiManager";
+import { ChallengeMembersResponseDTO, MemberDTO } from "@/types/challenge";
 
 const Page = ({
   params: { challengeId },
 }: {
   params: { challengeId: string };
 }) => {
-  const { challengeDetails, selectedDays, isLoading, error } =
-    useChallengeDetails(challengeId);
+  const [members, setMembers] = useState<MemberDTO[]>([]);
+  useEffect(() => {
+    document.title = "Members | HabitPay";
+    const getMembers = async () => {
+      const res = await apiManager.get(`/challenges/${challengeId}/members`);
+      const data: ChallengeMembersResponseDTO = res.data.data;
+      setMembers(data);
+    };
+    getMembers();
+  }, [challengeId]);
 
   return (
     <Frame canGoBack title="참여자 목록" isBorder>
       <div className="flex flex-col max-w-xl px-5 py-3 mx-auto space-y-4">
-        {challengeDetails?.enrolledMembersProfileImageList.map(
-          (item, index) => (
+        {members &&
+          members.map((member, index) => (
             <Link
-              href={`${item}`}
+              href={`/${member.memberId}/challenge`}
               key={index}
-              className="bg-white rounded-lg px-3 py-2"
+              className="flex items-center gap-3 px-3 py-2 bg-white rounded-lg"
             >
               <Image
-                className="rounded-full size-16 object-cover shadow-md shadow-slate-400 bg-habit-gray"
-                src={item || defaultProfileImage}
+                className="object-cover rounded-full shadow-md size-16 shadow-slate-400 bg-habit-gray"
+                src={member.profileImageUrl || defaultProfileImage}
                 width={64}
                 height={64}
                 alt="Picture of Avatar"
               />
+              <div>{member.nickname}</div>
             </Link>
-          )
-        )}
+          ))}
       </div>
     </Frame>
   );

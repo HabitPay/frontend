@@ -6,3 +6,4 @@ export * from "./challengeContentResponse.interface";
 export * from "./challengeFeeList.interface";
 export * from "./challengeListResponse.interface";
 export * from "./challengeParticipation.interface";
+export * from "./challengeMembersResponse.interface";

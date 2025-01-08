@@ -8,9 +8,14 @@ import {
 interface IChallengesProps {
   challenges: IChallengeEnrolledList;
   challengeState: ChallengeStatesEnum;
+  isCurrentUser: boolean;
 }
 
-function Challenges({ challenges, challengeState }: IChallengesProps) {
+function Challenges({
+  challenges,
+  challengeState,
+  isCurrentUser,
+}: IChallengesProps) {
   const sortByStartDateAsc = (
     a: IChallengeEnrolledListItemDto,
     b: IChallengeEnrolledListItemDto
@@ -36,6 +41,7 @@ function Challenges({ challenges, challengeState }: IChallengesProps) {
           <ChallengeCard
             items={challenges.inProgress.sort(sortByStartDateDesc)}
             challengeState={challengeState}
+            isCurrentUser={isCurrentUser}
           />
         )}
 
@@ -52,6 +58,7 @@ function Challenges({ challenges, challengeState }: IChallengesProps) {
           <ChallengeCard
             items={challenges.scheduled.sort(sortByStartDateDesc)}
             challengeState={challengeState}
+            isCurrentUser={isCurrentUser}
           />
         )}
 
@@ -66,6 +73,7 @@ function Challenges({ challenges, challengeState }: IChallengesProps) {
         <ChallengeCard
           items={challenges.completed.sort(sortByStartDateDesc)}
           challengeState={challengeState}
+          isCurrentUser={isCurrentUser}
         />
       )}
     </>

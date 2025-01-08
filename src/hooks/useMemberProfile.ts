@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { IProfileDTO } from "@/types/member";
 import { fetchMemberProfile } from "@/api/member";
 
-export const useMemberProfile = () => {
+export const useMemberProfile = (userId?: string) => {
   const [memberProfile, setMemberProfile] = useState<IProfileDTO | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -11,8 +11,10 @@ export const useMemberProfile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchMemberProfile();
-        if (data) {
+        const data = await fetchMemberProfile(userId);
+        if (data && !userId) {
+          setMemberProfile({ ...data, isCurrentUser: true });
+        } else {
           setMemberProfile(data);
         }
       } catch (err) {
@@ -23,7 +25,7 @@ export const useMemberProfile = () => {
     };
 
     fetchData();
-  }, []);
+  }, [userId]);
 
   return { memberProfile, isLoading, error };
 };
