@@ -11,8 +11,10 @@ export const useMemberProfile = (userId?: string) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetchMemberProfile();
-        if (data) {
+        const data = await fetchMemberProfile(userId);
+        if (data && !userId) {
+          setMemberProfile({ ...data, isCurrentUser: true });
+        } else {
           setMemberProfile(data);
         }
       } catch (err) {
@@ -23,7 +25,7 @@ export const useMemberProfile = (userId?: string) => {
     };
 
     fetchData();
-  }, []);
+  }, [userId]);
 
   return { memberProfile, isLoading, error };
 };

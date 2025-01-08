@@ -34,6 +34,9 @@ const Page = ({ params: { userId } }: { params: { userId: string } }) => {
       <div className="flex flex-col max-w-xl px-5 mx-auto">
         <div className="flex items-center justify-between mb-3">
           <div className="flex flex-col">
+            {memberProfile.isCurrentUser && (
+              <span className="text-gray-400">안녕하세요</span>
+            )}
             <h2 className="text-lg font-semibold">{memberProfile.nickname}</h2>
           </div>
           <Image
@@ -48,8 +51,11 @@ const Page = ({ params: { userId } }: { params: { userId: string } }) => {
           <span className="mb-2 text-sm font-light">
             {format(new Date(), "yyyy년 MM월 dd일")}
           </span>
-
-          <h3 className="mb-5 text-lg font-semibold">{`${memberProfile.nickname}의 챌린지`}</h3>
+          {memberProfile.isCurrentUser ? (
+            <h3 className="mb-5 text-lg font-semibold">나의 챌린지</h3>
+          ) : (
+            <h3 className="mb-5 text-lg font-semibold">{`${memberProfile.nickname}의 챌린지`}</h3>
+          )}
 
           <div className="flex items-center mb-2 space-x-2">
             <ChallengeStateSelector
