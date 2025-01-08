@@ -15,7 +15,7 @@ import { toastPopupAtom } from "@/hooks/atoms";
 import { IApiResponseDto } from "@/types/api/apiResponse.interface";
 import { PopupErrorMessage } from "@/types/enums";
 import { IProfileDTO } from "@/types/member";
-import { removeJwtFromSessionStorage } from "@/libs/jwt";
+import { removeJwtFromLocalStorage } from "@/libs/jwt";
 import { SUPPORTED_IMAGE_EXTENSIONS } from "@/libs/constants";
 import {
   isValidImageSize,
@@ -194,7 +194,7 @@ const Page = () => {
         }));
         router.push("/");
 
-        removeJwtFromSessionStorage();
+        removeJwtFromLocalStorage();
       }
     } catch (error) {
       setToastPopup({
@@ -207,7 +207,7 @@ const Page = () => {
   };
 
   const handleLogout = () => {
-    removeJwtFromSessionStorage();
+    removeJwtFromLocalStorage();
     router.push("/");
   };
 

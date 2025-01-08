@@ -1,6 +1,6 @@
 "use client";
 
-import { getAccessToken, removeJwtFromSessionStorage } from "@/libs/jwt";
+import { getAccessToken, removeJwtFromLocalStorage } from "@/libs/jwt";
 import { IApiErrorResponseDto } from "@/types/api/apiResponse.interface";
 import axios, {
   AxiosError,
@@ -13,7 +13,7 @@ import axios, {
 
 const getTokenType = () => {
   if (typeof window !== "undefined") {
-    return sessionStorage.getItem("tokenType");
+    return localStorage.getItem("tokenType");
   }
   return null;
 };
@@ -51,7 +51,7 @@ apiManager.interceptors.response.use(
   ): Promise<AxiosResponse | Promise<never>> {
     // const router = useRouter();
     const logout = () => {
-      removeJwtFromSessionStorage();
+      removeJwtFromLocalStorage();
       window.location.href = "/";
       // router.push("/");
     };
@@ -72,7 +72,7 @@ apiManager.interceptors.response.use(
         );
         if (tokenRefreshResult.status === 200) {
           const { accessToken } = tokenRefreshResult.data.data;
-          sessionStorage.setItem("accessToken", accessToken);
+          localStorage.setItem("accessToken", accessToken);
           originalRequest.headers.Authorization = `Bearer ${accessToken}`;
           return apiManager(originalRequest);
         } else {
@@ -93,7 +93,7 @@ apiManager.interceptors.response.use(
       //     );
       //     if (tokenRefreshResult.status === 200) {
       //       const { accessToken } = tokenRefreshResult.data.data;
-      //       sessionStorage.setItem("accessToken", accessToken);
+      //       localStorage.setItem("accessToken", accessToken);
       //       originalRequest.headers.Authorization = `Bearer ${accessToken}`;
       //       return apiManager(originalRequest);
       //     } else {

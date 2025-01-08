@@ -1,15 +1,14 @@
-import exp from "constants";
 import { JwtPayload, jwtDecode } from "jwt-decode";
 
 export const getAccessToken = () => {
   if (typeof window !== "undefined") {
-    return sessionStorage.getItem("accessToken");
+    return localStorage.getItem("accessToken");
   }
   return null;
 };
 
 function getDecodedJwt(): JwtPayload | null {
-  const jwt = sessionStorage.getItem("accessToken");
+  const jwt = localStorage.getItem("accessToken");
   if (jwt === null) {
     return null;
   }
@@ -33,9 +32,9 @@ export function getEmail(): string | null | undefined {
   return jwt.sub;
 }
 
-export function removeJwtFromSessionStorage() {
-  if (sessionStorage.getItem("accessToken") === null) {
+export function removeJwtFromLocalStorage() {
+  if (localStorage.getItem("accessToken") === null) {
     return;
   }
-  sessionStorage.removeItem("accessToken");
+  localStorage.removeItem("accessToken");
 }
