@@ -10,6 +10,7 @@ import {
   differenceInDays,
   differenceInHours,
   differenceInMinutes,
+  format,
 } from "date-fns";
 
 // return은 "hogkim jkwak surlee"가 된다.
@@ -91,8 +92,10 @@ export function formatToTimeAgo(date: string): string {
     return formatter.format(Math.round(diff / MIN), "minutes");
   } else if (-diff <= DAY) {
     return formatter.format(Math.round(diff / HOUR), "hours");
-  } else {
+  } else if (-diff <= DAY * 7) {
     return formatter.format(Math.round(diff / DAY), "days");
+  } else {
+    return format(new Date(time), "yyyy.MM.dd HH:mm");
   }
 }
 
