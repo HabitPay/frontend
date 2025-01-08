@@ -13,6 +13,7 @@ function getDecodedJwt(): JwtPayload | null {
   if (jwt === null) {
     return null;
   }
+  console.log(jwtDecode(jwt));
   return jwtDecode(jwt);
 }
 
@@ -25,7 +26,7 @@ export function getNickname(): string | null | undefined {
   return jwt.nickname;
 }
 
-export function getEmail(): string | null | undefined {
+export function getId(): string | null | undefined {
   const jwt = getDecodedJwt();
   if (jwt === null) {
     return null;
