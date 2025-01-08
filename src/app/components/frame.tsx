@@ -1,8 +1,10 @@
 "use client";
 
+import { getId } from "@/libs/jwt";
 import { addClassNames } from "@/libs/utils";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 interface LayoutProps {
   title?: string;
@@ -23,6 +25,7 @@ const Frame = ({
 }: LayoutProps) => {
   const router = useRouter();
   const currentPath = usePathname();
+  const [myId, setMyId] = useState<string | null | undefined>();
   const onClick = () => {
     if (currentPath === "/onboarding") {
       router.push("/");
@@ -30,6 +33,9 @@ const Frame = ({
       router.back();
     }
   };
+  useEffect(() => {
+    setMyId(getId());
+  }, []);
   return (
     <div className={`min-h-screen max-w-xl mx-auto shadow-xl h-auto`}>
       <div
@@ -64,11 +70,11 @@ const Frame = ({
       <div className={`pt-12 ${hasTabBar && "pb-20"}`}>{children}</div>
       {hasTabBar ? (
         <nav className="fixed bottom-0 z-50 flex justify-center w-full max-w-xl gap-12 py-4 text-xs text-gray-700 bg-white border-t">
-          <Link href="/challenges/my-challenge">
+          <Link href={`/${myId}/challenge`}>
             <div
               className={addClassNames(
                 "flex flex-col items-center space-y-2 p-3",
-                currentPath === "/challenges/my-challenge"
+                currentPath === `/${myId}/challenge`
                   ? "bg-[#EFF8F0] rounded-2xl text-habit-green"
                   : "hover:text-gray-500 transition-colors"
               )}

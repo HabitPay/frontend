@@ -23,12 +23,14 @@ import { getParentPath } from "@/libs/utils";
 
 import "@/styles/CustomCalendar.css";
 import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
+import { getId } from "@/libs/jwt";
 
 const Page = ({
   params: { challengeId },
 }: {
   params: { challengeId: string };
 }) => {
+  const [myId, setMyId] = useState<string | null | undefined>();
   const [participationRecords, setParticipationRecords] =
     useState<ChallengeParticipationRecords>({
       failureDaysSet: new Set(),
@@ -42,6 +44,7 @@ const Page = ({
   const router = useRouter();
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   useEffect(() => {
+    setMyId(getId());
     const getMyPosts = async () => {
       try {
         const res = await apiManager.get(`/challenges/${challengeId}/posts/me`);
@@ -86,7 +89,7 @@ const Page = ({
       top: false,
       success: false,
     });
-    router.push("/challenges/my-challenge");
+    router.push(`/${myId}/challenge`);
     return <></>;
   }
   const {

@@ -5,7 +5,6 @@ import Image from "next/image";
 
 import { format } from "date-fns";
 
-import FloatingButton from "@/app/components/floatingButton";
 import { useMemberProfile } from "@/hooks/useMemberProfile";
 import { useChallengeEnrolledList } from "@/hooks/useChallengeEnrolledList";
 import { ChallengeStatesEnum } from "@/types/enums";
@@ -13,9 +12,9 @@ import { ChallengeStatesEnum } from "@/types/enums";
 import defaultProfileImage from "@/public/default-profile.jpg";
 import withAuth from "@/app/components/withAuth";
 import Frame from "@/app/components/frame";
-import Loading from "@/app/challenges/my-challenge/loading";
-import ChallengeStateSelector from "@/app/challenges/my-challenge/components/challengeStateSelector";
-import Challenges from "@/app/challenges/my-challenge/components/challenges";
+import Loading from "./loading";
+import Challenges from "./components/challenges";
+import ChallengeStateSelector from "./components/challengeStateSelector";
 
 const Page = ({ params: { userId } }: { params: { userId: string } }) => {
   const { memberProfile, isLoading, error } = useMemberProfile(userId);

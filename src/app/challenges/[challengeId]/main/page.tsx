@@ -26,12 +26,14 @@ import Enrollment from "../components/enrollment";
 import Label from "../../components/label";
 import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
 import Loading from "./loading";
+import { getId } from "@/libs/jwt";
 
 const Page = ({
   params: { challengeId },
 }: {
   params: { challengeId: string };
 }) => {
+  const [myId, setMyId] = useState<string | null | undefined>();
   const [challengeDetail, setChallengeDetail] = useState(false);
   const [totalAbsenceFee, setTotalAbsenceFee] = useState<number | undefined>(0);
   const [isAnnouncements, setIsAnnouncements] = useState(false);
@@ -46,6 +48,7 @@ const Page = ({
   useEffect(() => {
     console.log(challengeDetail);
     document.title = "Challenge Main | HabitPay";
+    setMyId(getId());
     const getAnnouncementsPosts = async () => {
       const res = await apiManager.get(
         `/challenges/${challengeId}/posts/announcements`
@@ -66,7 +69,7 @@ const Page = ({
       top: false,
       success: false,
     });
-    router.push("/challenges/my-challenge");
+    router.push(`/${myId}/challenge`);
     return <></>;
   }
 

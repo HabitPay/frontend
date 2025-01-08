@@ -27,6 +27,7 @@ import { imageInfo } from "../../../post/page";
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import "@/styles/CustomMdEditor.css";
+import { getId } from "@/libs/jwt";
 
 interface IForm {
   content: string;
@@ -38,6 +39,7 @@ const Page = ({
 }: {
   params: { challengeId: string; postId: string };
 }) => {
+  const [myId, setMyId] = useState<string | null | undefined>();
   const [challengeContent, setChallengeContent] = useState<ContentDTO>();
   const [textAreaContent, setTextAreaContent] = useState(
     challengeContent?.content || ""
@@ -57,6 +59,7 @@ const Page = ({
 
   useEffect(() => {
     document.title = "Challenge Post Edit | HabitPay";
+    setMyId(getId());
     const getPostInfo = async () => {
       const res = await apiManager.get(`/posts/${postId}`);
       const data: ContentDTO = res.data.data;
@@ -250,7 +253,7 @@ const Page = ({
             <div
               className={addClassNames(
                 "flex flex-col items-center space-y-2 p-3",
-                currentPath === "/challenges/my-challenge"
+                currentPath === `/${myId}/challenge`
                   ? "bg-[#EFF8F0] rounded-2xl text-habit-green"
                   : "hover:text-gray-500 transition-colors"
               )}
