@@ -13,7 +13,7 @@ function Page() {
     if (accessToken === null) {
       router.push("/");
     } else {
-      sessionStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("accessToken", accessToken);
       router.push("/challenges/my-challenge");
     }
   }, [router, searchParams]);

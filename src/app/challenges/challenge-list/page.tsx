@@ -20,11 +20,11 @@ import ChallengeList from "@/app/components/challengeList";
 function Page() {
   // TODO: 다른 hook 들과 겹치지 않도록 컴포넌트 분리하기
   const { memberProfile, isLoading, error } = useMemberProfile();
-  const { challengeEnrolledList } = useChallengeEnrolledList();
+
   useEffect(() => {
     document.title = "Challenge List | HabitPay";
   }, []);
-  if (memberProfile === null || challengeEnrolledList === null) {
+  if (memberProfile === null) {
     return <Loading />;
   }
 

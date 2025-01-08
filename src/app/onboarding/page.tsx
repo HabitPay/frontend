@@ -41,10 +41,10 @@ function Page() {
     //   if (res.status === StatusCodes.OK) {
     //     // TODO: 데이터 받는 부분 수정 필요
     //     const { accessToken, expiresIn, tokenType } = res.data?.data;
-    //     sessionStorage.setItem("accessToken", accessToken);
-    //     sessionStorage.setItem("expiresIn", expiresIn);
-    //     // sessionStorage.setItem("refreshToken", refreshToken);
-    //     sessionStorage.setItem("tokenType", tokenType);
+    //     localStorage.setItem("accessToken", accessToken);
+    //     localStorage.setItem("expiresIn", expiresIn);
+    //     // localStorage.setItem("refreshToken", refreshToken);
+    //     localStorage.setItem("tokenType", tokenType);
     //     router.push("/challenges/my-challenge");
     //   }
     //   console.log(res);
@@ -60,9 +60,9 @@ function Page() {
     if (accessToken === null) {
       router.push("/");
     } else {
-      sessionStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("accessToken", accessToken);
       // TODO: 추가 예정
-      // sessionStorage.setItem("tokenType", tokenType);
+      // localStorage.setItem("tokenType", tokenType);
       router.replace("/onboarding");
     }
   }, [router, searchParams]);
