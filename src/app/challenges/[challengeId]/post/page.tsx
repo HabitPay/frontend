@@ -184,6 +184,7 @@ const Page = ({
                 textareaProps={{
                   placeholder: "내용을 입력해주세요",
                 }}
+                highlightEnable={false}
                 autoFocus
                 style={{
                   whiteSpace: "normal",
