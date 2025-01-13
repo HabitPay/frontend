@@ -47,12 +47,10 @@ function Page() {
   const {
     register,
     control,
-    watch,
     setValue,
-    setError,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { isSubmitting },
   } = useForm<IChallengeForm>({});
 
   const router = useRouter();
@@ -192,17 +190,7 @@ function Page() {
                 } else {
                   console.error("Invalid date selection", item.selection);
                 }
-                // setChallengeDate([item.selection]);
-                // setValue(
-                //   "startDate",
-                //   format(item.selection.startDate!, "yyyy-MM-dd")
-                // );
-                // setValue(
-                //   "endDate",
-                //   format(item.selection.endDate!, "yyyy-MM-dd")
-                // );
               }}
-              // showSelectionPreview={true}
               months={1}
               ranges={challengeDate}
               minDate={new Date()}
@@ -342,16 +330,7 @@ function Page() {
             </div>
           </div>
         </div>
-        {/* TODO: 없어도 될 것 같아서 주석 처리 */}
-        {/* <Label
-            title="챌린지 최대 참여 인원은 1000명입니다."
-            isRequired
-          ></Label> */}
-
-        <Button text="챌린지 생성" />
-        {/* <button className="py-2 text-sm text-white bg-habit-green rounded-2xl font-extralight">
-            챌린지 생성
-          </button> */}
+        <Button isSubmitting={isSubmitting} text="챌린지 생성" />
       </form>
     </Frame>
   );

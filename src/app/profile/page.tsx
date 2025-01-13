@@ -44,7 +44,7 @@ const Page = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<IForm>({});
   const router = useRouter();
 
@@ -293,7 +293,7 @@ const Page = () => {
                 className="w-full px-3 py-2 placeholder-gray-400 appearance-none rounded-2xl focus:outline-none focus:ring-green-500 focus:border-green-500"
               />
             </div>
-            <Button text="저장" />
+            <Button isSubmitting={isSubmitting} text="저장" />
           </div>
           {errors.nickname && <span>{errors.nickname.message}</span>}
           {errors.profileImage && <span>{errors.profileImage.message}</span>}

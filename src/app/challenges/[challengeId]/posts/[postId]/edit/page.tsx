@@ -44,8 +44,14 @@ const Page = ({
   const [textAreaContent, setTextAreaContent] = useState(
     challengeContent?.content || ""
   );
-  const { register, handleSubmit, setValue, setError, control } =
-    useForm<IForm>({ defaultValues: { content: textAreaContent } });
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    setError,
+    control,
+    formState: { isSubmitting },
+  } = useForm<IForm>({ defaultValues: { content: textAreaContent } });
   const [imageList, setImageList] = useState<imageInfo[]>([]);
   const [deletedImageList, setDeletedImageList] = useState<number[]>([]);
   const [isAnnouncement] = useState(false);
@@ -284,7 +290,10 @@ const Page = ({
               </label>
             </div>
           </div>
-          <button className="px-10 py-2 text-lg font-thin text-white border border-transparent shadow-sm bg-habit-green hover:bg-green-600 rounded-2xl focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:outline-none">
+          <button
+            disabled={isSubmitting}
+            className="px-10 py-2 text-lg font-thin text-white border border-transparent shadow-sm bg-habit-green hover:bg-green-600 rounded-2xl focus:ring-2 focus:ring-offset-2 focus:ring-green-500 focus:outline-none disabled:bg-neutral-400 disabled:text-neutral-300 disabled:cursor-not-allowed"
+          >
             저장
           </button>
         </nav>

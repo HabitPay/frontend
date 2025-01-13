@@ -27,7 +27,11 @@ const Page = ({
   const [myId, setMyId] = useState<string | null | undefined>();
   const { challengeDetails, selectedDays, isLoading, error } =
     useChallengeDetails(challengeId);
-  const { register, handleSubmit } = useForm<IChallengePatchDto>({});
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<IChallengePatchDto>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
@@ -174,7 +178,10 @@ const Page = ({
             </div>
           </div>
           <div className="flex flex-col mt-2">
-            <button className="py-2 text-sm text-white bg-habit-green rounded-2xl font-extralight ">
+            <button
+              disabled={isSubmitting}
+              className="py-2 text-sm text-white bg-habit-green rounded-2xl font-extralight disabled:bg-neutral-400 disabled:text-neutral-300 disabled:cursor-not-allowed"
+            >
               저장
             </button>
           </div>
