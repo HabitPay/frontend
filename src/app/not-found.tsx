@@ -11,6 +11,7 @@ export default function Page() {
             strokeWidth={1.5}
             stroke="currentColor"
             className="-mx-6 size-36"
+            aria-label="슬픈 얼굴"
           >
             <path
               strokeLinecap="round"

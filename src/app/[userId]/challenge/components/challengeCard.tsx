@@ -83,7 +83,8 @@ function ChallengeCard({
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="w-6 h-6"
+                    className="size-6"
+                    aria-label="챌린지 페이지로"
                   >
                     <path
                       strokeLinecap="round"
@@ -104,7 +105,8 @@ function ChallengeCard({
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="size-6"
+                  aria-label="챌린지 기간"
                 >
                   <path
                     strokeLinecap="round"
@@ -154,7 +156,8 @@ function ChallengeCard({
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="size-6"
+                  aria-label="나의 누적 벌금"
                 >
                   <path
                     strokeLinecap="round"
@@ -171,7 +174,8 @@ function ChallengeCard({
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="size-6"
+                  aria-label="나의 달성율"
                 >
                   <path
                     strokeLinecap="round"

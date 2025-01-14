@@ -30,12 +30,12 @@ const PreviewImage = ({
       ref={innerRef}
       {...dragHandleProps}
       {...draggableProps}
-      className="flex flex-col items-center relative size-16"
+      className="relative flex flex-col items-center size-16"
     >
       <Image src={item.preview} alt="image" fill className="object-cover" />
       <div
         onClick={() => onImageCancelClicked(index)}
-        className="absolute -top-2 -right-2 bg-slate-100 border rounded-full"
+        className="absolute border rounded-full -top-2 -right-2 bg-slate-100"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -44,6 +44,7 @@ const PreviewImage = ({
           strokeWidth={1.5}
           stroke="currentColor"
           className="size-4"
+          aria-label="이미지 취소"
         >
           <path
             strokeLinecap="round"
@@ -60,6 +61,7 @@ const PreviewImage = ({
           strokeWidth={1.5}
           stroke="white"
           className="size-4"
+          aria-label="이미지 이동"
         >
           <path
             strokeLinecap="round"

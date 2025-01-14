@@ -119,6 +119,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
                   strokeWidth={1.5}
                   stroke="currentColor"
                   className="size-6"
+                  aria-label="포스트 수정"
                 >
                   <path
                     strokeLinecap="round"
@@ -146,6 +147,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
                   strokeWidth={1.5}
                   stroke="currentColor"
                   className="size-6"
+                  aria-label="포스트 삭제"
                 >
                   <path
                     strokeLinecap="round"

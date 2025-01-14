@@ -80,7 +80,8 @@ const Page = ({ params: { userId } }: { params: { userId: string } }) => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-4 h-4"
+              className="size-4"
+              aria-label="챌린지 생성"
             >
               <path
                 strokeLinecap="round"

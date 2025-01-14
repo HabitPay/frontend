@@ -42,6 +42,7 @@ export default function ToastPopup() {
             strokeWidth={1.5}
             stroke="currentColor"
             className="text-white size-6"
+            aria-label="토스트팝업 성공"
           >
             <path
               strokeLinecap="round"
@@ -57,6 +58,7 @@ export default function ToastPopup() {
             strokeWidth={1.5}
             stroke="currentColor"
             className="text-white size-6"
+            aria-label="토스트팝업 실패"
           >
             <path
               strokeLinecap="round"

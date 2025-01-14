@@ -121,6 +121,7 @@ const Page = ({
                       strokeWidth={1.5}
                       stroke="currentColor"
                       className="w-6 h-6 text-gray-400"
+                      aria-label="챌린지 정보 수정"
                     >
                       <path
                         strokeLinecap="round"
@@ -149,6 +150,7 @@ const Page = ({
                       strokeWidth={1.5}
                       stroke="currentColor"
                       className="size-6"
+                      aria-label="챌린지 디테일 닫기"
                     >
                       <path
                         strokeLinecap="round"
@@ -164,6 +166,7 @@ const Page = ({
                       strokeWidth={1.5}
                       stroke="currentColor"
                       className="size-6"
+                      aria-label="챌린지 디테일 보기"
                     >
                       <path
                         strokeLinecap="round"
@@ -297,6 +300,7 @@ const Page = ({
                       strokeWidth={1.5}
                       stroke="currentColor"
                       className="size-7"
+                      aria-label="포스트 생성"
                     >
                       <path
                         strokeLinecap="round"

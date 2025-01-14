@@ -187,6 +187,7 @@ const Page = ({
           strokeWidth={1.5}
           stroke="currentColor"
           className="size-7"
+          aria-label="게시물 작성"
         >
           <path
             strokeLinecap="round"

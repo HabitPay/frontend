@@ -217,7 +217,7 @@ const Page = ({
             required: { value: true, message: "내용을 입력해주세요." },
           }}
           render={({ field, fieldState }) => (
-            <div className=" relative">
+            <div className="relative ">
               <MDEditor
                 value={field.value}
                 onChange={field.onChange}
@@ -236,7 +236,7 @@ const Page = ({
                 }}
               />
               {fieldState.error && (
-                <p className="text-red-500 text-sm mt-1 absolute top-20 left-4">
+                <p className="absolute mt-1 text-sm text-red-500 top-20 left-4">
                   {fieldState.error.message}
                 </p>
               )}
@@ -273,6 +273,7 @@ const Page = ({
                   strokeWidth={1.5}
                   stroke="currentColor"
                   className="size-7"
+                  aria-label="포스트 사진 추가"
                 >
                   <path
                     strokeLinecap="round"
