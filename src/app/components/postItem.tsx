@@ -51,7 +51,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
       }
     };
     getPostInfo();
-  }, [contentDTO, setToastPopup]);
+  }, [contentDTO.id, setToastPopup]);
 
   const handleDeletePost = async () => {
     try {
