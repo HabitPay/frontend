@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+
 import { useSetRecoilState } from "recoil";
 import { isBefore } from "date-fns";
 
@@ -19,14 +20,13 @@ import { Days } from "@/types/enums";
 import { addClassNames, getParentPath } from "@/libs/utils";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
-
+import { getId } from "@/libs/jwt";
 import Menu from "../components/menu";
 import ChallengeTitle from "../components/challengeTitle";
 import Enrollment from "../components/enrollment";
 import Label from "../../components/label";
 import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
 import Loading from "./loading";
-import { getId } from "@/libs/jwt";
 
 const Page = ({
   params: { challengeId },

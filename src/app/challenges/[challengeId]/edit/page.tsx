@@ -1,8 +1,12 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import { useForm } from "react-hook-form";
 import { format, differenceInDays } from "date-fns";
 import { ko } from "date-fns/locale";
+import { useSetRecoilState } from "recoil";
 
 import apiManager from "@/api/apiManager";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
@@ -11,10 +15,7 @@ import TextArea from "@/app/components/textarea";
 import { addClassNames } from "@/libs/utils";
 import { IChallengePatchDto } from "@/types/challenge";
 import { Days } from "@/types/enums";
-import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 import ConfirmModal from "@/app/components/confirmModal";
 import Frame from "@/app/components/frame";
 import { getId } from "@/libs/jwt";

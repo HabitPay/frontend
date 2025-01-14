@@ -1,8 +1,12 @@
 "use client";
 
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
+import { HttpStatusCode } from "axios";
+import { useSetRecoilState } from "recoil";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -10,14 +14,9 @@ import "slick-carousel/slick/slick-theme.css";
 import { formatToTimeAgo } from "@/libs/utils";
 import { ContentDTO } from "@/types/challenge";
 import defaultProfileImage from "@/public/default-profile.jpg";
-import Link from "next/link";
-import ConfirmModal from "./confirmModal";
 import apiManager from "@/api/apiManager";
-import { HttpStatusCode } from "axios";
-import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
-import { useRouter } from "next/navigation";
-
+import ConfirmModal from "./confirmModal";
 import MarkdownRenderer from "./markdwonRenderer";
 
 interface PostsFeedProps {

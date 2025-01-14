@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import dynamic from "next/dynamic";
 
 import { Controller, useForm } from "react-hook-form";
@@ -10,7 +10,6 @@ import { useSetRecoilState } from "recoil";
 import apiManager from "@/api/apiManager";
 import Frame from "@/app/components/frame";
 import { SUPPORTED_IMAGE_EXTENSIONS } from "@/libs/constants";
-import PreviewList from "../../../post/components/previewList";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { IPatchPostDTO } from "@/types/post";
 import { ContentDTO } from "@/types/challenge";
@@ -22,12 +21,12 @@ import {
   uploadImagesToS3,
 } from "@/libs/imageUploadUtils";
 import { PopupErrorMessage } from "@/types/enums";
-import { imageInfo } from "../../../post/page";
-
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import "@/styles/CustomMdEditor.css";
 import { getId } from "@/libs/jwt";
+import PreviewList from "../../../post/components/previewList";
+import { imageInfo } from "../../../post/page";
 
 interface IForm {
   content: string;

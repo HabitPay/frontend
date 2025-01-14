@@ -1,12 +1,13 @@
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
-import { imageInfo } from "../page";
-import PreviewImage from "./previewImage";
+import { Dispatch, SetStateAction, useCallback } from "react";
+
 import {
   DragDropContext,
   Draggable,
   DropResult,
   Droppable,
 } from "@hello-pangea/dnd";
+import { imageInfo } from "../page";
+import PreviewImage from "./previewImage";
 
 interface IPreviewList {
   imageList: imageInfo[];

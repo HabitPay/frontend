@@ -1,6 +1,4 @@
-import { addClassNames } from "@/libs/utils";
 import Link from "next/link";
-import { ReadonlyURLSearchParams } from "next/navigation";
 
 export interface IMenuProps {
   challengeId: string;

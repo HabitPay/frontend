@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import { GoogleAnalytics } from "@next/third-parties/google";
-
+import ReactQueryProviders from "@/hooks/useReactQuery";
 import "./globals.css";
 import RecoilRootWrapper from "./components/recoilWrapper";
 import ToastPopup from "./components/toastPopup";
-import ReactQueryProviders from "@/hooks/useReactQuery";
 
 const inter = Inter({ subsets: ["latin"] });
 

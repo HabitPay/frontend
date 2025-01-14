@@ -8,14 +8,13 @@ import { format } from "date-fns";
 import { useMemberProfile } from "@/hooks/useMemberProfile";
 import { useChallengeEnrolledList } from "@/hooks/useChallengeEnrolledList";
 import { ChallengeStatesEnum } from "@/types/enums";
-
 import defaultProfileImage from "@/public/default-profile.jpg";
 import withAuth from "@/app/components/withAuth";
 import Frame from "@/app/components/frame";
+import FloatingButton from "@/app/components/floatingButton";
 import Loading from "./loading";
 import Challenges from "./components/challenges";
 import ChallengeStateSelector from "./components/challengeStateSelector";
-import FloatingButton from "@/app/components/floatingButton";
 
 const Page = ({ params: { userId } }: { params: { userId: string } }) => {
   const { memberProfile, isLoading, error } = useMemberProfile(userId);

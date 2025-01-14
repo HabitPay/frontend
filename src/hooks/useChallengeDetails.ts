@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
+import Error from "next/error";
 
 import { IChallengeDetailsDto } from "@/types/challenge";
 import { SelectedStatus } from "@/types/enums";
 import { fetchChallengeDetails } from "../api/challenge";
-import Error from "next/error";
 
 export const calculateSelectedDays = (selectedDays: number[], days: number) => {
   selectedDays.forEach((_, idx) => {

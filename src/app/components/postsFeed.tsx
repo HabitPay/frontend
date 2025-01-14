@@ -1,10 +1,12 @@
-import { ChallengeContentResponseDTO } from "@/types/challenge";
 import { useEffect, useRef, useState } from "react";
-import apiManager from "@/api/apiManager";
+
 import { useInfiniteQuery } from "react-query";
 import { AxiosError } from "axios";
-import PostItem from "./postItem";
+
+import { ChallengeContentResponseDTO } from "@/types/challenge";
+import apiManager from "@/api/apiManager";
 import { OnIntersect, useObserver } from "@/hooks/useObserver";
+import PostItem from "./postItem";
 
 interface PostsFeedProps {
   id: string;
@@ -64,21 +66,21 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
     <div className="flex flex-col w-full pb-4">
       {announcements && (
         <>
-          <div className="mb-2 text-slate-500 font-medium">공지사항</div>
+          <div className="mb-2 font-medium text-slate-500">공지사항</div>
           {announcements.content.map((post) => (
             <PostItem contentDTO={post} challengeId={id} key={post.id} />
           ))}
         </>
       )}
-      <div className="mb-2 text-slate-500 font-medium">일반 게시물</div>
+      <div className="mb-2 font-medium text-slate-500">일반 게시물</div>
       {status === "loading" && (
-        <div className="flex flex-col px-6 divide-y-2 animate-pulse bg-white p-4 rounded-xl">
+        <div className="flex flex-col p-4 px-6 bg-white divide-y-2 animate-pulse rounded-xl">
           <div className="flex gap-4 pb-3">
-            <div className="size-14 bg-gray-400 rounded-xl" />
-            <div className="w-28 bg-gray-400 h-5 rounded-xl" />
+            <div className="bg-gray-400 size-14 rounded-xl" />
+            <div className="h-5 bg-gray-400 w-28 rounded-xl" />
           </div>
           <div className="flex items-center justify-center py-4">
-            <div className=" size-60 bg-gray-400 rounded-xl" />
+            <div className="bg-gray-400  size-60 rounded-xl" />
           </div>
         </div>
       )}
@@ -95,13 +97,13 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
 
       <div ref={bottom} />
       {isFetchingNextPage && (
-        <div className="flex flex-col px-6 divide-y-2 animate-pulse bg-white p-4 rounded-xl">
+        <div className="flex flex-col p-4 px-6 bg-white divide-y-2 animate-pulse rounded-xl">
           <div className="flex gap-4 pb-3">
-            <div className="size-14 bg-gray-400 rounded-xl" />
-            <div className="w-28 bg-gray-400 h-5 rounded-xl" />
+            <div className="bg-gray-400 size-14 rounded-xl" />
+            <div className="h-5 bg-gray-400 w-28 rounded-xl" />
           </div>
           <div className="flex items-center justify-center py-4">
-            <div className=" size-60 bg-gray-400 rounded-xl" />
+            <div className="bg-gray-400  size-60 rounded-xl" />
           </div>
         </div>
       )}

@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { differenceInCalendarDays, format } from "date-fns";
+
 import { IChallengeEnrolledListItemDto } from "@/types/challenge";
 import { ChallengeStatesEnum } from "@/types/enums";
 import defaultProfileImage from "@/public/default-profile.jpg";
-import { differenceInCalendarDays, format } from "date-fns";
 import { calculateTimeRemaining } from "@/libs/utils";
 
 interface IChallengeCardProps {

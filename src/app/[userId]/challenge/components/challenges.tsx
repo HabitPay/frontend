@@ -1,9 +1,9 @@
-import ChallengeCard from "./challengeCard";
 import { ChallengeStatesEnum } from "@/types/enums";
 import {
   IChallengeEnrolledList,
   IChallengeEnrolledListItemDto,
 } from "@/types/challenge";
+import ChallengeCard from "./challengeCard";
 
 interface IChallengesProps {
   challenges: IChallengeEnrolledList;

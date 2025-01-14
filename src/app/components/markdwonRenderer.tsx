@@ -1,10 +1,9 @@
-import Markdown from "react-markdown";
 import ReactMarkdown from "react-markdown";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialOceanic } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface MarkdownRendererProps {
-  content: string; // 마크다운 텍스트를 prop으로 받음
+  content: string;
 }
 
 const MarkdownRenderer: React.FC<MarkdownRendererProps> = ({ content }) => {

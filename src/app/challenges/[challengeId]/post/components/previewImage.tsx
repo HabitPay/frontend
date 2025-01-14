@@ -1,10 +1,11 @@
+import { memo } from "react";
 import Image from "next/image";
-import { imageInfo } from "../page";
+
 import {
   DraggableProvidedDragHandleProps,
   DraggableProvidedDraggableProps,
 } from "@hello-pangea/dnd";
-import { memo } from "react";
+import { imageInfo } from "../page";
 
 interface IPreviewImage {
   item: imageInfo;

@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 import { Controller, useForm } from "react-hook-form";
@@ -10,7 +10,6 @@ import { useSetRecoilState } from "recoil";
 import apiManager from "@/api/apiManager";
 import Frame from "@/app/components/frame";
 import { SUPPORTED_IMAGE_EXTENSIONS } from "@/libs/constants";
-import PreviewList from "./components/previewList";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { ICreatePostDTO } from "@/types/post";
 import { IChallengeDetailsDto } from "@/types/challenge";
@@ -22,11 +21,11 @@ import {
   isValidImageExtension,
 } from "@/libs/imageUploadUtils";
 import { PopupErrorMessage } from "@/types/enums";
-
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import "@/styles/CustomMdEditor.css";
 import { getId } from "@/libs/jwt";
+import PreviewList from "./components/previewList";
 
 export interface imageInfo {
   file?: File;
