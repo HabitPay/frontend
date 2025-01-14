@@ -17,10 +17,7 @@ import { HttpStatusCode } from "axios";
 import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
-import Markdown from "react-markdown";
 
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import MarkdownRenderer from "./markdwonRenderer";
 
 interface PostsFeedProps {
@@ -31,18 +28,30 @@ interface PostsFeedProps {
 const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPostAuthor, setIsPostAuthor] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
 
   useEffect(() => {
     const getPostInfo = async () => {
-      const res = await apiManager.get(`/posts/${contentDTO.id}`);
-      const data: ContentDTO = res.data.data;
-      console.log(data);
-      setIsPostAuthor(data.isPostAuthor);
+      try {
+        const res = await apiManager.get(`/posts/${contentDTO.id}`);
+        const data: ContentDTO = res.data.data;
+        setIsPostAuthor(data.isPostAuthor);
+      } catch (error) {
+        console.error("Failed to fetch post info:", error);
+        setToastPopup((prev) => ({
+          // @ts-ignore
+          message: error.data.message,
+          top: false,
+          success: true,
+        }));
+      } finally {
+        setIsLoading(false);
+      }
     };
     getPostInfo();
-  }, [contentDTO]);
+  }, [contentDTO, setToastPopup]);
 
   const handleDeletePost = async () => {
     try {
@@ -82,7 +91,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
         <Link href={`${contentDTO.profileUrl}`}>
           <Image
             src={contentDTO.profileUrl || defaultProfileImage}
-            className="z-30 rounded-full size-12 object-cover shadow-md shadow-slate-400 bg-habit-gray"
+            className="z-30 object-cover rounded-full shadow-md size-12 shadow-slate-400 bg-habit-gray"
             alt="profileImage of writer"
             width={12}
             height={12}
@@ -95,26 +104,30 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
             {formatToTimeAgo(contentDTO.createdAt.toString())}
           </span>
         </div>
-        <div className="flex ml-auto gap-4">
-          {isPostAuthor && (
-            <Link
-              href={`/challenges/${challengeId}/posts/${contentDTO.id}/edit`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
+        <div className="flex gap-4 ml-auto">
+          {isLoading ? (
+            <div className="bg-gray-400 rounded-lg size-6 animate-pulse" />
+          ) : (
+            isPostAuthor && (
+              <Link
+                href={`/challenges/${challengeId}/posts/${contentDTO.id}/edit`}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                />
-              </svg>
-            </Link>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                  />
+                </svg>
+              </Link>
+            )
           )}
           {contentDTO.isAnnouncement === true && (
             <>
@@ -158,7 +171,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
             </div>
           ))}
         </Slider>
-        <div className=" overflow-auto">
+        <div className="overflow-auto ">
           <MarkdownRenderer content={contentDTO.content} />
         </div>
       </div>
