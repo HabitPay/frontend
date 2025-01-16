@@ -1,25 +1,25 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
+import { useSetRecoilState } from "recoil";
 import { format, differenceInDays } from "date-fns";
 import { useForm, Controller } from "react-hook-form";
 import { ko } from "date-fns/locale";
 import { addYears } from "date-fns";
 import { NumericFormat } from "react-number-format";
 import { DateRange, Range } from "react-date-range";
-import "react-date-range/dist/styles.css"; // main css file
-import "react-date-range/dist/theme/default.css"; // theme css file
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 
 import { addClassNames } from "@/libs/utils";
-import Label from "../components/label";
 import Button from "@/app/components/button";
 import apiManager from "@/api/apiManager";
 import { Days, SelectedStatus } from "@/types/enums";
-import { useRouter } from "next/navigation";
-import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 import Frame from "@/app/components/frame";
+import Label from "../components/label";
 
 const INCREASE_FEE = [100, 1000, 10000];
 

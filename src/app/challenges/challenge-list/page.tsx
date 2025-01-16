@@ -7,15 +7,11 @@ import { format } from "date-fns";
 
 import FloatingButton from "@/app/components/floatingButton";
 import { useMemberProfile } from "@/hooks/useMemberProfile";
-import { useChallengeEnrolledList } from "@/hooks/useChallengeEnrolledList";
-
-// 나중에 삭제
 import defaultProfileImage from "@/public/default-profile.jpg";
-import Loading from "./loading";
 import withAuth from "@/app/components/withAuth";
 import Frame from "@/app/components/frame";
 import ChallengeList from "@/app/components/challengeList";
-// import Head from "next/head";
+import Loading from "./loading";
 
 function Page() {
   // TODO: 다른 hook 들과 겹치지 않도록 컴포넌트 분리하기
@@ -37,7 +33,7 @@ function Page() {
             <h2 className="text-lg font-semibold">{memberProfile.nickname}</h2>
           </div>
           <Image
-            className="rounded-full size-16 object-cover shadow-md shadow-slate-400 bg-white"
+            className="object-cover bg-white rounded-full shadow-md size-16 shadow-slate-400"
             src={memberProfile.imageUrl || defaultProfileImage}
             width={64}
             height={64}
@@ -61,6 +57,7 @@ function Page() {
             strokeWidth={1.5}
             stroke="currentColor"
             className="w-4 h-4"
+            aria-label="챌린지 생성"
           >
             <path
               strokeLinecap="round"

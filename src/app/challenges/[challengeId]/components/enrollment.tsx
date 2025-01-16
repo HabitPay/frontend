@@ -1,10 +1,9 @@
 import { useState } from "react";
 
-import { HttpStatusCode } from "axios";
+import { useSetRecoilState } from "recoil";
 
 import apiManager from "@/api/apiManager";
 import Button from "@/app/components/button";
-import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
 
 interface IEnrollmentProps {

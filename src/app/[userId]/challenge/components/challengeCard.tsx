@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { differenceInCalendarDays, format } from "date-fns";
+
 import { IChallengeEnrolledListItemDto } from "@/types/challenge";
 import { ChallengeStatesEnum } from "@/types/enums";
 import defaultProfileImage from "@/public/default-profile.jpg";
-import { differenceInCalendarDays, format } from "date-fns";
 import { calculateTimeRemaining } from "@/libs/utils";
 
 interface IChallengeCardProps {
@@ -83,7 +84,8 @@ function ChallengeCard({
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="w-6 h-6"
+                    className="size-6"
+                    aria-label="챌린지 페이지로"
                   >
                     <path
                       strokeLinecap="round"
@@ -104,7 +106,8 @@ function ChallengeCard({
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="size-6"
+                  aria-label="챌린지 기간"
                 >
                   <path
                     strokeLinecap="round"
@@ -154,7 +157,8 @@ function ChallengeCard({
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="size-6"
+                  aria-label="나의 누적 벌금"
                 >
                   <path
                     strokeLinecap="round"
@@ -171,7 +175,8 @@ function ChallengeCard({
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="size-6"
+                  aria-label="나의 달성율"
                 >
                   <path
                     strokeLinecap="round"

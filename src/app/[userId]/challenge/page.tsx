@@ -8,14 +8,13 @@ import { format } from "date-fns";
 import { useMemberProfile } from "@/hooks/useMemberProfile";
 import { useChallengeEnrolledList } from "@/hooks/useChallengeEnrolledList";
 import { ChallengeStatesEnum } from "@/types/enums";
-
 import defaultProfileImage from "@/public/default-profile.jpg";
 import withAuth from "@/app/components/withAuth";
 import Frame from "@/app/components/frame";
+import FloatingButton from "@/app/components/floatingButton";
 import Loading from "./loading";
 import Challenges from "./components/challenges";
 import ChallengeStateSelector from "./components/challengeStateSelector";
-import FloatingButton from "@/app/components/floatingButton";
 
 const Page = ({ params: { userId } }: { params: { userId: string } }) => {
   const { memberProfile, isLoading, error } = useMemberProfile(userId);
@@ -80,7 +79,8 @@ const Page = ({ params: { userId } }: { params: { userId: string } }) => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-4 h-4"
+              className="size-4"
+              aria-label="챌린지 생성"
             >
               <path
                 strokeLinecap="round"

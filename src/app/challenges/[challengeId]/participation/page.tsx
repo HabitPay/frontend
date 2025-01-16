@@ -1,9 +1,12 @@
 "use client";
 
-import Menu from "../components/menu";
+import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import ChallengeTitle from "../components/challengeTitle";
+
 import Calendar from "react-calendar";
+import { useSetRecoilState } from "recoil";
+import { format, isBefore } from "date-fns";
+
 import FloatingButton from "@/app/components/floatingButton";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
 import {
@@ -12,18 +15,16 @@ import {
   ChallengeParticipationRecords,
   IChallengeDetailsDto,
 } from "@/types/challenge";
-import { useSetRecoilState } from "recoil";
 import { toastPopupAtom } from "@/hooks/atoms";
-import Loading from "../main/loading";
-import { differenceInDays, format, isBefore } from "date-fns";
 import Frame from "@/app/components/frame";
-import { useEffect, useState } from "react";
 import apiManager from "@/api/apiManager";
 import { getParentPath } from "@/libs/utils";
-
 import "@/styles/CustomCalendar.css";
-import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
 import { getId } from "@/libs/jwt";
+import Menu from "../components/menu";
+import ChallengeTitle from "../components/challengeTitle";
+import Loading from "../main/loading";
+import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
 
 const Page = ({
   params: { challengeId },
@@ -187,6 +188,7 @@ const Page = ({
           strokeWidth={1.5}
           stroke="currentColor"
           className="size-7"
+          aria-label="게시물 작성"
         >
           <path
             strokeLinecap="round"

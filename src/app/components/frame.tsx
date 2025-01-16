@@ -1,10 +1,11 @@
 "use client";
 
-import { getId } from "@/libs/jwt";
-import { addClassNames } from "@/libs/utils";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+
+import { getId } from "@/libs/jwt";
+import { addClassNames } from "@/libs/utils";
 
 interface LayoutProps {
   title?: string;
@@ -51,6 +52,7 @@ const Frame = ({
               stroke="currentColor"
               viewBox="0 0 24 24"
               xmlns="http://www.w3.org/2000/svg"
+              aria-label="뒤로 가기"
             >
               <path
                 strokeLinecap="round"
@@ -86,6 +88,7 @@ const Frame = ({
                 strokeWidth={1.5}
                 stroke="currentColor"
                 className="size-7"
+                aria-label="홈으로"
               >
                 <path
                   strokeLinecap="round"
@@ -111,6 +114,7 @@ const Frame = ({
                 strokeWidth={1.5}
                 stroke="currentColor"
                 className="size-7"
+                aria-label="챌린지 목록"
               >
                 <path
                   strokeLinecap="round"
@@ -136,6 +140,7 @@ const Frame = ({
                 strokeWidth={1.5}
                 stroke="currentColor"
                 className="size-7"
+                aria-label="프로필"
               >
                 <path
                   strokeLinecap="round"

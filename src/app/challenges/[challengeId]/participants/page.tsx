@@ -1,11 +1,11 @@
 "use client";
 
-import Frame from "@/app/components/frame";
-import { useChallengeDetails } from "@/hooks/useChallengeDetails";
-import Image from "next/image";
-import defaultProfileImage from "@/public/default-profile.jpg";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+
+import Frame from "@/app/components/frame";
+import defaultProfileImage from "@/public/default-profile.jpg";
 import apiManager from "@/api/apiManager";
 import { ChallengeMembersResponseDTO, MemberDTO } from "@/types/challenge";
 

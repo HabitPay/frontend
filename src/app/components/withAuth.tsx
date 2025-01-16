@@ -1,12 +1,14 @@
 "use client";
 
+import { useEffect } from "react";
+import { NextPage } from "next";
+import { useRouter } from "next/navigation";
+
+import { useSetRecoilState } from "recoil";
+
 import { toastPopupAtom } from "@/hooks/atoms";
 import { getAccessToken } from "@/libs/jwt";
 import { PopupErrorMessage } from "@/types/enums";
-import { NextPage } from "next";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { useSetRecoilState } from "recoil";
 
 const withAuth = <P extends object>(
   WrappedComponent: NextPage<P>

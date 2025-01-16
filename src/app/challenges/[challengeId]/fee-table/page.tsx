@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
+import { useSetRecoilState } from "recoil";
+
 import apiManager from "@/api/apiManager";
 import Frame from "@/app/components/frame";
 import { toastPopupAtom } from "@/hooks/atoms";
@@ -9,9 +13,6 @@ import {
   IChallengeFeeListDto,
   MemberFeeView,
 } from "@/types/challenge/challengeFeeList.interface";
-import { IProfileDTO } from "@/types/member";
-import { useEffect, useState } from "react";
-import { useSetRecoilState } from "recoil";
 
 const Page = ({
   params: { challengeId },

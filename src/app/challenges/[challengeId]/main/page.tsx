@@ -1,8 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+
 import { useSetRecoilState } from "recoil";
 import { isBefore } from "date-fns";
 
@@ -19,14 +20,13 @@ import { Days } from "@/types/enums";
 import { addClassNames, getParentPath } from "@/libs/utils";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useChallengeDetails } from "@/hooks/useChallengeDetails";
-
+import { getId } from "@/libs/jwt";
 import Menu from "../components/menu";
 import ChallengeTitle from "../components/challengeTitle";
 import Enrollment from "../components/enrollment";
 import Label from "../../components/label";
 import ChallengeParticipationStatus from "../components/ChallengeParticipationStatus";
 import Loading from "./loading";
-import { getId } from "@/libs/jwt";
 
 const Page = ({
   params: { challengeId },
@@ -121,6 +121,7 @@ const Page = ({
                       strokeWidth={1.5}
                       stroke="currentColor"
                       className="w-6 h-6 text-gray-400"
+                      aria-label="챌린지 정보 수정"
                     >
                       <path
                         strokeLinecap="round"
@@ -149,6 +150,7 @@ const Page = ({
                       strokeWidth={1.5}
                       stroke="currentColor"
                       className="size-6"
+                      aria-label="챌린지 디테일 닫기"
                     >
                       <path
                         strokeLinecap="round"
@@ -164,6 +166,7 @@ const Page = ({
                       strokeWidth={1.5}
                       stroke="currentColor"
                       className="size-6"
+                      aria-label="챌린지 디테일 보기"
                     >
                       <path
                         strokeLinecap="round"
@@ -297,6 +300,7 @@ const Page = ({
                       strokeWidth={1.5}
                       stroke="currentColor"
                       className="size-7"
+                      aria-label="포스트 생성"
                     >
                       <path
                         strokeLinecap="round"

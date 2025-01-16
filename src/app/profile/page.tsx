@@ -1,10 +1,10 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import axios, { HttpStatusCode } from "axios";
 import { useSetRecoilState } from "recoil";
@@ -244,7 +244,7 @@ const Page = () => {
           <div className="relative">
             <Link href={`${profileImageUrl}`}>
               <Image
-                className="rounded-full size-32 object-cover shadow-lg shadow-slate-800 bg-white"
+                className="object-cover bg-white rounded-full shadow-lg size-32 shadow-slate-800"
                 src={previewImage || profileImageUrl || defaultProfileImage}
                 alt="Picture of me"
                 width={300}
@@ -260,6 +260,7 @@ const Page = () => {
                 strokeWidth={1.5}
                 stroke="currentColor"
                 className="w-5 h-5"
+                aria-label="프로필 사진 수정"
               >
                 <path
                   strokeLinecap="round"

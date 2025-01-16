@@ -1,8 +1,10 @@
 import Image from "next/image";
-import defaultProfileImage from "@/public/default-profile.jpg";
-import { differenceInDays, format, isBefore } from "date-fns";
-import { calculateTimeRemaining } from "@/libs/utils";
 import Link from "next/link";
+
+import { format } from "date-fns";
+
+import defaultProfileImage from "@/public/default-profile.jpg";
+import { calculateTimeRemaining } from "@/libs/utils";
 
 interface IChallengeTitleProps {
   title: string;
@@ -51,7 +53,7 @@ const ChallengeTitle = ({
           <div>{participants}</div>
         </Link>
       </div>
-      <div className=" text-md font-light">
+      <div className="font-light  text-md">
         {`${format(new Date(startDate), "yyyy.MM.dd HH:mm")} - ${format(
           new Date(endDate),
           "yyyy.MM.dd HH:mm"

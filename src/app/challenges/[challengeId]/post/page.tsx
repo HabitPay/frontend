@@ -1,7 +1,7 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 
 import { Controller, useForm } from "react-hook-form";
@@ -10,7 +10,6 @@ import { useSetRecoilState } from "recoil";
 import apiManager from "@/api/apiManager";
 import Frame from "@/app/components/frame";
 import { SUPPORTED_IMAGE_EXTENSIONS } from "@/libs/constants";
-import PreviewList from "./components/previewList";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { ICreatePostDTO } from "@/types/post";
 import { IChallengeDetailsDto } from "@/types/challenge";
@@ -22,11 +21,11 @@ import {
   isValidImageExtension,
 } from "@/libs/imageUploadUtils";
 import { PopupErrorMessage } from "@/types/enums";
-
 import "@uiw/react-md-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import "@/styles/CustomMdEditor.css";
 import { getId } from "@/libs/jwt";
+import PreviewList from "./components/previewList";
 
 export interface imageInfo {
   file?: File;
@@ -179,7 +178,7 @@ const Page = ({
             required: { value: true, message: "내용을 입력해주세요." },
           }}
           render={({ field, fieldState }) => (
-            <div className=" relative">
+            <div className="relative ">
               <MDEditor
                 value={field.value}
                 onChange={field.onChange}
@@ -198,7 +197,7 @@ const Page = ({
                 }}
               />
               {fieldState.error && (
-                <p className="text-red-500 text-sm mt-1 absolute top-20 left-4">
+                <p className="absolute mt-1 text-sm text-red-500 top-20 left-4">
                   {fieldState.error.message}
                 </p>
               )}
@@ -231,6 +230,7 @@ const Page = ({
                   strokeWidth={1.5}
                   stroke="currentColor"
                   className="size-7"
+                  aria-label="이미지 추가"
                 >
                   <path
                     strokeLinecap="round"
@@ -250,7 +250,7 @@ const Page = ({
             {isManager ? (
               <div
                 onClick={() => setIsAnnouncement((prev) => !prev)}
-                className="flex items-center space-x-1 w-24"
+                className="flex items-center w-24 space-x-1"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -264,6 +264,7 @@ const Page = ({
                       ? "text-habit-green"
                       : "hover:text-gray-500 transition-colors"
                   )}
+                  aria-label="공지사항으로 게시"
                 >
                   <path
                     strokeLinecap="round"

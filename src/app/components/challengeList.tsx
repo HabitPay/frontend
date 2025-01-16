@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -51,10 +51,10 @@ export default function ChallengeList() {
   return (
     <div className="flex flex-col w-full pb-4">
       {status === "loading" && (
-        <div className="flex flex-col px-6 animate-pulse bg-white p-3 rounded-xl">
-          <div className="flex gap-4 justify-between pb-4">
+        <div className="flex flex-col p-3 px-6 bg-white animate-pulse rounded-xl">
+          <div className="flex justify-between gap-4 pb-4">
             <div className="w-32 h-8 bg-gray-400 rounded-xl" />
-            <div className="w-28 bg-gray-400 h-5 rounded-xl" />
+            <div className="h-5 bg-gray-400 w-28 rounded-xl" />
           </div>
           <div className="flex items-center">
             <div className="w-56 h-16 bg-gray-400 rounded-xl" />
@@ -81,7 +81,7 @@ export default function ChallengeList() {
                       <Image
                         src={challenge.hostProfileImage || defaultProfileImage}
                         alt="ProfileImage of host"
-                        className="rounded-full size-7 object-cover shadow-md shadow-slate-400 bg-habit-gray"
+                        className="object-cover rounded-full shadow-md size-7 shadow-slate-400 bg-habit-gray"
                         width={7}
                         height={7}
                       />
@@ -111,10 +111,10 @@ export default function ChallengeList() {
         ))}
       <div ref={bottom} />
       {isFetchingNextPage && (
-        <div className="flex flex-col px-6 animate-pulse bg-white p-3 rounded-xl">
-          <div className="flex gap-4 justify-between pb-4">
+        <div className="flex flex-col p-3 px-6 bg-white animate-pulse rounded-xl">
+          <div className="flex justify-between gap-4 pb-4">
             <div className="w-32 h-8 bg-gray-400 rounded-xl" />
-            <div className="w-28 bg-gray-400 h-5 rounded-xl" />
+            <div className="h-5 bg-gray-400 w-28 rounded-xl" />
           </div>
           <div className="flex items-center">
             <div className="w-56 h-16 bg-gray-400 rounded-xl" />

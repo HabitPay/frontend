@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
-import ChallengesButton from "./challengeStateButton";
+
 import { ChallengeStatesEnum } from "@/types/enums";
+import ChallengesButton from "./challengeStateButton";
 
 interface ChallengesButtonProps {
   challengeStateSelection: string;
