@@ -12,6 +12,7 @@ import withAuth from "@/app/components/withAuth";
 import Frame from "@/app/components/frame";
 import ChallengeList from "@/app/components/challengeList";
 import Loading from "./loading";
+import PlusIcon from "@/app/components/icons/plusIcon";
 
 function Page() {
   // TODO: 다른 hook 들과 겹치지 않도록 컴포넌트 분리하기
@@ -50,21 +51,7 @@ function Page() {
       </div>
       <FloatingButton href="/challenges/create-challenge">
         <div className="flex items-center justify-center text-sm">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-4 h-4"
-            aria-label="챌린지 생성"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
-            />
-          </svg>
+          <PlusIcon className="size-4" />
           <span>챌린지 생성</span>
         </div>
       </FloatingButton>

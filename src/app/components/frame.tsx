@@ -6,6 +6,10 @@ import { usePathname, useRouter } from "next/navigation";
 
 import { getId } from "@/libs/jwt";
 import { addClassNames } from "@/libs/utils";
+import ChevronLeftIcon from "./icons/chevronLeftIcon";
+import HomeIcon from "./icons/homeIcon";
+import BarsIcon from "./icons/barsIcon";
+import UserIcon from "./icons/userIcon";
 
 interface LayoutProps {
   title?: string;
@@ -46,21 +50,7 @@ const Frame = ({
       >
         {canGoBack && (
           <button onClick={onClick} className="absolute left-4">
-            <svg
-              className="w-7 h-7"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-label="뒤로 가기"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M15 19l-7-7 7-7"
-              ></path>
-            </svg>
+            <ChevronLeftIcon className="size-7" />
           </button>
         )}
         {title && (
@@ -81,21 +71,7 @@ const Frame = ({
                   : "hover:text-gray-500 transition-colors"
               )}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-7"
-                aria-label="홈으로"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-                />
-              </svg>
+              <HomeIcon className="size-7" />
             </div>
           </Link>
           <Link href="/challenges/challenge-list">
@@ -107,21 +83,7 @@ const Frame = ({
                   : "hover:text-gray-500 transition-colors"
               )}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-7"
-                aria-label="챌린지 목록"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 5.25h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5m-16.5 4.5h16.5"
-                />
-              </svg>
+              <BarsIcon className="size-7" />
             </div>
           </Link>
           <Link href="/profile">
@@ -133,21 +95,7 @@ const Frame = ({
                   : "hover:text-gray-500 transition-colors"
               )}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-7"
-                aria-label="프로필"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                />
-              </svg>
+              <UserIcon className="size-7" />
             </div>
           </Link>
         </nav>

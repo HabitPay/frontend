@@ -15,6 +15,7 @@ import FloatingButton from "@/app/components/floatingButton";
 import Loading from "./loading";
 import Challenges from "./components/challenges";
 import ChallengeStateSelector from "./components/challengeStateSelector";
+import PlusIcon from "@/app/components/icons/plusIcon";
 
 const Page = ({ params: { userId } }: { params: { userId: string } }) => {
   const { memberProfile, isLoading, error } = useMemberProfile(userId);
@@ -73,21 +74,7 @@ const Page = ({ params: { userId } }: { params: { userId: string } }) => {
       {memberProfile.isCurrentUser && (
         <FloatingButton href="/challenges/create-challenge">
           <div className="flex items-center justify-center text-sm">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-4"
-              aria-label="챌린지 생성"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m7.5-7.5h-15"
-              />
-            </svg>
+            <PlusIcon className="size-4" />
             <span>챌린지 생성</span>
           </div>
         </FloatingButton>

@@ -6,6 +6,8 @@ import {
   DraggableProvidedDraggableProps,
 } from "@hello-pangea/dnd";
 import { imageInfo } from "../page";
+import CancelIcon from "@/app/components/icons/cancelIcon";
+import MoveIcon from "@/app/components/icons/moveIcon";
 
 interface IPreviewImage {
   item: imageInfo;
@@ -38,38 +40,10 @@ const PreviewImage = ({
         onClick={() => onImageCancelClicked(index)}
         className="absolute border rounded-full -top-2 -right-2 bg-slate-100"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-4"
-          aria-label="이미지 취소"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M6 18 18 6M6 6l12 12"
-          />
-        </svg>
+        <CancelIcon className="size-4" />
       </div>
       <div className="absolute bottom-1 left-1 bg-slate-600 opacity-75 rounded-md p-[1px]">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="white"
-          className="size-4"
-          aria-label="이미지 이동"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 0 0-3.7-3.7 48.678 48.678 0 0 0-7.324 0 4.006 4.006 0 0 0-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 0 0 3.7 3.7 48.656 48.656 0 0 0 7.324 0 4.006 4.006 0 0 0 3.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3-3 3"
-          />
-        </svg>
+        <MoveIcon className="size-4" />
       </div>
     </div>
   );
