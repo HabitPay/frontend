@@ -7,6 +7,7 @@ import Button from "@/app/components/button";
 import { toastPopupAtom } from "@/hooks/atoms";
 import { useRouter } from "next/navigation";
 import { getId } from "@/libs/jwt";
+import ConfirmModal from "@/app/components/confirmModal";
 
 interface IEnrollmentProps {
   id: string;
@@ -21,6 +22,8 @@ const Enrollment = ({
 }: IEnrollmentProps) => {
   const router = useRouter();
   const [myId, setMyId] = useState<string | null | undefined>();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [
     isMemberEnrolledInChallengeState,
@@ -93,7 +96,18 @@ const Enrollment = ({
   if (isHost) {
     return (
       <>
-        <Button color="red" onClick={deleteChallenge} text="챌린지 삭제" />
+        <Button
+          color="red"
+          onClick={() => setIsModalOpen(true)}
+          text="챌린지 삭제"
+        />
+        <ConfirmModal
+          onClick={deleteChallenge}
+          onClose={() => setIsModalOpen(false)}
+          open={isModalOpen}
+        >
+          챌린지 삭제
+        </ConfirmModal>
       </>
     );
   }
