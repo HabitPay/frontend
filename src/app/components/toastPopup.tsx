@@ -5,6 +5,8 @@ import { useRecoilState } from "recoil";
 
 import { toastPopupAtom } from "@/hooks/atoms";
 import { TOAST_DISMISS_TIMEOUT } from "@/libs/constants";
+import CheckIcon from "./icons/checkIcon";
+import ExclamationIcon from "./icons/exclamationIcon";
 
 export default function ToastPopup() {
   const [toastPopup, setToastPopup] = useRecoilState(toastPopupAtom);
@@ -35,37 +37,9 @@ export default function ToastPopup() {
         }`}
       >
         {toastPopup.success ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="text-white size-6"
-            aria-label="토스트팝업 성공"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="m4.5 12.75 6 6 9-13.5"
-            />
-          </svg>
+          <CheckIcon className="text-white size-8" />
         ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="text-white size-6"
-            aria-label="토스트팝업 실패"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"
-            />
-          </svg>
+          <ExclamationIcon className="text-white size-8" />
         )}
         <div className="text-sm text-white text-Body">{toastPopup.message}</div>
       </div>
