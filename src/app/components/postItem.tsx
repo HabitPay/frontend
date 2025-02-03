@@ -24,35 +24,13 @@ import PencilSquareIcon from "./icons/pencilSquareIcon";
 interface PostsFeedProps {
   challengeId: string;
   contentDTO: ContentDTO;
+  isLoading: boolean;
 }
 
-const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
+const PostItem = ({ challengeId, contentDTO, isLoading }: PostsFeedProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isPostAuthor, setIsPostAuthor] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const setToastPopup = useSetRecoilState(toastPopupAtom);
   const router = useRouter();
-
-  useEffect(() => {
-    const getPostInfo = async () => {
-      try {
-        const res = await apiManager.get(`/posts/${contentDTO.id}`);
-        const data: ContentDTO = res.data.data;
-        setIsPostAuthor(data.isPostAuthor);
-      } catch (error) {
-        console.error("Failed to fetch post info:", error);
-        setToastPopup((prev) => ({
-          // @ts-ignore
-          message: error.data.message,
-          top: false,
-          success: true,
-        }));
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    getPostInfo();
-  }, [contentDTO.id, setToastPopup]);
 
   const handleDeletePost = async () => {
     try {
@@ -109,7 +87,7 @@ const PostItem = ({ challengeId, contentDTO }: PostsFeedProps) => {
           {isLoading ? (
             <div className="bg-gray-400 rounded-lg size-6 animate-pulse" />
           ) : (
-            isPostAuthor && (
+            contentDTO.isPostAuthor && (
               <Link
                 href={`/challenges/${challengeId}/posts/${contentDTO.id}/edit`}
               >
