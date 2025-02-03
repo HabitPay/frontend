@@ -187,6 +187,7 @@ const Page = ({
                             contentDTO={announcement}
                             key={announcement.id}
                             challengeId={challengeId}
+                            isLoading={isLoading}
                           />
                         ))}
                     </div>

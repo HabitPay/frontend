@@ -32,7 +32,7 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
   };
   getPosts();
 
-  const { data, error, fetchNextPage, isFetchingNextPage, status } =
+  const { data, error, isLoading, fetchNextPage, isFetchingNextPage, status } =
     useInfiniteQuery<ChallengeContentResponseDTO, AxiosError>(
       ["feedPosts", id],
       getPosts,
@@ -68,7 +68,12 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
         <>
           <div className="mb-2 font-medium text-slate-500">공지사항</div>
           {announcements.content.map((post) => (
-            <PostItem contentDTO={post} challengeId={id} key={post.id} />
+            <PostItem
+              contentDTO={post}
+              challengeId={id}
+              key={post.id}
+              isLoading={isLoading}
+            />
           ))}
         </>
       )}
@@ -90,7 +95,12 @@ export default function PostsFeed({ id, isAnnouncements }: PostsFeedProps) {
           <div key={index} className="flex flex-col gap-3 pb-3">
             {posts?.content?.length > 0 &&
               posts.content.map((post) => (
-                <PostItem contentDTO={post} challengeId={id} key={post.id} />
+                <PostItem
+                  contentDTO={post}
+                  challengeId={id}
+                  key={post.id}
+                  isLoading={isLoading}
+                />
               ))}
           </div>
         ))}
